@@ -38,7 +38,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         holder.carCategory.setText(car.getCategory());
         holder.carYear.setText("Year: " + car.getYear());
         holder.carDetails.setText("Fuel: " + car.getFuelType());
-        holder.carMileage.setText("Mileage: " + car.getMilage());
+//        holder.carMileage.setText("Mileage: " + car.getMilage());
         holder.carSeats.setText("Seats: " + car.getSeats());
         holder.carPrice.setText( "$"+car.getPricePerDay() + "/day");
 
@@ -74,7 +74,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     }
 
     public static class CarViewHolder extends RecyclerView.ViewHolder {
-        TextView carName, carModel, carYear, carPrice, carDetails,carMileage,carCategory,carSeats;
+        TextView carName, carModel, carYear, carPrice, carDetails,carCategory,carSeats;
         ImageView carImage, editIcon, deleteIcon;
 
         public CarViewHolder(View itemView) {
@@ -82,7 +82,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             carName = itemView.findViewById(R.id.car_name);
             carModel = itemView.findViewById(R.id.car_modal);
             carYear = itemView.findViewById(R.id.car_year);
-            carMileage = itemView.findViewById(R.id.car_mileage);
+//            carMileage = itemView.findViewById(R.id.car_mileage);
             carPrice = itemView.findViewById(R.id.carPrice);
             carDetails = itemView.findViewById(R.id.carDetails);
             carCategory = itemView.findViewById(R.id.carCategory);
