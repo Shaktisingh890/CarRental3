@@ -1,105 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@android:color/white"
-    app:strokeColor="@android:color/darker_gray"
-    app:strokeWidth="1dp">
+    android:background="@drawable/card_background"
+    android:padding="16dp">
 
-    <!-- Car Content -->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
-
-
-        <!-- Car Image -->
-        <ImageView
-            android:id="@+id/carImage"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="8dp"/>
-
-
-        <!-- Car Title and Details -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
-
+    <!-- Car Name -->
     <TextView
-            android:id="@+id/car_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Car Name"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/grey"/>
-
-        <!-- Price per day -->
-        <TextView
-            android:id="@+id/carPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price per day"
-            android:textSize="14sp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
-    </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/darker_gray" />
-
-        <!-- First Row: Three Fields -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <!-- Car Year -->
-            <TextView
-                android:id="@+id/carCategory"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Car Category"
-                android:textSize="14sp"
-                android:gravity="center" />
-
-            <!-- Seating Capacity -->
-            <TextView
-                android:id="@+id/carSeats"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Seating Capacity"
-                android:textSize="14sp"
-                android:gravity="center" />
-
-            <!-- Car Details -->
-            <TextView
-                android:id="@+id/carDetails"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Car Details"
-                android:textSize="14sp"
-                android:gravity="center" />
-        </LinearLayout>
+        android:id="@+id/carName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Car Name"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="2dp" /> <!-- Optional margin to add spacing from edges -->
 
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+    <!-- Car Image -->
+    <ImageView
+        android:id="@+id/carImage"
+        android:layout_width="300dp"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>
