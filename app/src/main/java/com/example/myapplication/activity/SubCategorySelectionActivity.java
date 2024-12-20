@@ -2,20 +2,19 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
-import com.example.myapplication.activity.CarDetailsActivity;
 
 public class SubCategorySelectionActivity extends AppCompatActivity {
 
-    private ListView subCategoryListView;
+    private LinearLayout subCategoryContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +23,10 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
 
         // Back button setup
         ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // Go back to the previous activity
-            }
-        });
+        backButton.setOnClickListener(v -> finish());
 
-        // Get the ListView for displaying subcategories
-        subCategoryListView = findViewById(R.id.subCategoryListView);
+        // Initialize the container where subcategories will be dynamically added
+        subCategoryContainer = findViewById(R.id.subCategoryContainer);
 
         // Get the category from the intent
         String category = getIntent().getStringExtra("CATEGORY");
@@ -47,18 +41,29 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
             subCategories = new String[]{"Default"};
         }
 
-        // Set up the adapter to display the subcategories
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subCategories);
-        subCategoryListView.setAdapter(adapter);
+        // Populate the subcategories dynamically
+        populateSubCategories(subCategories);
+    }
 
-        // Set up an item click listener for the subcategory list
-        subCategoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedSubCategory = subCategories[position];
-                openCarDetailsScreen(selectedSubCategory);
-            }
-        });
+    private void populateSubCategories(String[] subCategories) {
+        for (String subCategory : subCategories) {
+            addSubCategoryItem(subCategory);
+        }
+    }
+
+    private void addSubCategoryItem(String subCategory) {
+        // Inflate a new subcategory item layout
+        View subCategoryItemView = LayoutInflater.from(this).inflate(R.layout.sub_category_item, subCategoryContainer, false);
+
+        // Initialize the subcategory name TextView
+        TextView subCategoryName = subCategoryItemView.findViewById(R.id.subCategoryName);
+        subCategoryName.setText(subCategory);
+
+        // Set a click listener for each subcategory item
+        subCategoryItemView.setOnClickListener(v -> openCarDetailsScreen(subCategory));
+
+        // Add the inflated view to the container
+        subCategoryContainer.addView(subCategoryItemView);
     }
 
     // Open the CarDetailsActivity with the selected subcategory

@@ -9,23 +9,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.models.response.Car;
-import com.example.myapplication.network.ApiService;
-import com.example.myapplication.network.RetrofitClient;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CategorySelectionActivity extends AppCompatActivity {
 
     private LinearLayout categoryContainer;
+    private TextView carName,carSeats,carPrice,carCategory,carDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,56 +35,91 @@ public class CategorySelectionActivity extends AppCompatActivity {
         // Initialize the container where categories will be dynamically added
         categoryContainer = findViewById(R.id.categoryContainer);
 
-        // Fetch categories from the server
-        fetchCategories();
-    }
+        // Get the car list passed from the DashboardActivity via Intent
+        Intent intent = getIntent();
+        List<Car> carList = intent.getParcelableArrayListExtra("carList");
 
-    private void fetchCategories() {
-        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
+        Log.d("CategorySelectionActivity", "Received carList: " + (carList != null ? carList.size() : "null"));
 
-        apiService.getCarsByCost("all").enqueue(new Callback<List<Car>>() {
-            @Override
-            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Car> carList = response.body();
-                    Log.d("CarList", "Fetched cars: " + carList.toString());
-
-                    populateCategories(carList);
-                } else {
-                    Toast.makeText(CategorySelectionActivity.this, "Failed to fetch categories.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Car>> call, Throwable t) {
-                Toast.makeText(CategorySelectionActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        // If the car list is not null, populate the categories
+        if (carList != null) {
+            populateCategories(carList);
+        } else {
+            Toast.makeText(this, "No categories available.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void populateCategories(List<Car> carList) {
+        Log.d("CategorySelectionActivity", "Populating categories...");
         for (Car car : carList) {
             addCategoryItem(car);
         }
     }
 
     private void addCategoryItem(Car car) {
+        Log.d("CategorySelectionActivity", "Adding category for car: " + car.getBrand() + " " + car.getModel());
+
         // Inflate a new car item layout
         View categoryItemView = LayoutInflater.from(this).inflate(R.layout.car_item, categoryContainer, false);
 
-        // Set the car brand and model as the name
-        TextView carNameTextView = categoryItemView.findViewById(R.id.carName);
-        carNameTextView.setText(car.getBrand() + " " + car.getModel());
+        // Initialize the car name TextView
+        carName = categoryItemView.findViewById(R.id.car_name); // Ensure we're getting the correct reference
+        carCategory = categoryItemView.findViewById(R.id.carCategory);
+        carPrice = categoryItemView.findViewById(R.id.carPrice);
+        carSeats = categoryItemView.findViewById(R.id.carSeats);
+        carDetails= categoryItemView.findViewById(R.id.carDetails);
+        if (carName != null) {
+            // Set the car brand and model as the name
+            carName.setText(car.getBrand() + " " + car.getModel());
+            Log.d("CategorySelectionActivity", "Car name set: " + car.getBrand() + " " + car.getModel());
+        } else {
+            Log.e("CategorySelectionActivity", "TextView carName is null!");
+        }
+        if (carCategory != null) {
+            // Set the car year
+            carCategory.setText("Category: " + car.getCategory());
+            Log.d("CategorySelectionActivity", "Car Category set: " + car.getCategory());
+        } else {
+            Log.e("CategorySelectionActivity", "TextView carCategory is null!");
+        }
+        if (carPrice != null) {
+            // Set the car year
+            carPrice.setText("$ " + car.getPricePerDay()+""+"/day");
+            Log.d("CategorySelectionActivity", "Car Price set: " + car.getPricePerDay());
+        } else {
+            Log.e("CategorySelectionActivity", "TextView carPrice is null!");
+        }
+        if (carSeats != null) {
+            // Set the car year
+            carSeats.setText("Seats: " + car.getSeats());
+            Log.d("CategorySelectionActivity", "Car seats set: " + car.getSeats());
+        } else {
+            Log.e("CategorySelectionActivity", "TextView carSeats is null!");
+        }
+        if (carDetails != null) {
+            // Set the car year
+            carDetails.setText("Fuel: " + car.getFuelType());
+            Log.d("CategorySelectionActivity", "Car Fuel set: " + car.getFuelType());
+        } else {
+            Log.e("CategorySelectionActivity", "TextView carDetails is null!");
+        }
 
         // Set the first image from the list (if available) using Glide
         ImageView carImageView = categoryItemView.findViewById(R.id.carImage);
-        if (car.getImages() != null && !car.getImages().isEmpty()) {
-            Glide.with(this)
-                    .load(car.getImages().get(0)) // Load the first image
-                    .placeholder(R.drawable.default_car_image) // Fallback image
-                    .into(carImageView);
+
+        if (carImageView != null) {
+            if (car.getImages() != null && !car.getImages().isEmpty()) {
+                Glide.with(this)
+                        .load(car.getImages().get(0)) // Load the first image
+                        .placeholder(R.drawable.default_car_image) // Fallback image
+                        .into(carImageView);
+                Log.d("CategorySelectionActivity", "Loaded car image: " + car.getImages().get(0));
+            } else {
+                carImageView.setImageResource(R.drawable.default_car_image); // Default image
+                Log.d("CategorySelectionActivity", "No images available, using default image.");
+            }
         } else {
-            carImageView.setImageResource(R.drawable.default_car_image); // Default image
+            Log.e("CategorySelectionActivity", "ImageView carImage is null!");
         }
 
         // Set a click listener for each category item
@@ -98,23 +129,9 @@ public class CategorySelectionActivity extends AppCompatActivity {
         categoryContainer.addView(categoryItemView);
     }
 
-
-    private int getImageResourceForCategory(String categoryName) {
-        switch (categoryName) {
-            case "SUV":
-                return R.drawable.suv;
-            case "Sedan":
-                return R.drawable.sedan;
-            case "Hatchback":
-                return R.drawable.hatchback;
-            case "Convertible":
-                return R.drawable.convertible;
-            default:
-                return R.drawable.default_car_image;
-        }
-    }
-
     private void openSubCategorySelection(String category) {
+        Log.d("CategorySelectionActivity", "Opening sub-category selection for category: " + category);
+
         Intent intent = new Intent(CategorySelectionActivity.this, SubCategorySelectionActivity.class);
         intent.putExtra("CATEGORY", category); // Pass the selected category to the next activity
         startActivity(intent);

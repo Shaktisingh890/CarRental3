@@ -1,9 +1,10 @@
 package com.example.myapplication.network;
 
 
-import com.example.myapplication.models.request.AddCarRequest;
 import com.example.myapplication.models.response.AddCarResponse;
 import com.example.myapplication.models.response.Car;
+import com.example.myapplication.models.response.CarDetailsResponse;
+import com.example.myapplication.models.response.CustomerBookingResponse;
 import com.example.myapplication.models.response.DriverImageResponse;
 import com.example.myapplication.models.response.DriverResponse1;
 import com.example.myapplication.models.response.GetCarByUserResponse;
@@ -16,8 +17,6 @@ import com.example.myapplication.models.response.PartnerResponse;
 import com.example.myapplication.models.request.RegisterRequest;
 import com.example.myapplication.models.response.RegisterResponse;
 import com.example.myapplication.models.response.UserProfileResponse;
-import com.example.myapplication.models.response.UserProfileResponse;
-import com.example.myapplication.models.response.CustomerBookingResponse;
 
 
 import java.util.List;
@@ -30,7 +29,6 @@ import retrofit2.http.Query;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Part;
 import retrofit2.http.Multipart;
 
@@ -113,8 +111,8 @@ public interface ApiService {
                 @Part List<MultipartBody.Part> imageFiles
         );
 
-    @GET("/api/v1/booking/getBookingByuserId")
-    Call<List<CustomerBookingResponse>> getBookingsByUserId();
+    @GET("api/v1/cars/getCarByUserId")
+    Call<CarDetailsResponse> getCarDetailsByUserId(@Query("userId") String userId);
 
     @GET("api/v1/cars/getCarByUserId")
     Call<GetCarByUserResponse> getCarsByUserId();
@@ -123,4 +121,5 @@ public interface ApiService {
     Call<List<Car>> getCarsByCost(@Query("filter") String costFilter);
 
 
+    Call<List<CustomerBookingResponse>> getBookingsByUserId();
 }

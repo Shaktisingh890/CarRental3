@@ -4,70 +4,74 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.CarAdapter;  // Assuming you have an adapter for cars
-import com.example.myapplication.models.response.Car;  // Assuming you have a Car model class
+import com.example.myapplication.adapter.CarAdapter;
+import com.example.myapplication.models.response.Car;
+import com.example.myapplication.models.response.CarDetailsResponse;
+import com.example.myapplication.network.ApiService;
+import com.example.myapplication.network.RetrofitClient;
+
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyCarsFragment extends Fragment {
 
-    private ImageView editIcon, deleteIcon;
     private RecyclerView carsRecyclerView;
-    private CarAdapter carAdapter;  // Assuming you have a car adapter to display cars
+    private CarAdapter carAdapter;
+
+    private String userId = "123";  // Replace with actual user ID logic
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.layout_fragment_my_cars, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_cars, container, false);
 
-        // Initialize ImageView objects
-        editIcon = view.findViewById(R.id.editIcon);
-        deleteIcon = view.findViewById(R.id.deleteIcon);
-
-        // Initialize RecyclerView
-        carsRecyclerView = view.findViewById(R.id.carsRecyclerView);  // Make sure RecyclerView ID matches
-
-        // Set the RecyclerView layout manager
+        carsRecyclerView = view.findViewById(R.id.carsRecyclerView);
         carsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Set click listeners for edit and delete actions
-        editIcon.setOnClickListener(v -> {
-            // Code to handle edit action
-            editCar();
-        });
-
-        deleteIcon.setOnClickListener(v -> {
-            // Code to handle delete action
-            deleteCar();
-        });
+        fetchCarDetails();
 
         return view;
     }
 
-    // Method to update the list of cars in the RecyclerView
-    public void updateCarList(List<Car> carList) {
-        if (carAdapter == null) {
-            carAdapter = new CarAdapter(carList);  // Initialize adapter with the car list
-            carsRecyclerView.setAdapter(carAdapter);  // Set the adapter for the RecyclerView
-        } else {
-            carAdapter.updateCars(carList);  // If the adapter already exists, update the car list
-        }
+    private void fetchCarDetails() {
+        RetrofitClient.getRetrofitInstance(getContext()).create(ApiService.class)
+                .getCarDetailsByUserId(userId)
+                .enqueue(new Callback<CarDetailsResponse>() {
+                    @Override
+                    public void onResponse(Call<CarDetailsResponse> call, Response<CarDetailsResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            CarDetailsResponse carDetailsResponse = response.body();
+                            if (carDetailsResponse.isSuccess() && carDetailsResponse.getData() != null && !carDetailsResponse.getData().isEmpty()) {
+                                List<CarDetailsResponse.Car> carList = carDetailsResponse.getData();
+
+                                // Set adapter with the list of cars
+                                carAdapter = new CarAdapter(carList);
+                                carsRecyclerView.setAdapter(carAdapter);
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "Failed to load car details", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CarDetailsResponse> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private void editCar() {
-        // Add code to edit the car details
-        // For example, show a dialog to edit car details
-    }
-
-    private void deleteCar() {
-        // Add code to delete the car
-        // For example, show a confirmation dialog and delete the car from the database
+    public void updateCarList(List<Car> cars) {
     }
 }

@@ -42,8 +42,8 @@ public class AddCarActivity extends AppCompatActivity {
     private static final int IMAGE_COUNT = 4;
 
     // Step 1 Fields
-    private EditText etCarName, etCarModel, etCarColor, etCarYear, etCarMileagePerHour, etCarDescription, etRegistrationNumber, etSubcategory;
-    private Spinner spinnerCategory, spinnerSeatingCapacity, spinnerFuelType, spinnerTransmissionType;
+    private EditText etCarName, etCarModel, etCarColor, etCarMileagePerHour, etCarDescription, etRegistrationNumber;
+    private Spinner spinnerCategory, etSubcategory,spinnerSeatingCapacity,etCarYear, spinnerFuelType, spinnerTransmissionType;
 
     // Step 2 Fields (Pricing)
     private EditText dailyRentalPrice;
@@ -130,6 +130,7 @@ public class AddCarActivity extends AppCompatActivity {
                         currentStep--;
                         break;
                     case 3:
+
                         transitionToStep(step3, step2, "Features");
                         currentStep--;
                         break;
@@ -224,6 +225,8 @@ public class AddCarActivity extends AppCompatActivity {
 
     // Setup Spinners with predefined values
     private void setupSpinners() {
+        setupSpinner(etCarYear, R.array.car_year_array);
+        setupSpinner(etSubcategory, R.array.subcategory_array);
         setupSpinner(spinnerCategory, R.array.category_array);
         setupSpinner(spinnerSeatingCapacity, R.array.seating_capacity_array);
         setupSpinner(spinnerFuelType, R.array.fuel_type_array);
@@ -242,7 +245,7 @@ public class AddCarActivity extends AppCompatActivity {
         if (etCarName.getText().toString().trim().isEmpty() ||
                 etCarModel.getText().toString().trim().isEmpty() ||
                 etRegistrationNumber.getText().toString().trim().isEmpty() ||
-                etSubcategory.getText().toString().trim().isEmpty()) {
+                etSubcategory.getSelectedItem().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill in all fields in Step 1", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -269,14 +272,7 @@ public class AddCarActivity extends AppCompatActivity {
         request.setCarName(etCarName.getText().toString().trim());
         request.setCarModel(etCarModel.getText().toString().trim());
         request.setCarColor(etCarColor.getText().toString().trim());
-
-        // Parse Car Year and Car Mileage as integers
-        try {
-            request.setCarYear(Integer.parseInt(etCarYear.getText().toString().trim()));
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Please enter a valid Car Year", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        request.setCarYear(Integer.parseInt(etCarYear.getSelectedItem().toString()));
 
         try {
             request.setCarMileagePerHour(Integer.parseInt(etCarMileagePerHour.getText().toString().trim()));
@@ -287,7 +283,7 @@ public class AddCarActivity extends AppCompatActivity {
 
         request.setCarDescription(etCarDescription.getText().toString().trim());
         request.setRegistrationNumber(etRegistrationNumber.getText().toString().trim());
-        request.setSubcategory(etSubcategory.getText().toString().trim());
+        request.setSubcategory(etSubcategory.getSelectedItem().toString().trim());
         request.setCategory(spinnerCategory.getSelectedItem().toString());
         request.setSeatingCapacity(Integer.parseInt(spinnerSeatingCapacity.getSelectedItem().toString()));
         request.setFuelType(spinnerFuelType.getSelectedItem().toString());
