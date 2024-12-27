@@ -1,46 +1,38 @@
 package com.example.myapplication.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.myapplication.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DriverDashboardActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNav;
+    private Switch availabilitySwitch;
+    private TextView subtitleMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_dashboard);
 
+        // Initialize Views
+        availabilitySwitch = findViewById(R.id.onlineOfflineSwitch);
 
-        // Initialize BottomNavigationView
-        bottomNav = findViewById(R.id.bottomNavView);
 
-        // BottomNavigationView listener
-        bottomNav.setSelectedItemId(R.id.nav_home);
-        bottomNav.setOnNavigationItemSelectedListener(this::navigateTo);
+        // Set Switch Listener
+        availabilitySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                availabilitySwitch.setText("Online");
+                subtitleMessage.setText("You are now available to take rides.");
+                Toast.makeText(this, "You are Online", Toast.LENGTH_SHORT).show();
+            } else {
+                availabilitySwitch.setText("Offline");
+                subtitleMessage.setText("Go Offline for taking rest");
+                Toast.makeText(this, "You are Offline", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
-    // Method to navigate based on BottomNavigationView item selection
-    private boolean navigateTo(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_home) {
-            startActivity(new Intent(DriverDashboardActivity.this, DriverDashboardActivity.class));
-            return true;
-        } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(DriverDashboardActivity.this, DriverProfileActivity.class));
-            return true;
-        }
-//        else if (id == R.id.nav_booking) {
-//            startActivity(new Intent(DriverDashboardActivity.this, DriverBookingActivity.class));
-//            return true;
-//        }
-        return false;
-    }
-
 }
