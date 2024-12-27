@@ -20,6 +20,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.adapter.AyaStoriesAdapter;
 import com.example.myapplication.adapter.ImageSliderAdapter;
 import com.example.myapplication.models.response.Car;
+import com.example.myapplication.models.response.CategoryResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -229,32 +230,35 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     // Open Car Selection Activity
-    private void openCarSelection(String type) {
+    private void openCarSelection(String costType) {
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
-        apiService.getCarsByCost(type).enqueue(new retrofit2.Callback<List<Car>>() {
-            @Override
-            public void onResponse(Call<List<Car>> call, retrofit2.Response<List<Car>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Car> carList = response.body();
-                    Log.d("CarList", "Fetched cars: " + carList.toString());
 
-                    // Pass the car list to the next activity
+        apiService.getCarCategories().enqueue(new retrofit2.Callback<CategoryResponse>() {
+            @Override
+            public void onResponse(Call<CategoryResponse> call, retrofit2.Response<CategoryResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    List<String> categories = response.body().getData();
+                    Log.d("Categories", "Fetched categories: " + categories);
+
+                    // Pass the categories to the next activity
                     Intent intent = new Intent(DashboardActivity.this, CategorySelectionActivity.class);
-                    intent.putParcelableArrayListExtra("carList", new ArrayList<>(carList));
+                    intent.putStringArrayListExtra("categories", new ArrayList<>(categories));
+                    intent.putExtra("costType", costType); // Add costType to the Intent
+
                     startActivity(intent);
                 } else {
-                    Toast.makeText(DashboardActivity.this, "Failed to fetch cars.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DashboardActivity.this, "Failed to fetch categories.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Car>> call, Throwable t) {
-                Toast.makeText(DashboardActivity.this, "ErrorAs: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("CarSelectionError", "Error: " + t.getMessage());
-
+            public void onFailure(Call<CategoryResponse> call, Throwable t) {
+                Toast.makeText(DashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("CategoryFetchError", "Error: " + t.getMessage());
             }
         });
     }
+
 
 
     // Handle bottom navigation

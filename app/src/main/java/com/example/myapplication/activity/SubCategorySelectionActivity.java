@@ -7,11 +7,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.activity.CarDetailsActivity;
+import com.example.myapplication.models.response.CustomerCarResponse;
+import com.example.myapplication.models.response.SubCategoryResponse;
+import com.example.myapplication.network.ApiService;
+import com.example.myapplication.network.RetrofitClient;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SubCategorySelectionActivity extends AppCompatActivity {
 
@@ -24,12 +36,7 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
 
         // Back button setup
         ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // Go back to the previous activity
-            }
-        });
+        backButton.setOnClickListener(v -> finish());
 
         // Get the ListView for displaying subcategories
         subCategoryListView = findViewById(R.id.subCategoryListView);
@@ -37,34 +44,80 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
         // Get the category from the intent
         String category = getIntent().getStringExtra("CATEGORY");
 
-        // Dynamically set subcategories based on the category passed in the intent
-        String[] subCategories;
-        if ("SUV".equals(category)) {
-            subCategories = new String[]{"Luxury", "Economy", "Compact"};
-        } else if ("Sedan".equals(category)) {
-            subCategories = new String[]{"Standard", "Luxury"};
+        // Fetch subcategories using Retrofit
+        if (category != null) {
+            fetchSubCategories(category);
         } else {
-            subCategories = new String[]{"Default"};
+            Toast.makeText(this, "Category not available", Toast.LENGTH_SHORT).show();
         }
+    }
 
-        // Set up the adapter to display the subcategories
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subCategories);
-        subCategoryListView.setAdapter(adapter);
+    private void fetchSubCategories(String category) {
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
-        // Set up an item click listener for the subcategory list
-        subCategoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // Make the network call
+        apiService.getSubCategories(category).enqueue(new Callback<SubCategoryResponse>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedSubCategory = subCategories[position];
-                openCarDetailsScreen(selectedSubCategory);
+            public void onResponse(Call<SubCategoryResponse> call, Response<SubCategoryResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    SubCategoryResponse subCategoryResponse = response.body();
+                    List<String> subCategories = subCategoryResponse.getSubcategories();
+
+                    // Set up the adapter to display the subcategories
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(SubCategorySelectionActivity.this, android.R.layout.simple_list_item_1, subCategories);
+                    subCategoryListView.setAdapter(adapter);
+
+                    // Set up an item click listener for the subcategory list
+                    subCategoryListView.setOnItemClickListener((parent, view, position, id) -> {
+                        String selectedSubCategory = subCategories.get(position);
+                        openCarDetailsScreen(selectedSubCategory);
+                    });
+                } else {
+                    Toast.makeText(SubCategorySelectionActivity.this, "Failed to fetch subcategories", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SubCategoryResponse> call, Throwable t) {
+                Toast.makeText(SubCategorySelectionActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     // Open the CarDetailsActivity with the selected subcategory
+    // Open the CarDetailsActivity with the selected subcategory
     private void openCarDetailsScreen(String subCategory) {
-        Intent intent = new Intent(SubCategorySelectionActivity.this, CarDetailsActivity.class);
-        intent.putExtra("SUB_CATEGORY", subCategory);
-        startActivity(intent);
+        // Define the filter type based on user selection
+        String filterType = getIntent().getStringExtra("COST_TYPE"); // Pass this value based on button selection
+        String category = getIntent().getStringExtra("CATEGORY");   // Get the category from intent
+
+        if (category == null || filterType == null) {
+            Toast.makeText(this, "Missing required parameters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Call the API
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
+        apiService.getCarsBySubCategory(category, subCategory, filterType).enqueue(new Callback<List<CustomerCarResponse>>() {
+            @Override
+            public void onResponse(Call<List<CustomerCarResponse>> call, Response<List<CustomerCarResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Pass the car data to the CarDetailsActivity
+                    Intent intent = new Intent(SubCategorySelectionActivity.this, CustomerCarDetailsActivity.class);
+                    intent.putParcelableArrayListExtra("CAR_DATA", new ArrayList<>(response.body())); // Assuming CustomerCarResponse is Parcelable
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SubCategorySelectionActivity.this, "No cars found for the selected filter", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CustomerCarResponse>> call, Throwable t) {
+                Toast.makeText(SubCategorySelectionActivity.this, "Failed to fetch car details: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+
 }
+

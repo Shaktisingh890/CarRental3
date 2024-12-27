@@ -10,11 +10,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
-import com.example.myapplication.activity.SubCategorySelectionActivity;
+
+import java.util.ArrayList;
 
 public class CategorySelectionActivity extends AppCompatActivity {
 
     private LinearLayout categoryContainer;
+    private String costType; // To hold the cost type passed from DashboardActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +30,22 @@ public class CategorySelectionActivity extends AppCompatActivity {
         // Initialize the container where categories will be dynamically added
         categoryContainer = findViewById(R.id.categoryContainer);
 
-        // Define the categories (for example purposes)
-        String[] categories = {"SUV", "Sedan", "Hatchback", "Convertible"};
+        // Get the categories and costType passed from the previous activity
+        ArrayList<String> categories = getIntent().getStringArrayListExtra("categories");
+        costType = getIntent().getStringExtra("costType"); // Retrieve the costType from Intent
 
-        // Dynamically add category items to the container
-        for (String category : categories) {
-            addCategoryItem(category);
+        if (categories != null && !categories.isEmpty()) {
+            // Dynamically add category items to the container
+            for (String category : categories) {
+                addCategoryItem(category);
+            }
+        } else {
+            // If no categories are received, show a placeholder or message
+            TextView placeholder = new TextView(this);
+            placeholder.setText("No categories available");
+            placeholder.setTextSize(18);
+            placeholder.setPadding(16, 16, 16, 16);
+            categoryContainer.addView(placeholder);
         }
     }
 
@@ -72,10 +84,14 @@ public class CategorySelectionActivity extends AppCompatActivity {
         }
     }
 
-
     private void openSubCategorySelection(String category) {
+        // Create an Intent to navigate to SubCategorySelectionActivity
         Intent intent = new Intent(CategorySelectionActivity.this, SubCategorySelectionActivity.class);
-        intent.putExtra("CATEGORY", category); // Pass the selected category to the next activity
+
+        // Pass the selected category and the costType to the next activity
+        intent.putExtra("CATEGORY", category);
+        intent.putExtra("COST_TYPE", costType);
+
         startActivity(intent);
     }
 }

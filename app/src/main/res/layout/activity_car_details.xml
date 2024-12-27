@@ -40,6 +40,7 @@
 
         <!-- Car Image -->
         <ImageView
+            android:id="@+id/car_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
@@ -74,7 +75,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tesla Model 3"
+                        android:text=""
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="#000" />
@@ -140,12 +141,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="TOP SPEED"
+                                android:text="Fuel Type"
                                 android:textSize="12sp"
                                 android:textColor="#757575"
                                 android:gravity="center" />
 
                             <TextView
+                                android:id="@+id/car_fuel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="250 km/h"
@@ -176,15 +178,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="WIFI"
+                                android:text="Milage"
                                 android:textSize="12sp"
                                 android:textColor="#757575"
                                 android:gravity="center" />
 
                             <TextView
+                                android:id="@+id/car_milage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Yes"
+
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
@@ -193,6 +196,7 @@
 
                         <!-- Seats -->
                         <LinearLayout
+
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_columnWeight="1"
@@ -208,6 +212,7 @@
                                 android:contentDescription="Seats Icon" />
 
                             <TextView
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -217,9 +222,10 @@
                                 android:gravity="center" />
 
                             <TextView
+                                android:id="@+id/car_seats"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="5"
+
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
@@ -248,15 +254,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="SENSOR"
+                                android:text="GPS"
                                 android:textSize="12sp"
                                 android:textColor="#757575"
                                 android:gravity="center" />
 
                             <TextView
+                                android:id="@+id/car_gps"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Adaptive"
+
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
@@ -291,9 +298,10 @@
                                 android:gravity="center" />
 
                             <TextView
+                                android:id="@+id/car_bluetooth"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Yes"
+
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
@@ -321,15 +329,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="DOOR"
+                                android:text="Air Conditioner"
                                 android:textSize="12sp"
                                 android:textColor="#757575"
                                 android:gravity="center" />
 
                             <TextView
+                                android:id="@+id/car_conditioning"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4"
+
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#000000"
@@ -355,87 +364,93 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="8dp">
 
                 <!-- Description Section -->
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:text="Description"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     android:textColor="#000"
-                    android:layout_marginBottom="4dp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/car_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:text="A car with high specs that are rented at an affordable price"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="16dp" />
+                    android:textSize="14sp" />
 
                 <!-- More Images Section -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="More images"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
                     android:textColor="#000"
-                    android:layout_marginBottom="8dp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <!-- Grid of Images -->
                 <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:columnCount="2">
 
                     <!-- Image 1 -->
                     <ImageView
+                        android:id="@+id/car_image0"
                         android:layout_width="0dp"
                         android:layout_height="100dp"
                         android:layout_columnWeight="1"
                         android:layout_margin="8dp"
-                        android:scaleType="centerCrop"
                         android:background="@drawable/image_border_radius"
-                        android:src="@drawable/image1"
-                        android:clipToOutline="true" />
+                        android:clipToOutline="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image1" />
 
                     <!-- Image 2 -->
                     <ImageView
+                        android:id="@+id/car_image1"
                         android:layout_width="0dp"
                         android:layout_height="100dp"
                         android:layout_columnWeight="1"
                         android:layout_margin="8dp"
-                        android:scaleType="centerCrop"
                         android:background="@drawable/image_border_radius"
-                        android:src="@drawable/image2"
-                        android:clipToOutline="true" />
+                        android:clipToOutline="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image2" />
 
                     <!-- Image 3 -->
                     <ImageView
+                        android:id="@+id/car_image2"
                         android:layout_width="0dp"
                         android:layout_height="100dp"
                         android:layout_columnWeight="1"
                         android:layout_margin="8dp"
-                        android:scaleType="centerCrop"
                         android:background="@drawable/image_border_radius"
-                        android:src="@drawable/image3"
-                        android:clipToOutline="true" />
+                        android:clipToOutline="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image3" />
 
                     <!-- Image 4 -->
                     <ImageView
+                        android:id="@+id/car_image3"
                         android:layout_width="0dp"
                         android:layout_height="100dp"
                         android:layout_columnWeight="1"
                         android:layout_margin="8dp"
-                        android:scaleType="centerCrop"
                         android:background="@drawable/image_border_radius"
-                        android:src="@drawable/image4"
-                        android:clipToOutline="true" />
+                        android:clipToOutline="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image4" />
                 </GridLayout>
 
             </LinearLayout>
@@ -443,7 +458,7 @@
 
         <!-- Book Car Button -->
         <Button
-            android:id="@+id/book_now_button"
+            android:id="@+id/bookNowButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

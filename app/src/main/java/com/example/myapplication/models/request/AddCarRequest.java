@@ -10,7 +10,7 @@ public class AddCarRequest {
     private String carColor;
     private int carYear;
     private int carMileagePerHour;
-    private String carDescription;
+    private String description;
     private String registrationNumber;
     private String subcategory;
     private String category;
@@ -64,11 +64,11 @@ public class AddCarRequest {
     }
 
     public String getCarDescription() {
-        return carDescription;
+        return description;
     }
 
     public void setCarDescription(String carDescription) {
-        this.carDescription = carDescription;
+        this.description = carDescription;
     }
 
     public String getRegistrationNumber() {

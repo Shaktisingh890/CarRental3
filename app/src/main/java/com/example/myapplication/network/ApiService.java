@@ -4,7 +4,9 @@ package com.example.myapplication.network;
 import com.example.myapplication.models.response.AddCarResponse;
 import com.example.myapplication.models.response.Car;
 import com.example.myapplication.models.response.CarDetailsResponse;
+import com.example.myapplication.models.response.CategoryResponse;
 import com.example.myapplication.models.response.CustomerBookingResponse;
+import com.example.myapplication.models.response.CustomerCarResponse;
 import com.example.myapplication.models.response.DriverImageResponse;
 import com.example.myapplication.models.response.DriverResponse1;
 import com.example.myapplication.models.response.GetCarByUserResponse;
@@ -16,6 +18,7 @@ import com.example.myapplication.models.request.PartnerRegisterRequest;
 import com.example.myapplication.models.response.PartnerResponse;
 import com.example.myapplication.models.request.RegisterRequest;
 import com.example.myapplication.models.response.RegisterResponse;
+import com.example.myapplication.models.response.SubCategoryResponse;
 import com.example.myapplication.models.response.UserProfileResponse;
 
 
@@ -24,6 +27,7 @@ import java.util.List;
 import retrofit2.Call;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 import retrofit2.http.Body;
@@ -120,6 +124,23 @@ public interface ApiService {
     @GET("api/v1/cars/getCarByCost")
     Call<List<Car>> getCarsByCost(@Query("filter") String costFilter);
 
+    @GET("api/v1/cars/getFetchCategory")
+    Call<CategoryResponse> getCarCategories();
 
+
+    @GET("api/v1/cars/getCarBysubCategory")
+
+    Call<List<CustomerCarResponse>> getCarsBySubCategory(
+            @Query("category") String category,
+            @Query("subCategory") String subCategory,
+            @Query("filter") String costType
+    );
+
+
+
+    @GET("api/v1/cars/getFetchSubCategory/{category}")
+    Call<SubCategoryResponse> getSubCategories(@Path("category") String category);
     Call<List<CustomerBookingResponse>> getBookingsByUserId();
 }
+
+
