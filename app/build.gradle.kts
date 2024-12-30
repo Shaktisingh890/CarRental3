@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.gsonConverter)
     implementation(libs.glide)
     annotationProcessor(libs.glideCompiler)
-
+    implementation (libs.phonepe)
     implementation (libs.okhttp)
     implementation(libs.loggingInterceptor) // OkHttp Logging Interceptor dependency
     implementation(libs.appcompat)

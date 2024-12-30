@@ -12,9 +12,8 @@ gsonConverter = "2.9.0"
 loggingInterceptor = "4.11.0"
 glide = "4.13.2"
 glideCompiler = "4.13.2"
-
+phonepe = "2.4.3" # Latest stable version of IntentSDK
 okhttp = "4.9.0"
-
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -24,12 +23,13 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }  # Retrofit dependency
-gsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gsonConverter" }  # Gson converter dependency
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+gsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gsonConverter" }
 loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }  # Glide dependency
-glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glideCompiler" }  # Glide Compiler dependency
-
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glideCompiler" }
+phonepe = { group = "phonepe.intentsdk.android.release", name = "IntentSDK", version.ref = "phonepe" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

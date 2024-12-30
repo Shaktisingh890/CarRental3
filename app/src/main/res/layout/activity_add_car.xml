@@ -431,6 +431,7 @@
             android:visibility="gone">
             <!-- Upload ID Photos Section -->
             <TextView
+                android:id="@+id/partnterId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Upload your ID photo"
@@ -446,7 +447,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/frontPhoto"
+                    android:id="@+id/idfrontPhoto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -472,7 +473,7 @@
                     android:layout_height="match_parent" />
                 <!-- Back Photo -->
                 <LinearLayout
-                    android:id="@+id/backPhoto"
+                    android:id="@+id/idbackPhoto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -512,7 +513,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/odocumentfrontPhoto"
+                    android:id="@+id/cardocumentfrontPhoto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -538,7 +539,7 @@
                     android:layout_height="match_parent" />
                 <!-- Back Photo -->
                 <LinearLayout
-                    android:id="@+id/odocumentbackPhoto"
+                    android:id="@+id/cardocumentbackPhoto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -578,7 +579,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/licensefrontPhoto"
+                    android:id="@+id/vechilelicensefrontPhoto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -604,7 +605,7 @@
                     android:layout_height="match_parent" />
                 <!-- Back Photo -->
                 <LinearLayout
-                    android:id="@+id/licensebackPhoto"
+                    android:id="@+id/vechileicensebackPhoto"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -644,7 +645,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/bankPhoto"
+                    android:id="@+id/bankpassbookPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

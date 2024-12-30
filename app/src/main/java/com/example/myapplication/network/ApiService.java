@@ -19,6 +19,7 @@ import com.example.myapplication.models.response.PartnerResponse;
 import com.example.myapplication.models.request.RegisterRequest;
 import com.example.myapplication.models.response.RegisterResponse;
 import com.example.myapplication.models.response.SubCategoryResponse;
+import com.example.myapplication.models.response.UploadIdResponse;
 import com.example.myapplication.models.response.UserProfileResponse;
 
 
@@ -27,6 +28,7 @@ import java.util.List;
 import retrofit2.Call;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -138,9 +140,22 @@ public interface ApiService {
 
 
 
+
     @GET("api/v1/cars/getFetchSubCategory/{category}")
     Call<SubCategoryResponse> getSubCategories(@Path("category") String category);
     Call<List<CustomerBookingResponse>> getBookingsByUserId();
+
+
+
+    @Multipart
+    @PUT("api/v1/customers/upload-id")
+    Call<UploadIdResponse> uploadId(
+            @Part("type") RequestBody type,
+            @Part("id_number") RequestBody idNumber,
+            @Part MultipartBody.Part frontPhoto,
+            @Part MultipartBody.Part backPhoto
+    );
 }
+
 
 

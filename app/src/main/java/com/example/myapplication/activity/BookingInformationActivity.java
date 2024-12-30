@@ -118,7 +118,7 @@ public class BookingInformationActivity extends AppCompatActivity {
             Toast.makeText(BookingInformationActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
         } else {
             // Create an Intent to start PersonalInfoActivity
-            Intent intent = new Intent(BookingInformationActivity.this, PersonalInfoActivity.class);
+            Intent intent = new Intent(BookingInformationActivity.this, IdentificationActivity.class);
 
             // Pass data to the next activity
             intent.putExtra("pickupLocation", pickUp);

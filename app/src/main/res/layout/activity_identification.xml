@@ -68,6 +68,18 @@
         android:background="@drawable/rounded_edittext_background"
         android:layout_marginTop="16dp" />
 
+    <EditText
+        android:id="@+id/passport_id_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Passport ID Number"
+        android:inputType="text"
+        android:drawableLeft="@drawable/baseline_credit_card_24"
+        android:drawablePadding="8dp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:layout_marginTop="16dp" />
+
     <!-- Upload Photo Section -->
     <TextView
         android:id="@+id/upload_title"

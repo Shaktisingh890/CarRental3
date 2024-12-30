@@ -41,13 +41,15 @@
             android:layout_marginBottom="16dp">
 
             <!-- ImageView on the left -->
+
+            <!-- Text group on the right -->
             <ImageView
+                android:id="@+id/car_image0"
                 android:layout_width="100dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-                android:src="@drawable/image4" />
+                 />
 
-            <!-- Text group on the right -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -57,17 +59,19 @@
                 android:layout_marginStart="16dp">
 
                 <TextView
+                    android:id="@+id/car_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Audi A8 L"
+                    android:text=""
                     android:textSize="16sp"
                     android:textColor="#000000"
                     android:fontFamily="sans-serif-medium" />
 
                 <TextView
+                    android:id="@+id/car_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$30/day"
+                    android:text=""
                     android:textSize="14sp"
                     android:textColor="#4CAF50"
                     android:fontFamily="sans-serif" />
@@ -82,6 +86,7 @@
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pickup_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -96,11 +101,12 @@
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/return_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:editable="false"
-                android:text="2464 Royal Ln. Mesa, New Jersey 45463" />
+                android:text="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -110,11 +116,12 @@
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pickup_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:editable="false"
-                android:text="7 December 2021" />
+                android:text="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -124,66 +131,71 @@
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/return_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:editable="false"
-                android:text="8 December 2021" />
+                android:text="" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Pricing Section -->
+
         <TextView
+            android:id="@+id/perday_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
             android:text="Per day car rent"
             android:textColor="#000000"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif" />
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="$30"
+            android:text=""
             android:gravity="end"
             android:textColor="#000000"
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
 
         <TextView
+            android:id="@+id/total_rent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
             android:text="Total 2 day rent"
             android:textColor="#000000"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif" />
+            android:textSize="14sp" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="369dp"
             android:layout_height="wrap_content"
-            android:text="$60"
+            android:layout_marginBottom="8dp"
             android:gravity="end"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Total payment"
             android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif-medium" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="$60"
-            android:gravity="end"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginBottom="16dp" />
+            android:textSize="14sp" />
 
         <!-- Confirm Button -->
+        <TextView
+            android:id="@+id/total_payment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="end"
+
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
         <Button
             android:id="@+id/confirmButton"
             android:layout_width="match_parent"

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +71,7 @@ public class AddCarActivity extends AppCompatActivity {
     private int currentStep = 1;
     private int currentImageIndex = -1;
 
+    private LinearLayout idfrontPhoto,idbackPhoto,cardocumentfrontPhoto,cardocumentbackPhoto,vechilelicensefrontPhoto,vechilelicensebackPhoto,bankpassbookPhoto;
     // Retrofit API Service
     private ApiService apiService;
 
@@ -214,6 +216,9 @@ public class AddCarActivity extends AppCompatActivity {
         uploadImageButtons[1] = findViewById(R.id.uploadImagesButton2);
         uploadImageButtons[2] = findViewById(R.id.uploadImagesButton3);
         uploadImageButtons[3] = findViewById(R.id.uploadImagesButton4);
+
+
+
     }
 
     // Transition between steps with indicator update
