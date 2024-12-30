@@ -1,176 +1,196 @@
 package com.example.myapplication.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.R;
-import com.phonepe.intent.sdk.api.B2BPGRequest;
-import com.phonepe.intent.sdk.api.B2BPGRequestBuilder;
 import com.phonepe.intent.sdk.api.PhonePe;
 import com.phonepe.intent.sdk.api.PhonePeInitException;
 import com.phonepe.intent.sdk.api.models.PhonePeEnvironment;
-
+import com.phonepe.intent.sdk.api.B2BPGRequest;
+import com.phonepe.intent.sdk.api.B2BPGRequestBuilder;
+import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import java.security.NoSuchAlgorithmException;
 
 public class PaymentActivity extends AppCompatActivity {
 
-    private static final int B2B_PG_REQUEST_CODE = 1;
-    private static final String MERCHANT_SECRET_KEY = "PGTESTPAYUAT86";  // Replace with your actual merchant secret key
-    private static final String SALT = "96434309-7796-489d-8924-ab56988a6076";  // Define or fetch the salt value
-    private static final String SALT_INDEX = "1";  // Define or fetch the salt index
-    private static final String TAG = "PaymentActivity";  // Tag for logging
+    private Button btnPay;
+    private static final String TAG = "PaymentActivity"; // Define a tag for logging
+    private static final int B2B_PG_REQUEST_CODE = 1; // Request code for startActivityForResult
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        // Retrieve data passed from ConfirmationActivity
-        Intent intent = getIntent();
-        int totalAmount = intent.getIntExtra("totalAmount", 0);
-        String carDetails = intent.getStringExtra("carDetails");
+        // Initialize PhonePe SDK
 
-        Log.d(TAG, "onCreate: Total Amount: " + totalAmount);
-        Log.d(TAG, "onCreate: Car Details: " + carDetails);
+            PhonePe.init(this, PhonePeEnvironment.SANDBOX, "ATMOSTUAT", "");
+            Log.d(TAG, "PhonePe SDK initialized successfully");
 
-        try {
-            // Initialize PhonePe SDK for production (Assuming another initialization method is needed)
-            PhonePe.init(this, PhonePeEnvironment.SANDBOX,"PGTESTPAYUAT86","");
-            Log.d(TAG, "PhonePe SDK initialized successfully.");
-        } catch (Exception e) {
-            Log.e(TAG, "Error initializing PhonePe SDK: ", e);
-            Toast.makeText(this, "Failed to initialize payment gateway.", Toast.LENGTH_SHORT).show();
-        }
 
-        Button btnPay = findViewById(R.id.btnPay);
-        btnPay.setOnClickListener(v -> {
-            Log.d(TAG, "Pay button clicked. Initiating payment...");
-            initiatePayment(70);
+        btnPay = findViewById(R.id.btnPay);
+        btnPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Pay button clicked. Initiating B2B payment.");
+                initiateB2BPayment();
+            }
         });
     }
 
-    private void initiatePayment(int totalAmount) {
-        try {
-            Log.d(TAG, "Creating payment payload...");
-
-            // Create the JSON payload with the total amount and other details
-            String payload = "{\n" +
-                    "  \"merchantId\": \"PGTESTPAYUAT86\",\n" +
-                    "  \"merchantTransactionId\": \"AVCFG123456\",\n" +
-                    "  \"merchantUserId\": \"90223250\",\n" +
-                    "  \"amount\": " + totalAmount + ",\n" +
-                    "  \"mobileNumber\": \"7300896284\",\n" +
-                    "  \"callbackUrl\": \"http://192.168.1.11:3000/callback\",\n" +  // Use HTTPS callback URL
-                    "  \"paymentInstrument\": {\n" +
-                    "    \"type\": \"UPI_INTENT\",\n" +
-                    "    \"targetApp\": \"com.phonepe.app\"\n" +
-                    "  },\n" +
-                    "  \"deviceContext\": {\n" +
-                    "    \"deviceOS\": \"ANDROID\"\n" +
-                    "  }\n" +
-                    "}";
-
-            Log.d(TAG, "Payload: " + payload);
-
-            // Base64 encode the payload
-            String base64Payload = encodeToBase64(payload);
-            Log.d(TAG, "Base64 Payload: " + base64Payload);
-
-            // Generate checksum
-            String apiEndPoint = "/pg/v1/pay";
-            String checksum = generateChecksum(base64Payload, apiEndPoint, SALT);
-            Log.d(TAG, "Checksum: " + checksum);
-
-            // Build the B2B PG request
-            B2BPGRequest b2BPGRequest = new B2BPGRequestBuilder()
-                    .setData(base64Payload)
-                    .setChecksum(checksum)
-                    .setUrl(apiEndPoint)
-                    .build();
-
-            // Start payment
-            Log.d(TAG, "Starting payment process...");
-            startActivityForResult(PhonePe.getImplicitIntent(this, b2BPGRequest, ""), B2B_PG_REQUEST_CODE);
-        } catch (Exception e) {
-            Log.e(TAG, "Error initiating payment: ", e);
-            Toast.makeText(this, "Payment initiation failed.", Toast.LENGTH_SHORT).show();
+    private void initiateB2BPayment() {
+        String base64Body = preparePayload(); // Prepare the payload and Base64 encode it
+        if (base64Body == null) {
+            Log.e(TAG, "Payload preparation failed, aborting payment initiation");
+            Toast.makeText(this, "Payment failed: Payload preparation error", Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
 
-    private String encodeToBase64(String payload) {
+        String salt = "58a63b64-574d-417a-9214-066bee1e4caa"; // Replace with your actual salt
+        String saltIndex = "1"; // Replace with your actual salt index
+        String apiEndPoint = "/pg/v1/pay"; // Replace with your actual API endpoint
+
+        // Log the generated base64 payload
+        Log.d(TAG, "Base64 Payload: " + base64Body);
+
+        // Generate checksum in the required format
+        String checksum = sha256(base64Body + apiEndPoint + salt) + "###1";
+
+        // Log the generated checksum
+        Log.d(TAG, "Generated Checksum: " + checksum);
+
+        // Create B2BPGRequest
+        B2BPGRequest b2BPGRequest = new B2BPGRequestBuilder()
+                .setData(base64Body)
+                .setChecksum(checksum)
+                .setUrl(apiEndPoint)
+                .build();
+
         try {
-            return Base64.encodeToString(payload.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT).trim();
-        } catch (Exception e) {
-            Log.e(TAG, "Error encoding payload to Base64: ", e);
-            return null;
-        }
-    }
-
-    private String generateChecksum(String base64Body, String apiEndPoint, String salt) {
-        try {
-            // Concatenate base64Body, apiEndPoint, and salt
-            String dataToSign = base64Body + apiEndPoint + salt;
-
-            Log.d(TAG, "Data to sign for checksum: " + dataToSign);
-
-            // Generate SHA-256 hash
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] checksumBytes = digest.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
-            String checksum = Base64.encodeToString(checksumBytes, Base64.DEFAULT).trim();
-
-            // Append saltIndex ("1" in your case) to the checksum
-            return checksum + "###" + SALT_INDEX;
-        } catch (Exception e) {
-            Log.e(TAG, "Error generating checksum: ", e);
-            return null;
+            Log.d(TAG, "Starting PhonePe payment flow...");
+            startActivityForResult(PhonePe.getImplicitIntent(
+                    this, b2BPGRequest, "com.phonepe.app"), B2B_PG_REQUEST_CODE);
+        } catch (PhonePeInitException e) {
+            Log.e(TAG, "PhonePe SDK Initialization Error: ", e);
         }
     }
 
     @Override
-
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == B2B_PG_REQUEST_CODE) {
-            if (data != null && data.getExtras() != null) {
-                Bundle extras = data.getExtras();
-                for (String key : extras.keySet()) {
-                    Object value = extras.get(key);
-                    Log.d(TAG, "Extra Data: " + key + " = " + value);
-                }
+        if (requestCode == B2B_PG_REQUEST_CODE) { // Check for PhonePe Payment Response
+            if (data != null) {
+                try {
+                    // Get the instrumentResponse JSON string
+                    String instrumentResponse = data.getStringExtra("instrumentResponse");
 
-                if (extras.containsKey("key_error_result")) {
-                    String errorResult = extras.getString("key_error_result");
-                    Log.e(TAG, "Error Result: " + errorResult);
-                }
-            }
+                    if (instrumentResponse != null) {
+                        JSONObject responseJson = new JSONObject(instrumentResponse);
 
-            if (resultCode == RESULT_OK) {
-                Log.d(TAG, "Payment Successful");
-                // Handle success
-            } else if (resultCode == RESULT_CANCELED) {
-                String cancellationReason = data != null ? data.getStringExtra("reason") : "Unknown reason";
-                Log.d(TAG, "Payment Canceled. Reason: " + cancellationReason);
+                        // Extract the intent URL
+                        String intentUrl = responseJson.getString("intentUrl");
 
-                if (data != null) {
-                    Log.d(TAG, "Data returned: " + data.toString());
+                        if (intentUrl != null && !intentUrl.isEmpty()) {
+                            // Launch UPI Intent for payment
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(intentUrl));
+                            intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://com.phonepe.app"));
+                            startActivity(intent); // Start UPI payment
+                        } else {
+                            Toast.makeText(this, "Invalid Payment URL", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "No Payment URL Found", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Error Processing Payment Response", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                String errorMessage = data != null ? data.getStringExtra("errorMessage") : "Unknown error";
-                Log.e(TAG, "Payment Failed. Error: " + errorMessage);
+                Toast.makeText(this, "Payment Response Missing", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Log.w(TAG, "Unhandled requestCode: " + requestCode);
         }
     }
 
+
+
+    private String preparePayload() {
+        try {
+            // Build the JSON payload
+            JSONObject paymentPayload = new JSONObject();
+            paymentPayload.put("merchantId", "ATMOSTUAT");
+            paymentPayload.put("merchantTransactionId", "23456678766554");
+            paymentPayload.put("merchantUserId", "M_23250000");
+            paymentPayload.put("amount", 10000);
+            paymentPayload.put("mobileNumber", "7300896284");
+            paymentPayload.put("callbackUrl", "https://sapoto.in/payment");
+
+            // Payment instrument details
+            JSONObject paymentInstrument = new JSONObject();
+            paymentInstrument.put("type", "PAY_PAGE");
+            paymentInstrument.put("targetApp", "com.phonepe.app");
+
+            // Device context details
+            JSONObject deviceContext = new JSONObject();
+            deviceContext.put("deviceOS", "ANDROID");
+
+            // Add the payment instrument and device context to the main payload
+            paymentPayload.put("paymentInstrument", paymentInstrument);
+            paymentPayload.put("deviceContext", deviceContext);
+
+            // Convert the payload to a string and Base64 encode it
+            String payloadString = paymentPayload.toString();
+            Log.d(TAG, "Payload JSON String: " + payloadString); // Log the payload before encoding
+
+            String base64Payload = Base64.encodeToString(
+                    payloadString.getBytes(StandardCharsets.UTF_8),
+                    Base64.NO_WRAP
+            );
+
+            // Log the Base64 encoded payload
+            Log.d(TAG, "Base64 Encoded Payload: " + base64Payload);
+
+            return base64Payload;
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Log the exception if there's an error in preparing the payload
+            Log.e(TAG, "Error preparing payload: ", e);
+            return null;
+        }
+    }
+
+    public static String sha256(String input) {
+        try {
+            // Create a MessageDigest instance for SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            // Convert the input string to a byte array using UTF-8 encoding
+            byte[] bytes = input.getBytes("UTF-8");
+
+            // Compute the hash
+            byte[] digest = md.digest(bytes);
+
+            // Convert the digest to a hexadecimal string
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : digest) {
+                // Format each byte to a two-digit hexadecimal string
+                hexString.append(String.format("%02x", b));
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException | java.io.UnsupportedEncodingException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error generating SHA-256 hash: ", e);
+            return null;
+        }
+    }
 }
