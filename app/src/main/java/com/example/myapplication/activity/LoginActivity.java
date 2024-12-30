@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
-
+    private ProgressBar progressBar;
     EditText loginEmail, loginPassword;
     Button loginButton;
     TextView signupRedirectText;
@@ -35,24 +36,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Initialize views
         loginEmail = findViewById(R.id.loginEmail);
         loginPassword = findViewById(R.id.loginPassword);
         loginButton = findViewById(R.id.loginButton);
         signupRedirectText = findViewById(R.id.signupRedirectText);
+        progressBar = findViewById(R.id.progressBar);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleLogin();
-            }
-        });
+        // Set login button click listener
+        loginButton.setOnClickListener(v -> handleLogin());
 
-        signupRedirectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignupDashboardActivity.class);
-                startActivity(intent);
-            }
+        // Set signup redirect text click listener
+        signupRedirectText.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SignupDashboardActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -60,13 +57,16 @@ public class LoginActivity extends AppCompatActivity {
         String email = loginEmail.getText().toString().trim();
         String password = loginPassword.getText().toString().trim();
 
-        // Check if both email and password fields are filled
+        // Validate input
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(LoginActivity.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Make the POST request to the login API using RetrofitClient to get Retrofit instance
+        // Show progress bar
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Make the POST request to the login API
         ApiService apiService = RetrofitClient.getRetrofitInstance(LoginActivity.this).create(ApiService.class);
         LoginRequest loginRequest = new LoginRequest(email, password);
 
@@ -74,17 +74,16 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                progressBar.setVisibility(View.GONE);
+
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     if (loginResponse.isSuccess()) {
                         // Save tokens to SharedPreferences
                         SharedPreferencesManager.saveTokens(LoginActivity.this, loginResponse.getData().getAccessToken(), loginResponse.getData().getRefreshToken());
 
-                        // Show success message
-                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-
-                        String role=loginResponse.getData().getUser().getRole();
-                        // Pass user data to the next activity
+                        // Determine user role and navigate accordingly
+                        String role = loginResponse.getData().getUser().getRole();
                         Intent intent;
 
                         switch (role) {
@@ -99,13 +98,11 @@ public class LoginActivity extends AppCompatActivity {
                                 break;
                             default:
                                 Toast.makeText(LoginActivity.this, "Unknown role: " + role, Toast.LENGTH_SHORT).show();
-                                return; // Exit if role is unknown
+                                return;
                         }
                         intent.putExtra("user_email", loginResponse.getData().getUser().getEmail());
-//                        intent.putExtra("user_fullName", loginResponse.getData().getUser().);
-
                         startActivity(intent);
-                        finish();  // Close the login activity
+                        finish();
                     } else {
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }
@@ -118,11 +115,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Login request failed", t);
             }
         });
     }
-
-
 }

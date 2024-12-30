@@ -14,24 +14,31 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
 
     // Static method to return Retrofit instance
     public static Retrofit getRetrofitInstance(Context context) {
+
+
         // Create the logging interceptor for logging HTTP request and response bodies
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY); // Log the full body of requests and responses
 
         // Create OkHttpClient and add the logging interceptor and the auth interceptor
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)  // Connection timeout
+                .readTimeout(40, TimeUnit.SECONDS)     // Read timeout
+                .writeTimeout(40, TimeUnit.SECONDS)    // Write timeout
+
                 .addInterceptor(loggingInterceptor)  // Add the logging interceptor to OkHttpClient
                 .addInterceptor(new AuthInterceptor(context)) // Add the AuthInterceptor for adding authorization header
                 .build();
 
         // Create and return the Retrofit instance
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.1.13:3000") // Base URL for the API
+                .baseUrl("http://192.168.1.16:3000") // Base URL for the API
                 .client(okHttpClient)               // Use the OkHttpClient with logging and auth interceptor
                 .addConverterFactory(GsonConverterFactory.create()) // Convert JSON to Java objects using Gson
                 .build();

@@ -447,7 +447,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/idfrontPhoto"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -456,6 +456,8 @@
                     android:background="@drawable/dashed_border"
                     android:padding="16dp">
                     <ImageView
+                        android:id="@+id/idfrontPhoto"
+
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/baseline_add_24" />
@@ -473,7 +475,7 @@
                     android:layout_height="match_parent" />
                 <!-- Back Photo -->
                 <LinearLayout
-                    android:id="@+id/idbackPhoto"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -482,6 +484,7 @@
                     android:background="@drawable/dashed_border"
                     android:padding="16dp">
                     <ImageView
+                        android:id="@+id/idbackPhoto"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/baseline_add_24"
@@ -513,7 +516,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/cardocumentfrontPhoto"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -522,6 +525,7 @@
                     android:background="@drawable/dashed_border"
                     android:padding="16dp">
                     <ImageView
+                        android:id="@+id/cardocumentfrontPhoto"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/baseline_add_24" />
@@ -539,7 +543,7 @@
                     android:layout_height="match_parent" />
                 <!-- Back Photo -->
                 <LinearLayout
-                    android:id="@+id/cardocumentbackPhoto"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -548,6 +552,7 @@
                     android:background="@drawable/dashed_border"
                     android:padding="16dp">
                     <ImageView
+                        android:id="@+id/cardocumentbackPhoto"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/baseline_add_24"
@@ -579,7 +584,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/vechilelicensefrontPhoto"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -588,6 +593,7 @@
                     android:background="@drawable/dashed_border"
                     android:padding="16dp">
                     <ImageView
+                        android:id="@+id/vechilelicensefrontPhoto"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/baseline_add_24" />
@@ -605,7 +611,7 @@
                     android:layout_height="match_parent" />
                 <!-- Back Photo -->
                 <LinearLayout
-                    android:id="@+id/vechileicensebackPhoto"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -614,6 +620,7 @@
                     android:background="@drawable/dashed_border"
                     android:padding="16dp">
                     <ImageView
+                        android:id="@+id/vechileicensebackPhoto"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/baseline_add_24"
@@ -645,7 +652,7 @@
                 android:gravity="center">
                 <!-- Front Photo -->
                 <LinearLayout
-                    android:id="@+id/bankpassbookPhoto"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -653,6 +660,7 @@
                     android:background="@drawable/dashed_border"
                     android:padding="16dp">
                     <ImageView
+                        android:id="@+id/bankpassbookPhoto"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/baseline_add_24" />
@@ -676,6 +684,15 @@
                 android:text="Next" />
 
         </LinearLayout>
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:indeterminateTint="@color/green"
+            android:visibility="gone"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 

@@ -110,12 +110,18 @@ public interface ApiService {
 
 
 
-        @Multipart
-        @POST("/api/v1/cars/addCar")
-        Call<AddCarResponse> addCarWithImages(
-                @Part("carDetails") RequestBody carDetails,
-                @Part List<MultipartBody.Part> imageFiles
-        );
+    @Multipart
+    @POST("/api/v1/cars/addCar")
+    Call<AddCarResponse> addCarWithImages(
+            @Part("carDetails") RequestBody carDetails,
+            @Part List<MultipartBody.Part> imageFiles,
+            @Part List<MultipartBody.Part> idImageFiles,
+            @Part List<MultipartBody.Part> carDocumentFiles,
+            @Part List<MultipartBody.Part> vehicleLicenseFiles,
+            @Part List<MultipartBody.Part> bankpassbookFiles
+
+    );
+
 
     @GET("api/v1/cars/getCarByUserId")
     Call<CarDetailsResponse> getCarDetailsByUserId(@Query("userId") String userId);

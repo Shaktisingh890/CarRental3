@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,10 +13,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -27,6 +30,7 @@ import com.example.myapplication.utils.FileUtils;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +43,27 @@ import retrofit2.Response;
 
 public class AddCarActivity extends AppCompatActivity {
 
+    private ProgressBar progressBar;
+
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int IMAGE_COUNT = 4;
+    private static final int REQUEST_FRONT_PHOTO = 101;
+    private static final int REQUEST_BACK_PHOTO = 102;
+
+    private static final int REQUEST_FRONT_PHOTO_DOCUMENT = 103;
+    private static final int REQUEST_BACK_PHOTO_DOCUMENT = 104;
+    private static final int REQUEST_FRONT_PHOTO_VECHILE = 105;
+    private static final int REQUEST_BACK_PHOTO_VECHILE = 106;
+    private static final int REQUEST_FRONT_PHOTO_BANK = 107;
+    private static final int REQUEST_BACK_PHOTO_BANK= 108;
+
+    private MultipartBody.Part[] selectedImageParts1;
+    private MultipartBody.Part[] selectedImageParts2;
+    private MultipartBody.Part[] selectedImageParts3;
+    private MultipartBody.Part[] selectedImageParts4;
+
+
+
 
     // Step 1 Fields
     private EditText etCarName, etCarModel, etCarColor, etCarMileagePerHour, etCarDescription, etRegistrationNumber;
@@ -63,15 +86,14 @@ public class AddCarActivity extends AppCompatActivity {
 
     // Navigation Buttons
     private Button nextButton;
-    private ImageView backArrow;
-
+    private ImageView backArrow,idfrontPhoto, idbackPhoto, cardocumentfrontPhoto,cardocumentbackPhoto,vechilelicensefrontPhoto,vechileicensebackPhoto,bankpassbookPhoto;
+    private Uri idfrontPhotoUri, idbackPhotoUri,cardocumentfrontPhotoUri,cardocumentbackPhotoUri,vechilelicensefrontPhotoUri,vechilelicensebackPhotoUri,bankpassbookPhotoUri;
     // Step Views
     private View step1, step2, step3, step4, step5;
     private TextView stepIndicator;
     private int currentStep = 1;
     private int currentImageIndex = -1;
 
-    private LinearLayout idfrontPhoto,idbackPhoto,cardocumentfrontPhoto,cardocumentbackPhoto,vechilelicensefrontPhoto,vechilelicensebackPhoto,bankpassbookPhoto;
     // Retrofit API Service
     private ApiService apiService;
 
@@ -159,6 +181,42 @@ public class AddCarActivity extends AppCompatActivity {
                 openImageGallery();
             });
         }
+        idfrontPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_FRONT_PHOTO);
+        });
+
+        // Image selection for back photo
+        idbackPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_BACK_PHOTO);
+        });
+        // Image selection for front photo
+        cardocumentfrontPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_FRONT_PHOTO_DOCUMENT);
+        });
+
+        // Image selection for back photo
+        cardocumentbackPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_BACK_PHOTO_DOCUMENT);
+        });
+        // Image selection for front photo
+        vechilelicensefrontPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_FRONT_PHOTO_VECHILE);
+        });
+
+        // Image selection for back photo
+        vechileicensebackPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_BACK_PHOTO_VECHILE);
+        });
+        bankpassbookPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_FRONT_PHOTO_BANK);
+        });
     }
 
     // Initialize Views for all steps and buttons
@@ -172,6 +230,7 @@ public class AddCarActivity extends AppCompatActivity {
         stepIndicator = findViewById(R.id.stepIndicator);
         nextButton = findViewById(R.id.nextButton);
         backArrow = findViewById(R.id.backArrow);
+        progressBar = findViewById(R.id.progressBar);
 
         // Step 1 Fields
         etCarName = findViewById(R.id.etCarName);
@@ -205,6 +264,10 @@ public class AddCarActivity extends AppCompatActivity {
         // Image Upload Fields
         selectedImageViews = new ImageView[IMAGE_COUNT];
         selectedImageParts = new MultipartBody.Part[IMAGE_COUNT];
+        selectedImageParts1 = new MultipartBody.Part[2];
+        selectedImageParts2 = new MultipartBody.Part[2];
+        selectedImageParts3 = new MultipartBody.Part[2];
+        selectedImageParts4 = new MultipartBody.Part[2];
         uploadImageButtons = new Button[IMAGE_COUNT];
 
         selectedImageViews[0] = findViewById(R.id.selectedImageView1);
@@ -217,7 +280,16 @@ public class AddCarActivity extends AppCompatActivity {
         uploadImageButtons[2] = findViewById(R.id.uploadImagesButton3);
         uploadImageButtons[3] = findViewById(R.id.uploadImagesButton4);
 
+        idfrontPhoto = findViewById(R.id.idfrontPhoto);
+        idbackPhoto = findViewById(R.id.idbackPhoto);
 
+        cardocumentfrontPhoto = findViewById(R.id.cardocumentfrontPhoto);
+        cardocumentbackPhoto = findViewById(R.id.cardocumentbackPhoto);
+
+        vechilelicensefrontPhoto = findViewById(R.id.vechilelicensefrontPhoto);
+        vechileicensebackPhoto = findViewById(R.id.vechileicensebackPhoto);
+
+        bankpassbookPhoto = findViewById(R.id.bankpassbookPhoto);
 
     }
 
@@ -323,12 +395,47 @@ public class AddCarActivity extends AppCompatActivity {
             return;
         }
 
-        apiService.addCarWithImages(carDetailsBody, imageParts).enqueue(new Callback<AddCarResponse>() {
+        // Send images in separate lists for each document category
+        List<MultipartBody.Part> imageParts1 = new ArrayList<>();
+        List<MultipartBody.Part> imageParts2 = new ArrayList<>();
+        List<MultipartBody.Part> imageParts3 = new ArrayList<>();
+        List<MultipartBody.Part> imageParts4 = new ArrayList<>();
+
+        // Add images to respective lists
+        for (MultipartBody.Part imagePart : selectedImageParts1) {
+            if (imagePart != null) {
+                imageParts1.add(imagePart);
+            }
+        }
+
+        for (MultipartBody.Part imagePart : selectedImageParts2) {
+            if (imagePart != null) {
+                imageParts2.add(imagePart);
+            }
+        }
+
+        for (MultipartBody.Part imagePart : selectedImageParts3) {
+            if (imagePart != null) {
+                imageParts3.add(imagePart);
+            }
+        }
+
+        for (MultipartBody.Part imagePart : selectedImageParts4) {
+            if (imagePart != null) {
+                imageParts4.add(imagePart);
+            }
+        }
+        progressBar.setVisibility(View.VISIBLE);
+
+        apiService.addCarWithImages(carDetailsBody, imageParts,imageParts1,imageParts2,imageParts3,imageParts4).enqueue(new Callback<AddCarResponse>() {
             @Override
             public void onResponse(Call<AddCarResponse> call, Response<AddCarResponse> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(AddCarActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     if (response.body().isSuccess()) {
+                        Toast.makeText(AddCarActivity.this, "success", Toast.LENGTH_SHORT).show();
+
                         Intent intent = new Intent(AddCarActivity.this, PartnerDashboardActivity.class);
                         intent.putExtra("tab", "MyCars");
                         startActivity(intent);
@@ -341,6 +448,8 @@ public class AddCarActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddCarResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Log.d("mytag","myerror"+t.getMessage());
                 Toast.makeText(AddCarActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -366,7 +475,64 @@ public class AddCarActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        if (resultCode == RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            try {
+                // Decode the selected image to a bitmap
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+
+                if (requestCode == REQUEST_FRONT_PHOTO) {
+                    // Set the selected image to the front photo ImageView
+                    idfrontPhoto.setImageBitmap(bitmap);
+                    idfrontPhotoUri = selectedImageUri;
+                    selectedImageParts1[0]=prepareImageFilePart(selectedImageUri, "idfront");
+
+                } else if (requestCode == REQUEST_BACK_PHOTO) {
+                    // Set the selected image to the back photo ImageView
+                    idbackPhoto.setImageBitmap(bitmap);
+                    idbackPhotoUri = selectedImageUri;
+                    selectedImageParts1[1] = prepareImageFilePart(selectedImageUri, "idback");
+                }
+                if (requestCode == REQUEST_FRONT_PHOTO_DOCUMENT) {
+                    // Set the selected image to the front photo ImageView
+                    cardocumentfrontPhoto.setImageBitmap(bitmap);
+                    cardocumentfrontPhotoUri = selectedImageUri;
+                    selectedImageParts2[0] = prepareImageFilePart(selectedImageUri, "cardocumentfront");
+                } else if (requestCode == REQUEST_BACK_PHOTO_DOCUMENT) {
+                    // Set the selected image to the back photo ImageView
+                    cardocumentbackPhoto.setImageBitmap(bitmap);
+                    cardocumentbackPhotoUri = selectedImageUri;
+                    selectedImageParts2[1] = prepareImageFilePart(selectedImageUri, "cardocumentback");
+
+                }
+                if (requestCode == REQUEST_FRONT_PHOTO_VECHILE) {
+                    // Set the selected image to the front photo ImageView
+                    vechilelicensefrontPhoto.setImageBitmap(bitmap);
+                    vechilelicensefrontPhotoUri = selectedImageUri;
+                    selectedImageParts3[0] = prepareImageFilePart(selectedImageUri, "vechilelicensefront");
+                } else if (requestCode == REQUEST_BACK_PHOTO_VECHILE) {
+                    // Set the selected image to the back photo ImageView
+                    vechileicensebackPhoto.setImageBitmap(bitmap);
+                    vechilelicensebackPhotoUri = selectedImageUri;
+                    selectedImageParts3[1] = prepareImageFilePart(selectedImageUri, "vechilelicenseback");
+
+                }
+                if (requestCode == REQUEST_FRONT_PHOTO_BANK) {
+                    // Set the selected image to the front photo ImageView
+                    bankpassbookPhoto.setImageBitmap(bitmap);
+                    bankpassbookPhotoUri = selectedImageUri;
+                    selectedImageParts4[1] = prepareImageFilePart(selectedImageUri, "bankpassbookphoto");
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+
+
 
     // Prepare image file part for upload
     private MultipartBody.Part prepareImageFilePart(Uri imageUri, String partName) {
@@ -374,4 +540,5 @@ public class AddCarActivity extends AppCompatActivity {
         RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(imageUri)), file);
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
+
 }
