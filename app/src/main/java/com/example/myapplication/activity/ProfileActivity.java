@@ -1,19 +1,21 @@
 package com.example.myapplication.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.example.myapplication.dialog.*;
 
 import com.example.myapplication.R;
 import com.example.myapplication.models.response.LogoutResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
-import com.example.myapplication.utils.ProgressBarUtils;
 import com.example.myapplication.utils.SharedPreferencesManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.content.Intent;
@@ -32,17 +34,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavView;
 
-    private View progressOverlay;
-    private ProgressBar progressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Get the passed data from the Intent
-        String email = getIntent().getStringExtra("user_email");
-        String fullName = getIntent().getStringExtra("user_fullName");
+
         // Initialize views
         profileName = findViewById(R.id.profile_name);
         profilePhone = findViewById(R.id.profile_phone);
@@ -58,11 +55,20 @@ public class ProfileActivity extends AppCompatActivity {
         optionFaq = findViewById(R.id.option_faq);
         // Initialize views
         bottomNavView = findViewById(R.id.bottomNavView);
-        progressBar = findViewById(R.id.progressBar);
-        progressOverlay = findViewById(R.id.progressOverlay);
 
         // Set Profile tab as active
         bottomNavView.setSelectedItemId(R.id.nav_profile);
+
+        String fullName= getIntent().getStringExtra("fullName");
+        String email1 = getIntent().getStringExtra("email");
+        String phoneNumber = getIntent().getStringExtra("phoneNumber");
+        String address = getIntent().getStringExtra("address");
+        String imgUrl = getIntent().getStringExtra("imgUrl");
+
+        Log.d("myfullname","my name is "+fullName);
+        Log.d("myfullname","my name is "+phoneNumber);
+        Log.d("myfullname","my name is "+imgUrl);
+
 
         // Set up profile info
         if (fullName != null) {
@@ -71,7 +77,25 @@ public class ProfileActivity extends AppCompatActivity {
             profileName.setText("Cameron Williamson");
         }
 
-        profilePhone.setText("(219) 555-0114");
+        if (profilePhone != null) {
+            profilePhone.setText(phoneNumber); // Set the user's full name
+        } else {
+            profilePhone.setText("67899998765544");
+        }
+
+        if (profileImage != null && imgUrl != null && !imgUrl.isEmpty()) {
+            // Use Glide to load the image from URL
+            Glide.with(this)
+                    .load(imgUrl)
+                    .placeholder(R.drawable.profile) // Placeholder while loading
+                    .error(R.drawable.profile)       // Fallback in case of an error
+                    .into(profileImage);
+        } else {
+            profileImage.setImageResource(R.drawable.profile); // Set default profile picture
+        }
+
+
+
         profileImage.setImageResource(R.drawable.profile); // Replace with actual image resource if needed
 
         // Set up onClickListeners for options
@@ -156,8 +180,14 @@ public class ProfileActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(v -> {
             dialog.dismiss();  // Dismiss any previous dialog
 
-            ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+            // Get the ProgressBar from your layout
+            ProgressBar progressBar = findViewById(R.id.progressBar);
 
+            // Show the ProgressBar
+            progressBar.setVisibility(View.VISIBLE);
+
+            // Show a loading spinner while waiting for the API response
+            progressBar.setVisibility(View.GONE);
 
             // Call the logout API using Retrofit
             ApiService apiService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(ApiService.class);
@@ -167,8 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
                 apiService.logoutUser().enqueue(new retrofit2.Callback<LogoutResponse>() {
                     @Override
                     public void onResponse(Call<LogoutResponse> call, retrofit2.Response<LogoutResponse> response) {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
-
+                        progressBar.setVisibility(View.GONE);;  // Dismiss the loading spinner
 
                         if (response.isSuccessful()) {
                             // Clear session and navigate to LoginActivity
@@ -188,8 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<LogoutResponse> call, Throwable t) {
                         // Hide the ProgressBar in case of failure
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
-
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(ProfileActivity.this, "Network error. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });

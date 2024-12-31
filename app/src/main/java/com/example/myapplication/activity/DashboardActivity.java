@@ -3,13 +3,16 @@ package com.example.myapplication.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Spinner;
@@ -21,28 +24,35 @@ import com.example.myapplication.adapter.AyaStoriesAdapter;
 import com.example.myapplication.adapter.ImageSliderAdapter;
 import com.example.myapplication.models.response.Car;
 import com.example.myapplication.models.response.CategoryResponse;
+import com.example.myapplication.models.response.UserProfileResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.ProgressBarUtils;
 import com.example.myapplication.utils.SharedPreferencesManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardActivity extends AppCompatActivity {
 
     private Button lowCostButton, normalCostButton, searchCarButton;
     private Spinner pickupSpinner, dropoffSpinner;
 
+    private Uri selectedImageUri;
+    private View progressOverlay;
     private TextView tripStartDateTextView, tripStartTimeTextView, dropOffDateTextView, dropOffTimeTextView;
     private int year, month, day, hour, minute;
-
+    private ProgressBar progressBar;
     // Flags to identify which TextView to update
     private boolean isPickupDate = true;
     private boolean isPickupTime = true;
@@ -74,7 +84,8 @@ public class DashboardActivity extends AppCompatActivity {
         ViewPager2 viewPager2 = findViewById(R.id.ayaStoriesSlider);
         TabLayout tabLayout = findViewById(R.id.sliderDots);
         LinearLayout commentsContainer = findViewById(R.id.customerCommentsContainer);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressOverlay = findViewById(R.id.progressOverlay);
 
         // Initialize Spinners with data
         String[] locations = {"CT – Cape Town Airport", "Cape Town - City", "Johannesburg - City"};
@@ -276,8 +287,9 @@ public class DashboardActivity extends AppCompatActivity {
         if (id == R.id.nav_home) {
             return true;
         }  else if (id == R.id.nav_profile) {
-            startActivity(new Intent(DashboardActivity.this, ProfileActivity.class));
-            return true;
+            fetchUserProfile();
+
+
         }
         else if (item.getItemId() == R.id.nav_booking){
             startActivity(new Intent(DashboardActivity.this, MyBookingActivity.class));
@@ -309,5 +321,57 @@ public class DashboardActivity extends AppCompatActivity {
     // Interface for date-time selection callback
     public interface OnDateTimeSelectedListener {
         void onDateTimeSelected(String dateTime);
+    }
+
+    private void fetchUserProfile() {
+        Log.d("fetchUserProfile", "Making API call to fetch user profile");
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+
+        ApiService apiService = RetrofitClient.getRetrofitInstance(DashboardActivity.this).create(ApiService.class);
+        apiService.getUserProfile().enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
+                // Log the HTTP status code
+                Log.d("fetchUserProfile", "Response Code: " + response.code());
+
+                if (response.isSuccessful() && response.body() != null) {
+                    UserProfileResponse user = response.body();
+
+                    // Log individual fields from the response
+                    Log.d("fetchUserProfile", "Full Name: " + user.getData().getFullName());
+                    Log.d("fetchUserProfile", "Email: " + user.getData().getEmail());
+                    Log.d("fetchUserProfile", "Phone Number: " + user.getData().getPhoneNumber());
+                    Log.d("fetchUserProfile", "Address: " + user.getData().getAddress());
+                    Log.d("fetchUserProfile", "Image URL: " + user.getData().getImgUrl());
+
+                    // Pass data to ProfileActivity using Intent
+                    Intent intent = new Intent(DashboardActivity.this, ProfileActivity.class);
+                    intent.putExtra("fullName", user.getData().getFullName());
+                    intent.putExtra("email", user.getData().getEmail());
+                    intent.putExtra("phoneNumber", user.getData().getPhoneNumber());
+                    intent.putExtra("address", user.getData().getAddress());
+                    intent.putExtra("imgUrl", user.getData().getImgUrl());
+                    startActivity(intent);
+                } else {
+                    // Log the error body
+                    try {
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
+                        Log.d("fetchUserProfile", "Error Body: " + errorBody);
+                    } catch (IOException e) {
+                        Log.e("fetchUserProfile", "Error parsing error body: " + e.getMessage(), e);
+                    }
+                    Log.d("fetchUserProfile", "Failed to fetch profile. Error Code: " + response.code());
+                    Toast.makeText(DashboardActivity.this, "Failed to fetch profile", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                Log.e("fetchUserProfile", "Error: " + t.getMessage(), t);
+                Toast.makeText(DashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

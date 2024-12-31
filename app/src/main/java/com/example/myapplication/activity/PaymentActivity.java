@@ -38,7 +38,7 @@ public class PaymentActivity extends AppCompatActivity {
         CustomerCarResponse carDetails = intent.getParcelableExtra("carDetails");
 
 
-        Log.d("Amount","total amoount is "+totalAmount);
+        Log.d("Amount","total amount is "+totalAmount);
         // Initialize PhonePe SDK
 
             PhonePe.init(this, PhonePeEnvironment.SANDBOX, "ATMOSTUAT", "");
@@ -137,9 +137,9 @@ public class PaymentActivity extends AppCompatActivity {
             paymentPayload.put("merchantId", "ATMOSTUAT");
             paymentPayload.put("merchantTransactionId", "23456678766554");
             paymentPayload.put("merchantUserId", "M_23250000");
-            paymentPayload.put("amount", totalAmount);
+            paymentPayload.put("amount", 10000);
             paymentPayload.put("mobileNumber", "7300896284");
-            paymentPayload.put("callbackUrl", "http://192.168.1.16:3000/callback");
+            paymentPayload.put("callbackUrl", "https://447c-106-219-157-118.ngrok-free.app/phonepe-webhook");
 
             // Payment instrument details
             JSONObject paymentInstrument = new JSONObject();

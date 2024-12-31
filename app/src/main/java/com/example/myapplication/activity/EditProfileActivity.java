@@ -164,6 +164,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return;
         }
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(EditProfileActivity.this).create(ApiService.class);
         RequestBody nameRequestBody = RequestBody.create(MultipartBody.FORM, name);
@@ -175,6 +176,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 .enqueue(new Callback<UserProfileResponse>() {
                     @Override
                     public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                         if (response.isSuccessful()) {
                             Toast.makeText(EditProfileActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
                         } else {
@@ -184,6 +187,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                         Toast.makeText(EditProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -191,11 +196,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void fetchUserProfile() {
         Log.d("fetchUserProfile", "Making API call to fetch user profile");
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(EditProfileActivity.this).create(ApiService.class);
         apiService.getUserProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                 // Log the HTTP status code
                 Log.d("fetchUserProfile", "Response Code: " + response.code());
 
@@ -205,11 +213,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     // Log individual fields from the response
                     UserProfileResponse user = response.body();
-                    Log.d("fetchUserProfile", "Full Name: " + user.getData().getFullName());
-                    Log.d("fetchUserProfile", "Email: " + user.getData().getEmail());
-                    Log.d("fetchUserProfile", "Phone Number: " + user.getData().getPhoneNumber());
-                    Log.d("fetchUserProfile", "Address: " + user.getData().getAddress());
-                    Log.d("fetchUserProfile", "Image URL: " + user.getData().getImgUrl());
+//                    Log.d("fetchUserProfile", "Full Name: " + user.getData().getFullName());
+//                    Log.d("fetchUserProfile", "Email: " + user.getData().getEmail());
+//                    Log.d("fetchUserProfile", "Phone Number: " + user.getData().getPhoneNumber());
+//                    Log.d("fetchUserProfile", "Address: " + user.getData().getAddress());
+//                    Log.d("fetchUserProfile", "Image URL: " + user.getData().getImgUrl());
 
                     // Populate the UI
                     etName.setText(user.getData().getFullName());
@@ -220,11 +228,16 @@ public class EditProfileActivity extends AppCompatActivity {
                 } else {
                     // Log the error body
                     try {
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
                         Log.d("fetchUserProfile", "Error Body: " + errorBody);
                     } catch (IOException e) {
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                         Log.e("fetchUserProfile", "Error parsing error body: " + e.getMessage(), e);
                     }
+                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
 
                     Log.d("fetchUserProfile", "Failed to fetch profile. Error Code: " + response.code());
                     Toast.makeText(EditProfileActivity.this, "Failed to fetch profile", Toast.LENGTH_SHORT).show();
