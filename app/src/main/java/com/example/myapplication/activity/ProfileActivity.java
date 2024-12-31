@@ -13,6 +13,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.models.response.LogoutResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.ProgressBarUtils;
 import com.example.myapplication.utils.SharedPreferencesManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.content.Intent;
@@ -30,6 +31,9 @@ public class ProfileActivity extends AppCompatActivity {
     optionSettings,optionTermsConditions,optionCustomerSupport,optionRateUs,optionLogout,optionFaq;
 
     private BottomNavigationView bottomNavView;
+
+    private View progressOverlay;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
         optionFaq = findViewById(R.id.option_faq);
         // Initialize views
         bottomNavView = findViewById(R.id.bottomNavView);
+        progressBar = findViewById(R.id.progressBar);
+        progressOverlay = findViewById(R.id.progressOverlay);
 
         // Set Profile tab as active
         bottomNavView.setSelectedItemId(R.id.nav_profile);
@@ -150,14 +156,8 @@ public class ProfileActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(v -> {
             dialog.dismiss();  // Dismiss any previous dialog
 
-            // Get the ProgressBar from your layout
-            ProgressBar progressBar = findViewById(R.id.progressBar);
+            ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
 
-            // Show the ProgressBar
-            progressBar.setVisibility(View.VISIBLE);
-
-            // Show a loading spinner while waiting for the API response
-            progressBar.setVisibility(View.GONE);
 
             // Call the logout API using Retrofit
             ApiService apiService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(ApiService.class);
@@ -167,7 +167,8 @@ public class ProfileActivity extends AppCompatActivity {
                 apiService.logoutUser().enqueue(new retrofit2.Callback<LogoutResponse>() {
                     @Override
                     public void onResponse(Call<LogoutResponse> call, retrofit2.Response<LogoutResponse> response) {
-                        progressBar.setVisibility(View.GONE);;  // Dismiss the loading spinner
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
 
                         if (response.isSuccessful()) {
                             // Clear session and navigate to LoginActivity
@@ -187,7 +188,8 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<LogoutResponse> call, Throwable t) {
                         // Hide the ProgressBar in case of failure
-                        progressBar.setVisibility(View.GONE);
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                         Toast.makeText(ProfileActivity.this, "Network error. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });

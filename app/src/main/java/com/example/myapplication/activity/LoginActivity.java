@@ -26,6 +26,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    private View progressOverlay; // Added overlay for blur effect
     private ProgressBar progressBar;
     EditText loginEmail, loginPassword;
     Button loginButton;
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         signupRedirectText = findViewById(R.id.signupRedirectText);
         progressBar = findViewById(R.id.progressBar);
+        progressOverlay = findViewById(R.id.progressOverlay); // Overlay view for blur effect
 
         // Set login button click listener
         loginButton.setOnClickListener(v -> handleLogin());
@@ -63,8 +65,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Show progress bar
-        progressBar.setVisibility(View.VISIBLE);
+        // Show progress bar and overlay
+        showProgress(true); // Modified to include overlay visibility
 
         // Make the POST request to the login API
         ApiService apiService = RetrofitClient.getRetrofitInstance(LoginActivity.this).create(ApiService.class);
@@ -74,13 +76,13 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                progressBar.setVisibility(View.GONE);
+                showProgress(false); // Modified to include overlay visibility
 
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     if (loginResponse.isSuccess()) {
                         // Save tokens to SharedPreferences
-                        SharedPreferencesManager.saveTokens(LoginActivity.this, loginResponse.getData().getAccessToken(), loginResponse.getData().getRefreshToken());
+                        SharedPreferencesManager.saveTokens(LoginActivity.this, loginResponse.getData().getAccessToken(), loginResponse.getData().getRefreshToken(),true);
 
                         // Determine user role and navigate accordingly
                         String role = loginResponse.getData().getUser().getRole();
@@ -115,10 +117,21 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                showProgress(false); // Modified to include overlay visibility
                 Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Login request failed", t);
             }
         });
+    }
+
+    // Method to handle showing and hiding progress bar with overlay
+    private void showProgress(boolean show) {
+        if (show) {
+            progressOverlay.setVisibility(View.VISIBLE); // Show overlay
+            progressBar.setVisibility(View.VISIBLE); // Show progress bar
+        } else {
+            progressOverlay.setVisibility(View.GONE); // Hide overlay
+            progressBar.setVisibility(View.GONE); // Hide progress bar
+        }
     }
 }

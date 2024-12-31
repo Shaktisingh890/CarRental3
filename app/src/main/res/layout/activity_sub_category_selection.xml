@@ -1,8 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".activity.SubCategorySelectionActivity">
+
+<ScrollView
+
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
@@ -79,9 +86,7 @@
                         android:textStyle="bold"
                         android:textColor="#000" />
 
-
                 </LinearLayout>
-
 
                 <!-- Bottom Border Line -->
                 <View
@@ -90,35 +95,43 @@
                     android:layout_marginTop="8dp"
                     android:background="@android:color/darker_gray" />
 
-                <GridLayout
+                <!-- Grid for Subcategories and Progress View -->
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="3"
-                    android:padding="8dp"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:background="@drawable/selected_option_background"
-                        android:layout_margin="4dp">
+                    android:padding="8dp">
+
+                    <!-- ListView for Subcategories -->
                     <ListView
                         android:id="@+id/subCategoryListView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:divider="@android:color/darker_gray"
-                        android:dividerHeight="1dp" />
-                    </LinearLayout>
-                </GridLayout>
+                        android:dividerHeight="1dp"
+                        android:layout_centerInParent="true" />
 
+                    <!-- Progress Overlay -->
+                    <View
+                        android:id="@+id/progressOverlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:background="#80000000"
+                        android:visibility="gone" />
 
-
+                    <!-- Progress Bar centered within the Overlay -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone"
+                        android:indeterminateTint="@color/green" />
+                </RelativeLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 </ScrollView>
+    </FrameLayout>

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.models.response.CustomerCarResponse;
 import com.phonepe.intent.sdk.api.PhonePe;
 import com.phonepe.intent.sdk.api.PhonePeInitException;
 import com.phonepe.intent.sdk.api.models.PhonePeEnvironment;
@@ -22,33 +23,39 @@ import java.security.NoSuchAlgorithmException;
 
 public class PaymentActivity extends AppCompatActivity {
 
-    private Button btnPay;
+
     private static final String TAG = "PaymentActivity"; // Define a tag for logging
     private static final int B2B_PG_REQUEST_CODE = 1; // Request code for startActivityForResult
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
 
+
+        // Retrieve data from intent
+        Intent intent = getIntent();
+        int totalAmount = intent.getIntExtra("totalAmount", 0);
+        CustomerCarResponse carDetails = intent.getParcelableExtra("carDetails");
+
+
+        Log.d("Amount","total amoount is "+totalAmount);
         // Initialize PhonePe SDK
 
             PhonePe.init(this, PhonePeEnvironment.SANDBOX, "ATMOSTUAT", "");
             Log.d(TAG, "PhonePe SDK initialized successfully");
 
 
-        btnPay = findViewById(R.id.btnPay);
-        btnPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Pay button clicked. Initiating B2B payment.");
-                initiateB2BPayment();
-            }
-        });
+
+
+
+
+        Log.d(TAG, "Starting payment process...");
+                initiateB2BPayment(totalAmount);
+
     }
 
-    private void initiateB2BPayment() {
-        String base64Body = preparePayload(); // Prepare the payload and Base64 encode it
+    private void initiateB2BPayment(int totalAmount) {
+        String base64Body = preparePayload(totalAmount); // Prepare the payload and Base64 encode it
         if (base64Body == null) {
             Log.e(TAG, "Payload preparation failed, aborting payment initiation");
             Toast.makeText(this, "Payment failed: Payload preparation error", Toast.LENGTH_SHORT).show();
@@ -123,16 +130,16 @@ public class PaymentActivity extends AppCompatActivity {
 
 
 
-    private String preparePayload() {
+    private String preparePayload(int totalAmount) {
         try {
             // Build the JSON payload
             JSONObject paymentPayload = new JSONObject();
             paymentPayload.put("merchantId", "ATMOSTUAT");
             paymentPayload.put("merchantTransactionId", "23456678766554");
             paymentPayload.put("merchantUserId", "M_23250000");
-            paymentPayload.put("amount", 10000);
+            paymentPayload.put("amount", totalAmount);
             paymentPayload.put("mobileNumber", "7300896284");
-            paymentPayload.put("callbackUrl", "https://sapoto.in/payment");
+            paymentPayload.put("callbackUrl", "http://192.168.1.16:3000/callback");
 
             // Payment instrument details
             JSONObject paymentInstrument = new JSONObject();

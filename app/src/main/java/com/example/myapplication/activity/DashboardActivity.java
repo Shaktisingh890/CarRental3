@@ -23,6 +23,7 @@ import com.example.myapplication.models.response.Car;
 import com.example.myapplication.models.response.CategoryResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.SharedPreferencesManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -49,6 +50,14 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean isLoggedIn = SharedPreferencesManager.isLoggedIn(this);
+        if(!isLoggedIn){
+            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();  // Finish current activity
+            return;
+        }
         setContentView(R.layout.activity_dashboard);
 
         // Initialize UI components

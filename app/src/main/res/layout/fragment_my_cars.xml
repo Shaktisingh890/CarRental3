@@ -4,100 +4,127 @@
     android:layout_margin="8dp"
     android:elevation="4dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/carsRecyclerView"
+    <!-- FrameLayout to hold the progress overlay and content -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        <!-- RecyclerView for displaying cars -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/carsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp" />
 
+        <!-- Main content layout (for car details) -->
         <LinearLayout
             android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-            <!-- Car Image -->
-            <ImageView
-                android:id="@+id/carImage"
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"/>
+                android:layout_height="wrap_content">
 
-            <!-- Car Brand and Model -->
-            <TextView
-                android:id="@+id/carBrand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp" />
+                <!-- Car Image -->
+                <ImageView
+                    android:id="@+id/carImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"/>
 
-            <TextView
-                android:id="@+id/carModel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp" />
+                <!-- Car Brand and Model -->
+                <TextView
+                    android:id="@+id/carBrand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp" />
 
-            <!-- Other car details like year, seats, fuel type -->
-            <TextView
-                android:id="@+id/carYear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/carModel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/carSeats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <!-- Other car details like year, seats, fuel type -->
+                <TextView
+                    android:id="@+id/carYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/carFuelType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/carSeats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/carPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/carFuelType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <!-- Additional features like mileage, availability -->
-            <TextView
-                android:id="@+id/carMilage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/carPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/carColor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <!-- Additional features like mileage, availability -->
+                <TextView
+                    android:id="@+id/carMilage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/carAvailability"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/carColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <!-- Features -->
-            <TextView
-                android:id="@+id/carFeatures"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/carAvailability"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <!-- Car category and sub-category -->
-            <TextView
-                android:id="@+id/carCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <!-- Features -->
+                <TextView
+                    android:id="@+id/carFeatures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/carSubCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <!-- Car category and sub-category -->
+                <TextView
+                    android:id="@+id/carCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
+                <TextView
+                    android:id="@+id/carSubCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+        <!-- Progress Overlay (invisible by default) -->
+        <View
+            android:id="@+id/progressOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <!-- Progress Bar centered within the Overlay -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:indeterminateTint="@color/green" />
+
+    </FrameLayout>
 </androidx.cardview.widget.CardView>

@@ -44,6 +44,7 @@ import retrofit2.Response;
 public class AddCarActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
+    private View progressOverlay; // Added overlay for blur effect
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int IMAGE_COUNT = 4;
@@ -226,6 +227,9 @@ public class AddCarActivity extends AppCompatActivity {
         step3 = findViewById(R.id.step3);
         step4 = findViewById(R.id.step4);
         step5 = findViewById(R.id.step5);
+
+
+        progressOverlay = findViewById(R.id.progressOverlay); // Overlay view for blur effect
 
         stepIndicator = findViewById(R.id.stepIndicator);
         nextButton = findViewById(R.id.nextButton);
@@ -425,12 +429,12 @@ public class AddCarActivity extends AppCompatActivity {
                 imageParts4.add(imagePart);
             }
         }
-        progressBar.setVisibility(View.VISIBLE);
+        showProgress(true);
 
         apiService.addCarWithImages(carDetailsBody, imageParts,imageParts1,imageParts2,imageParts3,imageParts4).enqueue(new Callback<AddCarResponse>() {
             @Override
             public void onResponse(Call<AddCarResponse> call, Response<AddCarResponse> response) {
-                progressBar.setVisibility(View.GONE);
+                showProgress(false);
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(AddCarActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     if (response.body().isSuccess()) {
@@ -448,7 +452,7 @@ public class AddCarActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddCarResponse> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                showProgress(false);
                 Log.d("mytag","myerror"+t.getMessage());
                 Toast.makeText(AddCarActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -539,6 +543,18 @@ public class AddCarActivity extends AppCompatActivity {
         File file = new File(FileUtils.getPath(this, imageUri));
         RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(imageUri)), file);
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
+    }
+
+
+    // Method to handle showing and hiding progress bar with overlay
+    private void showProgress(boolean show) {
+        if (show) {
+            progressOverlay.setVisibility(View.VISIBLE); // Show overlay
+            progressBar.setVisibility(View.VISIBLE); // Show progress bar
+        } else {
+            progressOverlay.setVisibility(View.GONE); // Hide overlay
+            progressBar.setVisibility(View.GONE); // Hide progress bar
+        }
     }
 
 }

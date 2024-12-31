@@ -10,11 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.myapplication.utils.ProgressBarUtils;
+import com.example.myapplication.utils.ProgressBarUtils.*;
+
 
 import com.example.myapplication.R;
 import com.example.myapplication.models.response.CustomerCarResponse;
@@ -45,6 +50,8 @@ public class IdentificationActivity extends AppCompatActivity {
     private ImageView backButton, frontPhoto, backPhoto;
     private Uri frontPhotoUri, backPhotoUri;
     private CustomerCarResponse selectedCar;
+    private View progressOverlay;
+    private ProgressBar progressBar;
 
 
 
@@ -62,7 +69,8 @@ public class IdentificationActivity extends AppCompatActivity {
         backPhoto = findViewById(R.id.backImageView);
         nextButton = findViewById(R.id.next_button);
         backButton = findViewById(R.id.back_button);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressOverlay = findViewById(R.id.progressOverlay);
         // Handle Radio Button Selection
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.radio_national_id) {
@@ -137,17 +145,18 @@ public class IdentificationActivity extends AppCompatActivity {
         RequestBody typeBody = RequestBody.create(MediaType.parse("text/plain"), type);
         RequestBody idBody = RequestBody.create(MediaType.parse("text/plain"), type.equals("National ID") ? nationalId : passportNumber);
 
-
         MultipartBody.Part frontPart = createImagePart("front_photo", frontPhotoUri);
         MultipartBody.Part backPart = createImagePart("back_photo", backPhotoUri);
-
+        // Show progress bar and overlay
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
         // Call API
         Call<UploadIdResponse> call = apiService.uploadId(typeBody,idBody, frontPart, backPart);
         call.enqueue(new Callback<UploadIdResponse>() {
             @Override
             public void onResponse(Call<UploadIdResponse> call, Response<UploadIdResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-
+                    // Show progress bar and overlay
+                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
                     Toast.makeText(IdentificationActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     // Proceed to next activity if needed
                     Intent intent = new Intent(IdentificationActivity.this,ConfirmationActivity.class);
@@ -165,6 +174,8 @@ public class IdentificationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UploadIdResponse> call, Throwable t) {
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                 Toast.makeText(IdentificationActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

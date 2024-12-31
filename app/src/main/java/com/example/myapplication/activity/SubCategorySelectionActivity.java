@@ -7,8 +7,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
+import com.example.myapplication.utils.ProgressBarUtils;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -28,7 +29,8 @@ import retrofit2.Response;
 public class SubCategorySelectionActivity extends AppCompatActivity {
 
     private ListView subCategoryListView;
-
+    private View progressOverlay;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,8 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
 
         // Get the ListView for displaying subcategories
         subCategoryListView = findViewById(R.id.subCategoryListView);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressOverlay = findViewById(R.id.progressOverlay);
         // Get the category from the intent
         String category = getIntent().getStringExtra("CATEGORY");
 
@@ -53,12 +56,17 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
     }
 
     private void fetchSubCategories(String category) {
+
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
         // Make the network call
         apiService.getSubCategories(category).enqueue(new Callback<SubCategoryResponse>() {
             @Override
             public void onResponse(Call<SubCategoryResponse> call, Response<SubCategoryResponse> response) {
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                 if (response.isSuccessful() && response.body() != null) {
                     SubCategoryResponse subCategoryResponse = response.body();
                     List<String> subCategories = subCategoryResponse.getSubcategories();
@@ -79,6 +87,8 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SubCategoryResponse> call, Throwable t) {
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+
                 Toast.makeText(SubCategorySelectionActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

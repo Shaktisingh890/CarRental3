@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import com.example.myapplication.models.response.ImageResponse;
 import com.example.myapplication.models.response.UserProfileResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.ProgressBarUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,12 +41,15 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY = 2;
     private static final int REQUEST_CAMERA = 3;
     private Uri selectedImageUri;
+    private View progressOverlay;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressOverlay = findViewById(R.id.progressOverlay);
         etName = findViewById(R.id.et_name);
         etEmail = findViewById(R.id.et_email);
         etPhone = findViewById(R.id.et_phone);
@@ -111,6 +116,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         File file = getImageFile();
         if (file == null) return;
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(EditProfileActivity.this).create(ApiService.class);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
@@ -119,6 +125,7 @@ public class EditProfileActivity extends AppCompatActivity {
         apiService.uploadImage(part).enqueue(new Callback<ImageResponse>() {
             @Override
             public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false);
                 if (response.isSuccessful()) {
                     Toast.makeText(EditProfileActivity.this, "Image Changed successfully", Toast.LENGTH_SHORT).show();
                 } else {
@@ -128,6 +135,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ImageResponse> call, Throwable t) {
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false);
+
                 Toast.makeText(EditProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

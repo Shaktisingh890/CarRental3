@@ -90,7 +90,6 @@ public class ConfirmationActivity extends AppCompatActivity {
 
             // Confirm button functionality - Now opens PaymentActivity directly
             confirmButton.setOnClickListener(v -> {
-                Toast.makeText(this, "Booking Confirmed!", Toast.LENGTH_SHORT).show();
 
                 // Pass car data and total amount to PaymentActivity
                 Intent paymentIntent = new Intent(ConfirmationActivity.this, PaymentActivity.class);
