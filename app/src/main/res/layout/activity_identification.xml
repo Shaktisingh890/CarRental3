@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:backgroundTint="#1E824C"
-            android:text="Continue"
+            android:text="Save"
             android:textColor="#FFFFFF"
             android:visibility="gone"
             android:padding="12dp" />
@@ -199,6 +199,7 @@
         android:background="#80000000"
         android:visibility="gone" />
 
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="60dp"
