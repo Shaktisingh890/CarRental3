@@ -164,6 +164,7 @@
             android:backgroundTint="#1E824C"
             android:text="Continue"
             android:textColor="#FFFFFF"
+            android:visibility="gone"
             android:padding="12dp" />
 
         <Button
@@ -172,7 +173,7 @@
             android:layout_height="wrap_content"
             android:text="Skip"
             android:layout_marginTop="16dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"/>
 
 
@@ -182,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Update"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_marginTop="16dp" />
 
 

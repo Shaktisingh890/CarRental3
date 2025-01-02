@@ -81,8 +81,7 @@ public class IdentificationActivity extends AppCompatActivity {
         progressOverlay = findViewById(R.id.progressOverlay);
 
 
-        passportIdInput.setVisibility(View.GONE);
-        nationalIdInput.setVisibility(View.GONE);
+
 
         // Handle Radio Button Selection
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
