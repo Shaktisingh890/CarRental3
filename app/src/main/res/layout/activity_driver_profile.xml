@@ -29,8 +29,22 @@
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:layout_marginStart="8dp"
-                    android:textColor="#000" />
+                    android:textColor="#000"
+                    android:layout_weight="1" /> <!-- This ensures TextView takes all available space -->
+
+                <!-- Cross icon -->
+                <ImageView
+                    android:id="@+id/close"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/close"
+                    android:contentDescription="Close"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
+
             <!-- Profile Section -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,6 +93,7 @@
 
             <!-- Account Settings -->
             <RelativeLayout
+                android:id="@+id/option_edit_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -86,12 +101,12 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/editProfile"
+                    android:id="@+id/edit_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit Profile"
                     android:textSize="16sp"
-                    android:drawableLeft="@drawable/user"
+                    android:drawableLeft="@drawable/baseline_person_24"
                     android:drawablePadding="8dp"
                     android:textColor="#000000" />
 
@@ -112,6 +127,7 @@
 
             <!-- Vehicle Settings -->
             <RelativeLayout
+                android:id="@+id/rides"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -119,12 +135,11 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/request"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Request"
+                    android:text="My Rides"
                     android:textSize="16sp"
-                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawableLeft="@drawable/baseline_directions_car_24"
                     android:drawablePadding="8dp"
                     android:textColor="#000000" />
 
@@ -144,6 +159,7 @@
 
             <!-- Vehicle Settings -->
             <RelativeLayout
+                android:id="@+id/documents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -151,12 +167,11 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/wallet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My Wallet"
+                    android:text="My Documents"
                     android:textSize="16sp"
-                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawableLeft="@drawable/round_document_scanner_24"
                     android:drawablePadding="8dp"
                     android:textColor="#000000" />
 
@@ -176,6 +191,7 @@
 
             <!-- Vehicle Settings -->
             <RelativeLayout
+                android:id="@+id/earnings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -183,12 +199,11 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="History"
+                    android:text="Earnings"
                     android:textSize="16sp"
-                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawableLeft="@drawable/baseline_currency_exchange_24"
                     android:drawablePadding="8dp"
                     android:textColor="#000000" />
 
@@ -239,8 +254,9 @@
                 android:layout_height="1dp"
                 android:background="#EEEEEE" />
 
-            <!-- License Upload -->
+            <!--FAQ-->
             <RelativeLayout
+                android:id="@+id/faq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -248,12 +264,11 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/uploadLicense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload License"
+                    android:text="FAQ"
                     android:textSize="16sp"
-                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawableLeft="@drawable/faq"
                     android:drawablePadding="8dp"
                     android:textColor="#000000" />
 
@@ -271,8 +286,9 @@
                 android:layout_height="1dp"
                 android:background="#EEEEEE" />
 
-            <!-- Payment Information -->
+            <!--Contact US-->
             <RelativeLayout
+                android:id="@+id/contact_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -280,12 +296,11 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/paymentInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Payment Information"
+                    android:text="Contact Us"
                     android:textSize="16sp"
-                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawableLeft="@drawable/contact1"
                     android:drawablePadding="8dp"
                     android:textColor="#000000" />
 
@@ -305,6 +320,7 @@
 
             <!-- Logout -->
             <RelativeLayout
+                android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -312,7 +328,7 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/logout"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Logout"
@@ -333,14 +349,14 @@
     </ScrollView>
 
     <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/nav_item_color"
-        app:itemTextColor="@color/nav_item_color" />
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottomNavView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:background="@color/white"-->
+<!--        app:menu="@menu/bottom_nav_menu"-->
+<!--        app:labelVisibilityMode="labeled"-->
+<!--        app:itemIconTint="@color/nav_item_color"-->
+<!--        app:itemTextColor="@color/nav_item_color" />-->
 </RelativeLayout>

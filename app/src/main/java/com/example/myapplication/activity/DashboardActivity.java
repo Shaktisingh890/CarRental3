@@ -81,9 +81,9 @@ public class DashboardActivity extends AppCompatActivity {
         dropOffDateTextView = findViewById(R.id.trip_end_date);
         dropOffTimeTextView = findViewById(R.id.trip_end_time);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
-        ViewPager2 viewPager2 = findViewById(R.id.ayaStoriesSlider);
-        TabLayout tabLayout = findViewById(R.id.sliderDots);
-        LinearLayout commentsContainer = findViewById(R.id.customerCommentsContainer);
+//        ViewPager2 viewPager2 = findViewById(R.id.ayaStoriesSlider);
+//        TabLayout tabLayout = findViewById(R.id.sliderDots);
+//        LinearLayout commentsContainer = findViewById(R.id.customerCommentsContainer);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
 
@@ -96,11 +96,11 @@ public class DashboardActivity extends AppCompatActivity {
         // Setup Slider
         List<Integer> storyImages = Arrays.asList(R.drawable.sedan, R.drawable.suv, R.drawable.hatchback);
         AyaStoriesAdapter sliderAdapter = new AyaStoriesAdapter(this, storyImages);
-        viewPager2.setAdapter(sliderAdapter);
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {}).attach();
+//        viewPager2.setAdapter(sliderAdapter);
+//        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {}).attach();
 
         // Add Customer Comments
-        addCustomerComments(commentsContainer);
+//        addCustomerComments(commentsContainer);
 
         // Set current date and time
         Calendar calendar = Calendar.getInstance();

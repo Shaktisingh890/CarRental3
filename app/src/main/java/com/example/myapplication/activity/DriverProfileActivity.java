@@ -2,66 +2,83 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import  com.example.myapplication.R;
+
+import com.example.myapplication.R;
+
 public class DriverProfileActivity extends AppCompatActivity {
 
-    private ImageView profileImage;
+    private ImageView profileImage, close;
     private TextView profileName, profilePhone;
-    private TextView editProfile, notifications,request,wallet,history, uploadLicense, paymentInfo, logout;
+    private RelativeLayout optionEditProfile, rides, documents, earnings,faq,contact_us, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_driver_profile); // Ensure your XML layout file is named activity_profile.xml
+        setContentView(R.layout.activity_driver_profile); // Make sure your XML layout is correct
 
         // Initialize views
         profileImage = findViewById(R.id.profile_image);
         profileName = findViewById(R.id.profile_name);
         profilePhone = findViewById(R.id.profile_phone);
-
-        editProfile = findViewById(R.id.editProfile);
-        notifications = findViewById(R.id.notifications);
-        uploadLicense = findViewById(R.id.uploadLicense);
-        paymentInfo = findViewById(R.id.paymentInfo);
-        request = findViewById(R.id.request);
-        wallet = findViewById(R.id.wallet);
-        history = findViewById(R.id.history);
-
+        optionEditProfile = findViewById(R.id.option_edit_profile);
+        rides = findViewById(R.id.rides);
+        documents = findViewById(R.id.documents);
+        faq = findViewById(R.id.faq);
+        contact_us = findViewById(R.id.contact_us);
+        earnings = findViewById(R.id.earnings);
         logout = findViewById(R.id.logout);
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
+        close = findViewById(R.id.close); // Close button
 
         // Set initial profile details
         setProfileDetails();
 
         // Handle clicks on menu items
-        editProfile.setOnClickListener(v -> navigateTo(EditProfileActivity.class));
-//        vehicleDetails.setOnClickListener(v -> navigateTo(VehicleDetailsActivity.class));
-//        uploadLicense.setOnClickListener(v -> navigateTo(UploadLicenseActivity.class));
-//        paymentInfo.setOnClickListener(v -> navigateTo(PaymentInfoActivity.class));
-        logout.setOnClickListener(v -> logoutUser());
+        optionEditProfile.setOnClickListener(v -> {
+            // Debugging
+            Log.d("DriverProfileActivity", "Edit Profile clicked!");
 
-        // Handle Bottom Navigation clicks
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.nav_home) {
-                startActivity(new Intent(DriverProfileActivity.this, DriverDashboardActivity.class));
-                return true;
-            } else if (itemId == R.id.nav_settings) {
-                startActivity(new Intent(DriverProfileActivity.this, DriverProfileActivity.class));
-                return true;
-            }
-            return false;
+            // Redirect to Edit Profile Activity
+            Intent intent = new Intent(DriverProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
         });
 
+
+        rides.setOnClickListener(v -> {
+            // Redirect to Rides Activity
+            Intent intent = new Intent(DriverProfileActivity.this, MyRidesActivity.class);
+            startActivity(intent);
+        });
+        documents.setOnClickListener(v -> {
+            // Redirect to Rides Activity
+            Intent intent = new Intent(DriverProfileActivity.this, MyDocumentsActivity.class);
+            startActivity(intent);
+        });
+        contact_us.setOnClickListener(v -> {
+            // Redirect to Rides Activity
+            Intent intent = new Intent(DriverProfileActivity.this,DriverContactActivity.class);
+            startActivity(intent);
+        });
+        faq.setOnClickListener(v -> {
+            // Redirect to Rides Activity
+            Intent intent = new Intent(DriverProfileActivity.this,DriverFaqActivity.class);
+            startActivity(intent);
+        });
+        earnings.setOnClickListener(v -> {
+            // Redirect to Rides Activity
+            Intent intent = new Intent(DriverProfileActivity.this,DriverEarningsActivity.class);
+            startActivity(intent);
+        });
+        // Set logout logic if necessary
+        logout.setOnClickListener(v -> finish()); // Logout logic (finish current activity)
+
+        // Close activity when the close icon is clicked
+        close.setOnClickListener(v -> finish()); // Close activity on click of the close icon
     }
 
     private void setProfileDetails() {
@@ -69,16 +86,5 @@ public class DriverProfileActivity extends AppCompatActivity {
         profileName.setText("Cameron Williamson");
         profilePhone.setText("(219) 555-0114");
         profileImage.setImageResource(R.drawable.profile); // Replace with actual profile image loading logic
-    }
-
-    private void navigateTo(Class<?> activityClass) {
-        Intent intent = new Intent(DriverProfileActivity.this, activityClass);
-        startActivity(intent);
-    }
-
-    private void logoutUser() {
-        // Handle logout logic, e.g., clearing user session, redirecting to login
-        startActivity(new Intent(DriverProfileActivity.this, LoginActivity.class));
-        finish();
     }
 }

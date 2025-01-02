@@ -80,10 +80,7 @@ public class IdentificationActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
 
-
-
-
-        // Handle Radio Button Selection
+// Handle Radio Button Selection
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.radio_national_id) {
                 nationalIdInput.setVisibility(View.VISIBLE);
@@ -93,16 +90,16 @@ public class IdentificationActivity extends AppCompatActivity {
                 passportIdInput.setVisibility(View.VISIBLE);
             } else {
                 // Show both inputs if no radio button is selected
-                nationalIdInput.setVisibility(View.VISIBLE);
-                passportIdInput.setVisibility(View.VISIBLE);
+                nationalIdInput.setVisibility(View.GONE);
+                passportIdInput.setVisibility(View.GONE);
             }
         });
 
-        // Set initial visibility based on the default selection or no selection
+// Set initial visibility based on the default selection or no selection
         if (radioGroup.getCheckedRadioButtonId() == -1) {
-            // No radio button selected, show both inputs
-            nationalIdInput.setVisibility(View.VISIBLE);
-            passportIdInput.setVisibility(View.VISIBLE);
+            // No radio button selected, hide both inputs
+            nationalIdInput.setVisibility(View.GONE);
+            passportIdInput.setVisibility(View.GONE);
         } else if (radioGroup.getCheckedRadioButtonId() == R.id.radio_national_id) {
             nationalIdInput.setVisibility(View.VISIBLE);
             passportIdInput.setVisibility(View.GONE);
@@ -110,6 +107,7 @@ public class IdentificationActivity extends AppCompatActivity {
             nationalIdInput.setVisibility(View.GONE);
             passportIdInput.setVisibility(View.VISIBLE);
         }
+
 
         // Retrieve the car object from the intent
         Intent intent1 = getIntent();

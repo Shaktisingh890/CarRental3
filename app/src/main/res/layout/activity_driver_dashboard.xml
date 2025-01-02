@@ -2,11 +2,13 @@
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- Main Content -->
     <RelativeLayout
+        android:id="@+id/topSection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F5F5F5">
@@ -22,17 +24,17 @@
             android:src="@drawable/burger_menu"
             android:contentDescription="Hamburger Menu"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true" />
 
         <!-- Map Placeholder -->
-        <FrameLayout
-            android:id="@+id/mapContainer"
+        <ImageView
+            android:id="@+id/mapPlaceholder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/menuIcon"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="16dp"
-            android:background="#D3D3D3" />
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:background="@drawable/map_placeholder" />
 
         <!-- Bottom Toggle Section -->
         <LinearLayout
@@ -54,6 +56,7 @@
                 android:gravity="center" />
 
             <TextView
+                android:id="@+id/subtitleMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Go Offline for taking rest"
@@ -66,60 +69,23 @@
                 android:id="@+id/onlineOfflineSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/switch_border"
                 android:thumbTint="@color/white"
                 android:trackTint="#4CAF50"
                 android:textOn="Online"
                 android:textOff="Offline"
-                android:textColor="#FFFFFF"
                 android:gravity="center"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:padding="8dp" />
+
         </LinearLayout>
     </RelativeLayout>
 
-    <!-- Sidebar Menu -->
-    <LinearLayout
-        android:id="@+id/sideMenu"
+    <!-- Include Driver Profile -->
+    <include
+        android:id="@+id/driverProfileLayout"
+        layout="@layout/activity_driver_profile"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:orientation="vertical"
-        android:background="#FFFFFF"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Menu"
-            android:textSize="24sp"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Add Menu Items -->
-        <TextView
-            android:id="@+id/menuItem1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Profile"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"
-            android:textColor="#333333" />
-
-        <TextView
-            android:id="@+id/menuItem2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Settings"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"
-            android:textColor="#333333" />
-
-        <TextView
-            android:id="@+id/menuItem3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textSize="18sp"
-            android:textColor="#FF0000" />
-    </LinearLayout>
+        android:layout_gravity="start" />
 </androidx.drawerlayout.widget.DrawerLayout>

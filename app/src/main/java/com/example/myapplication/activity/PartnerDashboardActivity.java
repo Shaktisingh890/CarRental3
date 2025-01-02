@@ -69,4 +69,18 @@ public class PartnerDashboardActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment)  // Make sure the container's ID is correct
                 .commit();
     }
+    @Override
+    public void onBackPressed() {
+        // Check if the current fragment is MyCarsFragment
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (currentFragment instanceof MyCarsFragment) {
+            // If on the My Cars tab, simply stay in the PartnerDashboardActivity
+            // Optionally, you can load the EarningFragment if you want to show that fragment
+            loadFragment(new EarningFragment());
+        } else {
+            // Otherwise, use the default behavior for the back button (which finishes the activity)
+            super.onBackPressed();
+        }
+    }
+
 }
