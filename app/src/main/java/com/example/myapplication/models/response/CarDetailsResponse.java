@@ -1,6 +1,10 @@
 package com.example.myapplication.models.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class CarDetailsResponse {
@@ -50,9 +54,7 @@ public class CarDetailsResponse {
         this.success = success;
     }
 
-    public static class Car {
-        @SerializedName("location")
-        private Location location;
+    public static class Car implements Parcelable {
 
         @SerializedName("_id")
         private String id;
@@ -111,16 +113,70 @@ public class CarDetailsResponse {
         @SerializedName("__v")
         private int version;
 
-        // Getters and Setters for all fields
-
-        public Location getLocation() {
-            return location;
+        // Parcelable implementation
+        protected Car(Parcel in) {
+            id = in.readString();
+            brand = in.readString();
+            model = in.readString();
+            year = in.readInt();
+            seats = in.readInt();
+            fuelType = in.readString();
+            pricePerDay = in.readInt();
+            milage = in.readInt();
+            color = in.readString();
+            availabilityStatus = in.readString();
+            features = in.createStringArrayList();
+            images = in.createStringArrayList();
+            partnerId = in.readString();
+            category = in.readString();
+            subCategory = in.readString();
+            bookings = in.readArrayList(Object.class.getClassLoader());
+            createdAt = in.readString();
+            updatedAt = in.readString();
+            version = in.readInt();
         }
 
-        public void setLocation(Location location) {
-            this.location = location;
+        public static final Creator<Car> CREATOR = new Creator<Car>() {
+            @Override
+            public Car createFromParcel(Parcel in) {
+                return new Car(in);
+            }
+
+            @Override
+            public Car[] newArray(int size) {
+                return new Car[size];
+            }
+        };
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
+            dest.writeString(brand);
+            dest.writeString(model);
+            dest.writeInt(year);
+            dest.writeInt(seats);
+            dest.writeString(fuelType);
+            dest.writeInt(pricePerDay);
+            dest.writeInt(milage);
+            dest.writeString(color);
+            dest.writeString(availabilityStatus);
+            dest.writeStringList(features);
+            dest.writeStringList(images);
+            dest.writeString(partnerId);
+            dest.writeString(category);
+            dest.writeString(subCategory);
+            dest.writeList(bookings);
+            dest.writeString(createdAt);
+            dest.writeString(updatedAt);
+            dest.writeInt(version);
         }
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        // Getters and Setters
         public String getId() {
             return id;
         }
@@ -271,31 +327,6 @@ public class CarDetailsResponse {
 
         public void setVersion(int version) {
             this.version = version;
-        }
-    }
-
-    public static class Location {
-        @SerializedName("type")
-        private String type;
-
-        @SerializedName("coordinates")
-        private List<Double> coordinates;
-
-        // Getters and Setters for Location
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public List<Double> getCoordinates() {
-            return coordinates;
-        }
-
-        public void setCoordinates(List<Double> coordinates) {
-            this.coordinates = coordinates;
         }
     }
 }

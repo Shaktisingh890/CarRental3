@@ -1,5 +1,7 @@
 package com.example.myapplication.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.activity.CarDetailsActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.models.response.CarDetailsResponse;
 
@@ -18,9 +21,11 @@ import java.util.List;
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     private List<CarDetailsResponse.Car> carList;
+    private Context context;
 
-    public CarAdapter(List<CarDetailsResponse.Car> carList) {
+    public CarAdapter(List<CarDetailsResponse.Car> carList, Context context) {
         this.carList = carList;
+        this.context = context;
     }
 
     @NonNull
@@ -34,30 +39,33 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     public void onBindViewHolder(@NonNull CarViewHolder holder, int position) {
         CarDetailsResponse.Car car = carList.get(position);
 
-        holder.carName.setText(car.getBrand() +" "+ car.getModel());
+        holder.carName.setText(car.getBrand() + " " + car.getModel());
         holder.carCategory.setText(car.getCategory());
         holder.carYear.setText("Year: " + car.getYear());
         holder.carDetails.setText("Fuel: " + car.getFuelType());
-//        holder.carMileage.setText("Mileage: " + car.getMilage());
         holder.carSeats.setText("Seats: " + car.getSeats());
-        holder.carPrice.setText( "$"+car.getPricePerDay() + "/day");
+        holder.carPrice.setText("$" + car.getPricePerDay() + "/day");
 
-        // Get the first image URL from the array (if available)
-        // Get the first image URL from the List (if available)
+        // Load the car image using Glide
         String imageUrl = null;
-        List<String> imageUrls = car.getImages(); // Assuming this is a List<String>
-
+        List<String> imageUrls = car.getImages();
         if (imageUrls != null && !imageUrls.isEmpty()) {
             imageUrl = imageUrls.get(0);  // Get the first image URL
         }
 
-        // Load car image using Glide if URL exists
         if (imageUrl != null) {
             Glide.with(holder.carImage.getContext())
                     .load(imageUrl)
-                    .placeholder(R.drawable.profile) // Optional placeholder while the image loads
+                    .placeholder(R.drawable.profile) // Optional placeholder
                     .into(holder.carImage);
         }
+
+        // Set click listener for the item
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, CarDetailsActivity.class);
+            intent.putExtra("SELECTED_CAR", car);  // Pass the car object to CarDetailsActivity
+            context.startActivity(intent);
+        });
 
         holder.editIcon.setOnClickListener(v -> {
             // Code to handle edit action
@@ -74,7 +82,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     }
 
     public static class CarViewHolder extends RecyclerView.ViewHolder {
-        TextView carName, carModel, carYear, carPrice, carDetails,carCategory,carSeats;
+        TextView carName, carModel, carYear, carPrice, carDetails, carCategory, carSeats;
         ImageView carImage, editIcon, deleteIcon;
 
         public CarViewHolder(View itemView) {
@@ -82,7 +90,6 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             carName = itemView.findViewById(R.id.car_name);
             carModel = itemView.findViewById(R.id.car_modal);
             carYear = itemView.findViewById(R.id.car_year);
-//            carMileage = itemView.findViewById(R.id.car_mileage);
             carPrice = itemView.findViewById(R.id.carPrice);
             carDetails = itemView.findViewById(R.id.carDetails);
             carCategory = itemView.findViewById(R.id.carCategory);
