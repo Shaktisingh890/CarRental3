@@ -166,7 +166,29 @@
             android:textColor="#FFFFFF"
             android:padding="12dp" />
 
+        <Button
+            android:id="@+id/skip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Skip"
+            android:layout_marginTop="16dp"
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal"/>
+
+
+
+        <Button
+            android:id="@+id/update_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:visibility="visible"
+            android:layout_marginTop="16dp" />
+
+
+
     </LinearLayout>
+
 
     <!-- Overlay Background (Semi-transparent) and Progress Bar -->
     <View

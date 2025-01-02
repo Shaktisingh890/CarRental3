@@ -153,9 +153,32 @@ public interface ApiService {
 
 
 
+//    @Multipart
+//    @PUT("api/v1/customers/upload-id")
+//    Call<UploadIdResponse> uploadId(
+//            @Part("type") RequestBody type,
+//            @Part("id_number") RequestBody idNumber,
+//            @Part MultipartBody.Part frontPhoto,
+//            @Part MultipartBody.Part backPhoto
+//    );
+
+
+
+    @GET("api/v1/customers/identification")
+    Call<UploadIdResponse> fetchCustomerDoc();
+
     @Multipart
     @PUT("api/v1/customers/upload-id")
-    Call<UploadIdResponse> uploadId(
+    Call<UploadIdResponse> saveNewDocCustomer(
+            @Part("type") RequestBody type,
+            @Part("id_number") RequestBody idNumber,
+            @Part MultipartBody.Part frontPhoto,
+            @Part MultipartBody.Part backPhoto
+    );
+
+    @Multipart
+    @POST("updateCustomerDoc")
+    Call<UploadIdResponse> updateCustomerDoc(
             @Part("type") RequestBody type,
             @Part("id_number") RequestBody idNumber,
             @Part MultipartBody.Part frontPhoto,
