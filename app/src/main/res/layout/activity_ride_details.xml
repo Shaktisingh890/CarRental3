@@ -1,0 +1,249 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".activity.RideDetailsActivity">
+    <!--Back Button Header Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="6dp"
+        android:padding="10dp"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/backArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back"
+            android:padding="8dp"
+            android:layout_marginEnd="8dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ride Details"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+    </LinearLayout>
+    <!-- Map Section -->
+    <ImageView
+        android:id="@+id/mapPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomSection"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:background="@drawable/map_placeholder" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="16dp">
+            <!-- User Info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/profile"
+                    android:contentDescription="Profile Picture"
+                    android:background="@drawable/circle_background" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Abhay"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5.0 ★"
+                        android:textSize="14sp"
+                        android:textColor="@color/green" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$30"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="22km"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+            <!-- Address and Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/driver_card"
+                android:layout_marginTop="8dp"
+                android:padding="16dp">
+                <!-- Vertical Dotted Line -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center">
+                    <!-- Top Image -->
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/baseline_circle_24"
+                        android:contentDescription="Start Location Icon" />
+                    <!-- Centered Divider -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:layout_weight="1"
+                        android:text="|"
+                        android:textSize="12sp"
+                        android:textColor="#DDDDDD"
+                        android:gravity="center" />
+                    <!-- Bottom Image -->
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/location"
+                        android:contentDescription="End Location Icon" />
+                </LinearLayout>
+                <!-- Text and Divider -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <!-- First Row -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Panniyankara, Kozhikode"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+                    <!-- Horizontal Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#DDDDDD"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginVertical="4dp" />
+                    <!-- Second Row -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kozhikode, Kerala, India"
+                        android:textSize="14sp"
+                        android:textColor="@color/gray" />
+                </LinearLayout>
+            </LinearLayout>
+            <!--Fare Info-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp">
+                <!-- Trip Fare -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Trip Fare"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp" />
+                <!-- Pick up Charge -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pick up Charge"
+                        android:textSize="14sp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/gray" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30/-"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+                <!-- Paid Charge -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Paid Charge"
+                        android:layout_marginEnd="16dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/gray" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="200/-"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+                <Button
+                    android:id="@+id/gotopickupButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/green"
+                    android:text="Go to pick up"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
