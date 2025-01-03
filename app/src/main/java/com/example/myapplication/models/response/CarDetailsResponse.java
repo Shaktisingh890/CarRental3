@@ -74,6 +74,9 @@ public class CarDetailsResponse {
         @SerializedName("fuelType")
         private String fuelType;
 
+        @SerializedName("description")
+        private String description;
+
         @SerializedName("pricePerDay")
         private int pricePerDay;
 
@@ -121,6 +124,7 @@ public class CarDetailsResponse {
             year = in.readInt();
             seats = in.readInt();
             fuelType = in.readString();
+            description = in.readString();
             pricePerDay = in.readInt();
             milage = in.readInt();
             color = in.readString();
@@ -156,6 +160,7 @@ public class CarDetailsResponse {
             dest.writeInt(year);
             dest.writeInt(seats);
             dest.writeString(fuelType);
+            dest.writeString(description);
             dest.writeInt(pricePerDay);
             dest.writeInt(milage);
             dest.writeString(color);
@@ -221,9 +226,13 @@ public class CarDetailsResponse {
             return fuelType;
         }
 
+        public String getDescription(){return description;}
+
         public void setFuelType(String fuelType) {
             this.fuelType = fuelType;
         }
+
+        public void setDescription(String description){this.description=description;}
 
         public int getPricePerDay() {
             return pricePerDay;

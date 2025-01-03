@@ -66,7 +66,7 @@ public class MyCarsFragment extends Fragment {
                                 List<CarDetailsResponse.Car> carList = carDetailsResponse.getData();
 
                                 // Set adapter with the list of cars
-                                carAdapter = new CarAdapter(carList);
+                                carAdapter = new CarAdapter(carList,getContext());
                                 carsRecyclerView.setAdapter(carAdapter);
                             }
                         } else {

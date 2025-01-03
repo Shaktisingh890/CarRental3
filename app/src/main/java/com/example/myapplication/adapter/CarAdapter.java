@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.activity.CarDetailsActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.activity.CarDetailsActivity1;
 import com.example.myapplication.models.response.CarDetailsResponse;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
         // Set click listener for the item
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, CarDetailsActivity.class);
+            Intent intent = new Intent(context, CarDetailsActivity1.class);
             intent.putExtra("SELECTED_CAR", car);  // Pass the car object to CarDetailsActivity
             context.startActivity(intent);
         });

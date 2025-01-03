@@ -51,6 +51,7 @@ public class CarDetailsActivity extends AppCompatActivity {
 
         // Set up the "Book Now" button functionality
         Button bookNowButton = findViewById(R.id.bookNowButton);
+        bookNowButton.setVisibility(View.VISIBLE);
         bookNowButton.setOnClickListener(v -> {
             Intent bookingIntent = new Intent(CarDetailsActivity.this, BookingInformationActivity.class);
             bookingIntent.putExtra("SELECTED_CAR", selectedCar); // Pass the selectedCar object
