@@ -96,7 +96,6 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-        profileImage.setImageResource(R.drawable.profile); // Replace with actual image resource if needed
 
         // Set up onClickListeners for options
         optionEditProfile.setOnClickListener(v -> {

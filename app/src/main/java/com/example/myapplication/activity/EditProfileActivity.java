@@ -179,8 +179,11 @@ public class EditProfileActivity extends AppCompatActivity {
                         ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
 
                         if (response.isSuccessful()) {
+
                             Toast.makeText(EditProfileActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
+                            Intent intent = new Intent(EditProfileActivity.this, DashboardActivity.class);
+                            startActivity(intent);
+                                    } else {
                             Toast.makeText(EditProfileActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
                         }
                     }

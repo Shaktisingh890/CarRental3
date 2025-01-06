@@ -1,95 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".activity.PartnerDashboardActivity">
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F3F9F7">
 
-    <!-- Header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="horizontal"
-        android:background="#FFFFFF"
-        android:elevation="6dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Home"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="20sp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_circle_notifications_24"
-            android:background="@null"
-            android:contentDescription="Notifications" />
-    </LinearLayout>
-
-    <!-- Tabs -->
+    <!-- Main Content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#F3F9F7">
 
-        <!-- Tab Section -->
+        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:background="#FFFFFF"
+            android:elevation="6dp"
+            android:gravity="center_vertical">
 
-            <Button
-                android:id="@+id/tab_earning"
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/green"
-                android:text="Earning" />
+                android:text="Home"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/tab_my_cars"
-                android:layout_width="0dp"
+            <ImageButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/green"
-                android:text="My Cars" />
+                android:src="@drawable/baseline_circle_notifications_24"
+                android:background="@null"
+                android:contentDescription="Notifications" />
         </LinearLayout>
 
-        <!-- Fragment Container -->
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <!-- Tabs -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Tab Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <Button
+                    android:id="@+id/tab_earning"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/green"
+                    android:text="Earning" />
+
+                <Button
+                    android:id="@+id/tab_my_cars"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/green"
+                    android:text="My Cars" />
+            </LinearLayout>
+
+            <!-- Fragment Container -->
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
     </LinearLayout>
 
-
-</LinearLayout>
-    <!-- Bottom Navigation View aligned to the bottom -->
+    <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:background="@color/white"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/nav_item_color"
-        app:itemTextColor="@color/nav_item_color"/>
-</RelativeLayout>
+        app:itemTextColor="@color/nav_item_color" />
+
+    <!-- Overlay for Progress -->
+    <View
+        android:id="@+id/progressOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateTint="@color/green" />
+</FrameLayout>

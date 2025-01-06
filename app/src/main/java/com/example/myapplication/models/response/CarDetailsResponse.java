@@ -68,6 +68,9 @@ public class CarDetailsResponse {
         @SerializedName("year")
         private int year;
 
+        @SerializedName("registrationNumber")
+        private String registrationNumber;
+
         @SerializedName("seats")
         private int seats;
 
@@ -85,6 +88,12 @@ public class CarDetailsResponse {
 
         @SerializedName("color")
         private String color;
+
+        @SerializedName("pickupLocation")
+        private String pickupLocation;
+
+        @SerializedName("dropoffLocation")
+        private String dropoffLocation;
 
         @SerializedName("availabilityStatus")
         private String availabilityStatus;
@@ -113,6 +122,9 @@ public class CarDetailsResponse {
         @SerializedName("updatedAt")
         private String updatedAt;
 
+        @SerializedName("docs")
+        private Docs docs;
+
         @SerializedName("__v")
         private int version;
 
@@ -123,11 +135,14 @@ public class CarDetailsResponse {
             model = in.readString();
             year = in.readInt();
             seats = in.readInt();
+            registrationNumber = in.readString();
             fuelType = in.readString();
             description = in.readString();
             pricePerDay = in.readInt();
             milage = in.readInt();
             color = in.readString();
+            pickupLocation = in.readString();
+            dropoffLocation = in.readString();
             availabilityStatus = in.readString();
             features = in.createStringArrayList();
             images = in.createStringArrayList();
@@ -138,6 +153,37 @@ public class CarDetailsResponse {
             createdAt = in.readString();
             updatedAt = in.readString();
             version = in.readInt();
+            docs = in.readParcelable(Docs.class.getClassLoader());
+        }
+
+        @Override
+        public String toString() {
+            return "Car{" +
+                    "id='" + id + '\'' +
+                    ", brand='" + brand + '\'' +
+                    ", model='" + model + '\'' +
+                    ", year=" + year +
+                    ", registrationNumber='" + registrationNumber + '\'' +
+                    ", seats=" + seats +
+                    ", fuelType='" + fuelType + '\'' +
+                    ", description='" + description + '\'' +
+                    ", pricePerDay=" + pricePerDay +
+                    ", mileage=" + milage +
+                    ", color='" + color + '\'' +
+                    ", availabilityStatus='" + availabilityStatus + '\'' +
+                    ", features=" + features +
+                    ", images=" + images +
+                    ", partnerId='" + partnerId + '\'' +
+                    ", category='" + category + '\'' +
+                    ", subCategory='" + subCategory + '\'' +
+                    ", pickupLocation='" + pickupLocation + '\'' +
+                    ", dropoffLocation='" + dropoffLocation + '\'' +
+                    ", bookings=" + bookings +
+                    ", createdAt='" + createdAt + '\'' +
+                    ", updatedAt='" + updatedAt + '\'' +
+                    ", version=" + version +
+                    ", docs=" + docs + // Added docs details
+                    '}';
         }
 
         public static final Creator<Car> CREATOR = new Creator<Car>() {
@@ -159,11 +205,14 @@ public class CarDetailsResponse {
             dest.writeString(model);
             dest.writeInt(year);
             dest.writeInt(seats);
+            dest.writeString(registrationNumber);
             dest.writeString(fuelType);
             dest.writeString(description);
             dest.writeInt(pricePerDay);
             dest.writeInt(milage);
             dest.writeString(color);
+            dest.writeString(pickupLocation);
+            dest.writeString(dropoffLocation);
             dest.writeString(availabilityStatus);
             dest.writeStringList(features);
             dest.writeStringList(images);
@@ -174,6 +223,7 @@ public class CarDetailsResponse {
             dest.writeString(createdAt);
             dest.writeString(updatedAt);
             dest.writeInt(version);
+            dest.writeParcelable(docs, flags);
         }
 
         @Override
@@ -193,7 +243,11 @@ public class CarDetailsResponse {
         public String getBrand() {
             return brand;
         }
+        public void setPickupLocation(String pickupLocation){ this.pickupLocation=pickupLocation;}
+        public String getPickupLocation(){return pickupLocation;}
 
+        public void setDropoffLocation(String pickupLocation){this.dropoffLocation=dropoffLocation;}
+        public String getDropoffLocation(){return  dropoffLocation;}
         public void setBrand(String brand) {
             this.brand = brand;
         }
@@ -209,9 +263,20 @@ public class CarDetailsResponse {
         public int getYear() {
             return year;
         }
+        public Docs getCarDocs() {
+            return docs;
+        }
 
         public void setYear(int year) {
             this.year = year;
+        }
+
+        public String getRegistrationNumber() {
+            return registrationNumber;
+        }
+
+        public void setRegistrationNumber(String registrationNumber) {
+            this.registrationNumber = registrationNumber;
         }
 
         public int getSeats() {
@@ -226,13 +291,17 @@ public class CarDetailsResponse {
             return fuelType;
         }
 
-        public String getDescription(){return description;}
-
         public void setFuelType(String fuelType) {
             this.fuelType = fuelType;
         }
 
-        public void setDescription(String description){this.description=description;}
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
 
         public int getPricePerDay() {
             return pricePerDay;
@@ -337,5 +406,96 @@ public class CarDetailsResponse {
         public void setVersion(int version) {
             this.version = version;
         }
+
+        public Docs getDocs() {
+            return docs;
+        }
+
+        public void setDocs(Docs docs) {
+            this.docs = docs;
+        }
+
+        public static class Docs implements Parcelable {
+
+            @SerializedName("ownerDoc")
+            private List<String> ownerDoc;
+
+            @SerializedName("carDoc")
+            private List<String> carDoc;
+
+            @SerializedName("vehiclelic")
+            private List<String> vehiclelic;
+
+            @SerializedName("bankPass")
+            private String bankPass;
+
+            // Constructor for Parcelable
+            protected Docs(Parcel in) {
+                ownerDoc = in.createStringArrayList();
+                carDoc = in.createStringArrayList();
+                vehiclelic = in.createStringArrayList();
+                bankPass = in.readString();
+            }
+
+            // Parcelable Creator
+            public static final Creator<Docs> CREATOR = new Creator<Docs>() {
+                @Override
+                public Docs createFromParcel(Parcel in) {
+                    return new Docs(in);
+                }
+
+                @Override
+                public Docs[] newArray(int size) {
+                    return new Docs[size];
+                }
+            };
+
+            @Override
+            public int describeContents() {
+                return 0; // No special objects
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeStringList(ownerDoc);
+                dest.writeStringList(carDoc);
+                dest.writeStringList(vehiclelic);
+                dest.writeString(bankPass);
+            }
+
+            // Getters and Setters
+            public List<String> getOwnerDoc() {
+                return ownerDoc;
+            }
+
+            public void setOwnerDoc(List<String> ownerDoc) {
+                this.ownerDoc = ownerDoc;
+            }
+
+            public List<String> getCarDoc() {
+                return carDoc;
+            }
+
+            public void setCarDoc(List<String> carDoc) {
+                this.carDoc = carDoc;
+            }
+
+            public List<String> getVehiclelic() {
+                return vehiclelic;
+            }
+
+            public void setVehiclelic(List<String> vehiclelic) {
+                this.vehiclelic = vehiclelic;
+            }
+
+            public String getBankPass() {
+                return bankPass;
+            }
+
+            public void setBankPass(String bankPass) {
+                this.bankPass = bankPass;
+            }
+        }
     }
+
 }

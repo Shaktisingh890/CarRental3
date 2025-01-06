@@ -28,6 +28,7 @@ import java.util.List;
 import retrofit2.Call;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.DELETE;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -70,6 +71,19 @@ public interface ApiService {
             @Part("address") RequestBody address
 
 
+    );
+
+    @Multipart
+    @POST("api/v1/users/updateProfile/") // Replace with your API endpoint
+    Call<UserProfileResponse> updatePartnerProfile(
+            @Part("fullName") RequestBody name,
+            @Part("phoneNumber") RequestBody phone,
+            @Part("email") RequestBody email,
+            @Part("company") RequestBody company,
+            @Part("companyAddress") RequestBody companyAddress,
+            @Part("area") RequestBody area,
+            @Part("account") RequestBody account,
+            @Part("upi") RequestBody upi
     );
 
         @POST("/api/v1/users/logout")
@@ -122,6 +136,19 @@ public interface ApiService {
 
     );
 
+    @Multipart
+    @PUT("/api/v1/cars/updateCar/{carId}")
+    Call<AddCarResponse> EditCarWithImages(
+            @Path("carId") String carId,
+            @Part("carDetails") RequestBody carDetails,
+            @Part List<MultipartBody.Part> imageFiles,
+            @Part List<MultipartBody.Part> idImageFiles,
+            @Part List<MultipartBody.Part> carDocumentFiles,
+            @Part List<MultipartBody.Part> vehicleLicenseFiles,
+            @Part List<MultipartBody.Part> bankpassbookFiles
+
+    );
+
 
     @GET("api/v1/cars/getCarByUserId")
     Call<CarDetailsResponse> getCarDetailsByUserId(@Query("userId") String userId);
@@ -144,7 +171,12 @@ public interface ApiService {
             @Query("filter") String costType
     );
 
+    @DELETE("api/v1/cars/deleteCar/{carId}")
+    Call<Void> partnerDeleteCarByCarId(@Path("carId") String carId);
 
+
+    @PUT("partner/updateCar/{carId}")
+    Call<Void> updateCarDetails(@Path("carId") String carId, @Body CarDetailsResponse.Car car);
 
 
     @GET("api/v1/cars/getFetchSubCategory/{category}")

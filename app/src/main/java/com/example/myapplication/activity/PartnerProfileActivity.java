@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.dialog.EarningFragment;
 import com.example.myapplication.models.response.LogoutResponse;
@@ -37,6 +38,7 @@ public class PartnerProfileActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
     private RelativeLayout optionEditProfile, optionChangePassword, optionContactUs, optionDeleteAccount, optionLogout;
 
+    private String fullName,email,phoneNumber,address,imgUrl,upi_id,company_name,company_address,area,account_number;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,45 @@ public class PartnerProfileActivity extends AppCompatActivity {
         profileName = findViewById(R.id.profile_name);
         profilePhone = findViewById(R.id.profile_phone);
         progressBar = findViewById(R.id.progressBar);
+        fullName= getIntent().getStringExtra("fullName");
+        email = getIntent().getStringExtra("email");
+        phoneNumber = getIntent().getStringExtra("phoneNumber");
+        address = getIntent().getStringExtra("address");
+        imgUrl = getIntent().getStringExtra("imgUrl");
+        upi_id=getIntent().getStringExtra("upi_id");
+        account_number=getIntent().getStringExtra("account_number");
+        company_address=getIntent().getStringExtra("company_address");
+        company_name=getIntent().getStringExtra("company_name");
+        area=getIntent().getStringExtra("area");
+
+
+        Log.d("myfullname","my name is "+fullName);
+        Log.d("myfullname","my name is "+phoneNumber);
+        Log.d("myfullname","my name is "+imgUrl);
+        Log.d("myfullname","my name is "+company_name);
+        // Set up profile info
+        if (fullName != null) {
+            profileName.setText(fullName); // Set the user's full name
+        } else {
+            profileName.setText("Cameron Williamson");
+        }
+
+        if (profilePhone != null) {
+            profilePhone.setText(phoneNumber); // Set the user's full name
+        } else {
+            profilePhone.setText("67899998765544");
+        }
+
+        if (profileImage != null && imgUrl != null && !imgUrl.isEmpty()) {
+            // Use Glide to load the image from URL
+            Glide.with(this)
+                    .load(imgUrl)
+                    .placeholder(R.drawable.profile) // Placeholder while loading
+                    .error(R.drawable.profile)       // Fallback in case of an error
+                    .into(profileImage);
+        } else {
+            profileImage.setImageResource(R.drawable.profile); // Set default profile picture
+        }
 
         optionEditProfile = findViewById(R.id.option_edit_profile);
         optionChangePassword = findViewById(R.id.option_change_password);
@@ -59,8 +100,7 @@ public class PartnerProfileActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.nav_settings);
         bottomNav.setOnNavigationItemSelectedListener(this::navigateTo);
 
-        // Load Profile Data
-        loadProfileData();
+
 
         // Set Click Listeners
         optionEditProfile.setOnClickListener(v -> navigateToEditProfile());
@@ -70,19 +110,21 @@ public class PartnerProfileActivity extends AppCompatActivity {
         optionLogout.setOnClickListener(v -> showLogoutDialog());
     }
 
-    private void loadProfileData() {
-        progressBar.setVisibility(View.VISIBLE);
 
-        // Simulate loading data (replace with actual API/database logic)
-        profileName.setText("Cameron Williamson");
-        profilePhone.setText("(219) 555-0114");
-        profileImage.setImageResource(R.drawable.profile); // Replace with dynamic image loading if needed
-
-        progressBar.setVisibility(View.GONE);
-    }
 
     private void navigateToEditProfile() {
+
         Intent intent = new Intent(PartnerProfileActivity.this, PartnerEditProfileActivity.class);
+        intent.putExtra("fullName", fullName);
+        intent.putExtra("email", email);
+        intent.putExtra("phoneNumber", phoneNumber);
+        intent.putExtra("address", address);
+        intent.putExtra("company_address", company_address);
+        intent.putExtra("company_name", company_name);
+        intent.putExtra("area", area);
+        intent.putExtra("account_number", account_number);
+        intent.putExtra("upi_id", upi_id);
+        intent.putExtra("imgUrl", imgUrl);
         startActivity(intent);
     }
 

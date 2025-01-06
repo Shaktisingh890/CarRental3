@@ -4,6 +4,9 @@ package com.example.myapplication.models.response;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
+import com.google.gson.annotations.SerializedName;
+import java.util.List;
+
 public class UserProfileResponse {
 
     @SerializedName("statusCode")
@@ -51,8 +54,13 @@ public class UserProfileResponse {
         this.success = success;
     }
 
-    // Nested class for data
     public static class Data {
+
+        @SerializedName("paymentDetails")
+        private PaymentDetails paymentDetails;
+
+        @SerializedName("bussinessinfo")
+        private BusinessInfo businessInfo;
 
         @SerializedName("_id")
         private String id;
@@ -69,22 +77,44 @@ public class UserProfileResponse {
         @SerializedName("address")
         private String address;
 
+        @SerializedName("fleet")
+        private List<Object> fleet;
+
+        @SerializedName("drivers")
+        private List<Object> drivers;
+
         @SerializedName("imgUrl")
         private String imgUrl;
 
-        @SerializedName("bookingHistory")
-        private List<Object> bookingHistory;
+        @SerializedName("refreshToken")
+        private String refreshToken;
 
-        @SerializedName("createdAt")
-        private String createdAt;
-
-        @SerializedName("updatedAt")
-        private String updatedAt;
+        @SerializedName("termsAccepted")
+        private boolean termsAccepted;
 
         @SerializedName("__v")
         private int version;
 
+        @SerializedName("deviceTokens")
+        private List<String> deviceTokens;
+
         // Getters and Setters
+        public PaymentDetails getPaymentDetails() {
+            return paymentDetails;
+        }
+
+        public void setPaymentDetails(PaymentDetails paymentDetails) {
+            this.paymentDetails = paymentDetails;
+        }
+
+        public BusinessInfo getBusinessInfo() {
+            return businessInfo;
+        }
+
+        public void setBusinessInfo(BusinessInfo businessInfo) {
+            this.businessInfo = businessInfo;
+        }
+
         public String getId() {
             return id;
         }
@@ -125,6 +155,22 @@ public class UserProfileResponse {
             this.address = address;
         }
 
+        public List<Object> getFleet() {
+            return fleet;
+        }
+
+        public void setFleet(List<Object> fleet) {
+            this.fleet = fleet;
+        }
+
+        public List<Object> getDrivers() {
+            return drivers;
+        }
+
+        public void setDrivers(List<Object> drivers) {
+            this.drivers = drivers;
+        }
+
         public String getImgUrl() {
             return imgUrl;
         }
@@ -133,28 +179,20 @@ public class UserProfileResponse {
             this.imgUrl = imgUrl;
         }
 
-        public List<Object> getBookingHistory() {
-            return bookingHistory;
+        public String getRefreshToken() {
+            return refreshToken;
         }
 
-        public void setBookingHistory(List<Object> bookingHistory) {
-            this.bookingHistory = bookingHistory;
+        public void setRefreshToken(String refreshToken) {
+            this.refreshToken = refreshToken;
         }
 
-        public String getCreatedAt() {
-            return createdAt;
+        public boolean isTermsAccepted() {
+            return termsAccepted;
         }
 
-        public void setCreatedAt(String createdAt) {
-            this.createdAt = createdAt;
-        }
-
-        public String getUpdatedAt() {
-            return updatedAt;
-        }
-
-        public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
+        public void setTermsAccepted(boolean termsAccepted) {
+            this.termsAccepted = termsAccepted;
         }
 
         public int getVersion() {
@@ -164,7 +202,76 @@ public class UserProfileResponse {
         public void setVersion(int version) {
             this.version = version;
         }
+
+        public List<String> getDeviceTokens() {
+            return deviceTokens;
+        }
+
+        public void setDeviceTokens(List<String> deviceTokens) {
+            this.deviceTokens = deviceTokens;
+        }
+    }
+
+    public static class PaymentDetails {
+
+        @SerializedName("accountNumber")
+        private String accountNumber;
+
+        @SerializedName("upi_id")
+        private String upiId;
+
+        // Getters and Setters
+        public String getAccountNumber() {
+            return accountNumber;
+        }
+
+        public void setAccountNumber(String accountNumber) {
+            this.accountNumber = accountNumber;
+        }
+
+        public String getUpiId() {
+            return upiId;
+        }
+
+        public void setUpiId(String upiId) {
+            this.upiId = upiId;
+        }
+    }
+
+    public static class BusinessInfo {
+
+        @SerializedName("company_add")
+        private String companyAddress;
+
+        @SerializedName("company_name")
+        private String companyName;
+
+        @SerializedName("service_area")
+        private String serviceArea;
+
+        // Getters and Setters
+        public String getCompanyAddress() {
+            return companyAddress;
+        }
+
+        public void setCompanyAddress(String companyAddress) {
+            this.companyAddress = companyAddress;
+        }
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
+        public String getServiceArea() {
+            return serviceArea;
+        }
+
+        public void setServiceArea(String serviceArea) {
+            this.serviceArea = serviceArea;
+        }
     }
 }
-
-

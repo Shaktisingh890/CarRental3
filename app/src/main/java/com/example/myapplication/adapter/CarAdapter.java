@@ -1,23 +1,34 @@
 package com.example.myapplication.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.activity.AddCarActivity;
 import com.example.myapplication.activity.CarDetailsActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.activity.CarDetailsActivity1;
+import com.example.myapplication.activity.CarEditActivity;
 import com.example.myapplication.models.response.CarDetailsResponse;
+import com.example.myapplication.network.ApiService;
+import com.example.myapplication.network.RetrofitClient;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
@@ -69,11 +80,50 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         });
 
         holder.editIcon.setOnClickListener(v -> {
-            // Code to handle edit action
+            Intent intent = new Intent(context, CarEditActivity.class);
+            intent.putExtra("EDIT_CAR", car); // Pass the selected car object
+            context.startActivity(intent);
         });
 
-        holder.deleteIcon.setOnClickListener(v -> {
-            // Code to handle delete action
+        holder.deleteIcon.setOnClickListener(v -> showDeleteConfirmationDialog(car.getId(), position));
+    }
+
+
+    private void showDeleteConfirmationDialog(String carId, int position) {
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Car")
+                .setMessage("Are you sure you want to delete this car?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteCar(carId, position);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+
+    private void deleteCar(String carId, int position) {
+        ApiService apiService = RetrofitClient.getRetrofitInstance(context).create(ApiService.class);
+
+        Call<Void> call = apiService.partnerDeleteCarByCarId(carId);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    carList.remove(position);
+                    notifyItemRemoved(position);
+                    Toast.makeText(context, "Car deleted successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Failed to delete car", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

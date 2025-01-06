@@ -113,6 +113,10 @@
         <activity
             android:name=".activity.AddCarActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".activity.CarEditActivity"
+            android:exported="true" />
         <activity
             android:name=".activity.PartnerDashboardActivity"
             android:exported="true" />
