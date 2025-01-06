@@ -36,8 +36,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
         RelativeLayout faq = findViewById(R.id.faq);
         RelativeLayout contact_us = findViewById(R.id.contact_us);
         RelativeLayout earnings = findViewById(R.id.earnings);
-
-
+        ImageView closeIcon = findViewById(R.id.close);
 
         // Set up hamburger menu click listener
         menuIcon.setOnClickListener(v -> {
@@ -73,7 +72,11 @@ public class DriverDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(DriverDashboardActivity.this, DriverEarningsActivity.class);
             startActivity(intent);
         });
-
+        // Set click listener for Close icon
+        closeIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(DriverDashboardActivity.this, DriverDashboardActivity.class);
+            startActivity(intent);
+        });
 
         // Set Switch Listener
         availabilitySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {

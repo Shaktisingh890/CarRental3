@@ -11,14 +11,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Back Button and Title -->
         <LinearLayout
+            android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:elevation="6dp"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/back_button"
@@ -37,7 +41,6 @@
                 android:textStyle="bold"
                 android:layout_gravity="center" />
         </LinearLayout>
-
         <!-- Car Image -->
         <ImageView
             android:id="@+id/car_image"
@@ -54,6 +57,8 @@
             android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             app:cardBackgroundColor="#FFF">
 
             <LinearLayout
@@ -360,7 +365,8 @@
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             app:cardBackgroundColor="#FFF"
-            android:padding="16dp">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -466,7 +472,9 @@
             android:backgroundTint="@color/green"
             android:textColor="#FFF"
             android:visibility="gone"
-            android:textStyle="bold" />
-
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="12dp"/>
     </LinearLayout>
 </ScrollView>

@@ -19,8 +19,6 @@
         android:layout_alignParentTop="true"
         android:layout_margin="2dp" /> <!-- Optional margin to add spacing from edges -->
 
-
-
     <!-- Car Image -->
     <ImageView
         android:id="@+id/carImage"

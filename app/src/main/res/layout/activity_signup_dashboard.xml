@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="80dp"
         app:layout_constraintBottom_toTopOf="@id/partnerCard">
 
         <LinearLayout
@@ -34,7 +35,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@drawable/baseline_person_24"
-                android:tint="#4CAF50"
+                android:tint="@color/green"
                 android:contentDescription="Customer Icon" />
 
             <TextView
@@ -43,9 +44,8 @@
                 android:layout_height="wrap_content"
                 android:text="Customer"
                 android:textSize="20sp"
-                android:textColor="#4CAF50"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp" />
+                android:textColor="@color/green"
+                android:textStyle="bold"/>
 
             <!-- Redirect Text for Customer -->
             <TextView
@@ -54,10 +54,10 @@
                 android:layout_height="wrap_content"
                 android:text="Sign up as a Customer"
                 android:textSize="16sp"
-                android:textColor="#4CAF50"
+                android:textColor="@color/green"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="10dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -85,7 +85,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@drawable/baseline_person_24"
-                android:tint="#FFC107"
+                android:tint="@color/yellow"
                 android:contentDescription="Partner Icon" />
 
             <TextView
@@ -94,9 +94,8 @@
                 android:layout_height="wrap_content"
                 android:text="Partner"
                 android:textSize="20sp"
-                android:textColor="#FFC107"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp" />
+                android:textColor="@color/yellow"
+                android:textStyle="bold" />
 
             <!-- Redirect Text for Partner -->
             <TextView
@@ -105,10 +104,10 @@
                 android:layout_height="wrap_content"
                 android:text="Sign up as a Partner"
                 android:textSize="16sp"
-                android:textColor="#FFC107"
+                android:textColor="@color/yellow"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="10dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -136,7 +135,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@drawable/baseline_person_24"
-                android:tint="#F44336"
+                android:tint="@color/red"
                 android:contentDescription="Driver Icon" />
 
             <TextView
@@ -145,9 +144,8 @@
                 android:layout_height="wrap_content"
                 android:text="Driver"
                 android:textSize="20sp"
-                android:textColor="#F44336"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp" />
+                android:textColor="@color/red"
+                android:textStyle="bold" />
 
             <!-- Redirect Text for Driver -->
             <TextView
@@ -156,10 +154,10 @@
                 android:layout_height="wrap_content"
                 android:text="Sign up as a Driver"
                 android:textSize="16sp"
-                android:textColor="#F44336"
+                android:textColor="@color/red"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="10dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

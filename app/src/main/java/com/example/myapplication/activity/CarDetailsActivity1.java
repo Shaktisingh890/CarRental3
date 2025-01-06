@@ -70,13 +70,13 @@ public class CarDetailsActivity1 extends AppCompatActivity {
         // Set car price
         TextView carPrice = findViewById(R.id.car_price);
         carPrice.setText(selectedCar.getPricePerDay() > 0
-                ? String.format("$%d per day", selectedCar.getPricePerDay())
+                ? String.format("$%d/day", selectedCar.getPricePerDay())
                 : "Price not available");
 
         // Set car seats
         TextView carSeats = findViewById(R.id.car_seats);
         carSeats.setText(selectedCar.getSeats() > 0
-                ? String.format("%d seats available", selectedCar.getSeats())
+                ? String.format("%d", selectedCar.getSeats())
                 : "Seats not available");
 
         // Set car features

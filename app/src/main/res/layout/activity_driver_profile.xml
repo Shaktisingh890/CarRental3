@@ -223,36 +223,36 @@
                 android:background="#EEEEEE" />
 
             <!-- Vehicle Settings -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:clickable="true"
-                android:focusable="true">
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="16dp"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true">-->
 
-                <TextView
-                    android:id="@+id/notifications"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Notifications"
-                    android:textSize="16sp"
-                    android:drawableLeft="@drawable/baseline_circle_notifications_24"
-                    android:drawablePadding="8dp"
-                    android:textColor="#000000" />
+<!--                <TextView-->
+<!--                    android:id="@+id/notifications"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Notifications"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:drawableLeft="@drawable/baseline_circle_notifications_24"-->
+<!--                    android:drawablePadding="8dp"-->
+<!--                    android:textColor="#000000" />-->
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/baseline_chevron_right_24"
-                    app:tint="#666666" />
-            </RelativeLayout>
+<!--                <ImageView-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:src="@drawable/baseline_chevron_right_24"-->
+<!--                    app:tint="#666666" />-->
+<!--            </RelativeLayout>-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE" />
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:background="#EEEEEE" />-->
 
             <!--FAQ-->
             <RelativeLayout

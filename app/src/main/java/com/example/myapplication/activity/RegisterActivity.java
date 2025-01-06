@@ -87,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
         crossButton.setEnabled(true);
 
         crossButton.setOnClickListener(v -> {
-            Intent intent = new Intent(RegisterActivity.this, InterfaceActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, SignupDashboardActivity.class);
             startActivity(intent);
             finish();  // Optionally close the RegisterActivity
         });

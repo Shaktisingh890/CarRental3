@@ -84,17 +84,15 @@ public class CarDetailsActivity extends AppCompatActivity {
         TextView carPrice = findViewById(R.id.car_price);
         int pricePerDay = selectedCar.getPricePerDay();
         if (pricePerDay > 0) {
-            carPrice.setText(String.format("$%d per day", pricePerDay));
+            carPrice.setText(String.format("$%d/day", pricePerDay));
         } else {
             carPrice.setText("Price not available"); // Fallback for invalid price
         }
-
-
         // Set car seats
         TextView carSeats = findViewById(R.id.car_seats);
         int numberOfSeats = selectedCar.getSeats();
         if (numberOfSeats > 0) {
-            carSeats.setText(String.format("%d seats available", numberOfSeats));
+            carSeats.setText(String.format("%d", numberOfSeats));
         } else {
             carSeats.setText("Seats not available"); // Fallback for invalid seat data
         }

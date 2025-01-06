@@ -110,16 +110,14 @@ public class MyDocumentsActivity extends AppCompatActivity {
 
     private void showSuccessDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Success")
-                .setMessage("Your documents uploaded successfully!\nWe will get in touch in 48 working hours.")
-                .setIcon(android.R.drawable.checkbox_on_background)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        View customLayout = getLayoutInflater().inflate(R.layout.driver_dialog_success, null);
+        builder.setView(customLayout);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Dismiss dialog when the "OK" button is clicked
+        customLayout.findViewById(R.id.btnOk).setOnClickListener(v -> dialog.dismiss());
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -146,5 +144,6 @@ public class MyDocumentsActivity extends AppCompatActivity {
                     100);
         }
     }
+
 
 }
