@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97621479044",
+    "project_id": "ayarental-f85a0",
+    "storage_bucket": "ayarental-f85a0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97621479044:android:1ecf519744c38b65457cd1",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYtqkXLHeAyTa4v6W71nGZe5I0svRnkz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -128,16 +128,45 @@ public class PartnerDashboardActivity extends AppCompatActivity {
 
                     // Pass data to ProfileActivity using Intent
                     Intent intent = new Intent(PartnerDashboardActivity.this, PartnerProfileActivity.class);
-                    intent.putExtra("fullName", user.getData().getFullName());
-                    intent.putExtra("email", user.getData().getEmail());
-                    intent.putExtra("phoneNumber", user.getData().getPhoneNumber());
-                    intent.putExtra("address", user.getData().getAddress());
-                    intent.putExtra("imgUrl", user.getData().getImgUrl());
-                    intent.putExtra("upi_id", user.getData().getPaymentDetails().getUpiId());
-                    intent.putExtra("account_number", user.getData().getPaymentDetails().getAccountNumber());
-                    intent.putExtra("company_address", user.getData().getBusinessInfo().getCompanyAddress());
-                    intent.putExtra("company_name", user.getData().getBusinessInfo().getCompanyName());
-                    intent.putExtra("area", user.getData().getBusinessInfo().getServiceArea());
+
+
+// Check and send user details
+                    if (user.getData() != null) {
+                        intent.putExtra("fullName", user.getData().getFullName() != null ? user.getData().getFullName() : "");
+                        intent.putExtra("email", user.getData().getEmail() != null ? user.getData().getEmail() : "");
+                        intent.putExtra("phoneNumber", user.getData().getPhoneNumber() != null ? user.getData().getPhoneNumber() : "");
+                        intent.putExtra("address", user.getData().getAddress() != null ? user.getData().getAddress() : "");
+                        intent.putExtra("imgUrl", user.getData().getImgUrl() != null ? user.getData().getImgUrl() : "");
+
+                        // Check and send payment details
+                        if (user.getData().getPaymentDetails() != null) {
+                            intent.putExtra("upi_id", user.getData().getPaymentDetails().getUpiId() != null ?
+                                    user.getData().getPaymentDetails().getUpiId() : "");
+                            intent.putExtra("account_number", user.getData().getPaymentDetails().getAccountNumber() != null ?
+                                    user.getData().getPaymentDetails().getAccountNumber() : "");
+                        } else {
+                            intent.putExtra("upi_id", "");
+                            intent.putExtra("account_number", "");
+                        }
+
+                        // Check and send business info
+                        if (user.getData().getBusinessInfo() != null) {
+                            intent.putExtra("company_address", user.getData().getBusinessInfo().getCompanyAddress() != null ?
+                                    user.getData().getBusinessInfo().getCompanyAddress() : "");
+                            intent.putExtra("company_name", user.getData().getBusinessInfo().getCompanyName() != null ?
+                                    user.getData().getBusinessInfo().getCompanyName() : "");
+                            intent.putExtra("area", user.getData().getBusinessInfo().getServiceArea() != null ?
+                                    user.getData().getBusinessInfo().getServiceArea() : "");
+                        } else {
+                            intent.putExtra("company_address", "");
+                            intent.putExtra("company_name", "");
+                            intent.putExtra("area", "");
+                        }
+                    }
+
+// Start the activity
+                    startActivity(intent);
+                    finish();
 
 
 
