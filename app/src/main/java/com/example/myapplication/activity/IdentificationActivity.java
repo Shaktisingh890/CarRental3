@@ -1,6 +1,7 @@
 package com.example.myapplication.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -147,7 +149,8 @@ public class IdentificationActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-
+// Back button functionality
+        backButton.setOnClickListener(v -> finish());
         // Next Button
         nextButton.setOnClickListener(v -> {
             if (radioGroup.getCheckedRadioButtonId() == R.id.radio_national_id && nationalIdInput.getText().toString().trim().isEmpty()) {
@@ -384,7 +387,17 @@ public class IdentificationActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && data != null) {
             Uri selectedImageUri = data.getData();
             try {
-                // Decode the selected image to a bitmap
+                // Get the image file size
+                File file = new File(getRealPathFromURI(selectedImageUri));
+                long imageSize = file.length(); // Get the image size in bytes
+
+                // Check if the image size is greater than 150KB
+                if (imageSize > 150 * 1024) { // 150KB in bytes
+                    Toast.makeText(this, "Image size exceeds 150KB. Please select a smaller image.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Decode the selected image to a bitmap if the size is valid
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
 
                 if (requestCode == REQUEST_FRONT_PHOTO) {
@@ -402,4 +415,17 @@ public class IdentificationActivity extends AppCompatActivity {
             }
         }
     }
+
+    // Helper method to get the real path from URI
+    private String getRealPathFromURI(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndex(projection[0]);
+                return cursor.getString(columnIndex);
+            }
+        }
+        return null;
+    }
+
 }
