@@ -2,11 +2,13 @@ package com.example.myapplication.network;
 
 
 import com.example.myapplication.models.request.BookingRequest;
+import com.example.myapplication.models.request.ChangePasswordRequest;
 import com.example.myapplication.models.response.AddCarResponse;
 import com.example.myapplication.models.response.BookingResponse;
 import com.example.myapplication.models.response.Car;
 import com.example.myapplication.models.response.CarDetailsResponse;
 import com.example.myapplication.models.response.CategoryResponse;
+import com.example.myapplication.models.response.ChangePasswordResponse;
 import com.example.myapplication.models.response.CustomerBookingResponse;
 import com.example.myapplication.models.response.CustomerCarResponse;
 import com.example.myapplication.models.response.DriverImageResponse;
@@ -222,6 +224,11 @@ public interface ApiService {
 
     @POST("api/v1/booking/createBooking")
     Call<BookingResponse> createBooking(@Body BookingRequest bookingRequest);
+
+
+    // Method to change password
+    @PUT("api/v1/users/update_password")
+    Call<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
 }
 
 

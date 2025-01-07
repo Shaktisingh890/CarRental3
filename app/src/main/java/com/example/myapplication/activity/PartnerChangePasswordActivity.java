@@ -1,5 +1,6 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +13,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.models.response.ChangePasswordResponse;
+import com.example.myapplication.models.request.ChangePasswordRequest;
+import com.example.myapplication.network.RetrofitClient;
 import com.google.android.material.textfield.TextInputEditText;
+import com.example.myapplication.network.ApiService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PartnerChangePasswordActivity extends AppCompatActivity {
 
@@ -74,23 +83,46 @@ public class PartnerChangePasswordActivity extends AppCompatActivity {
             return;
         }
 
-        // Example: Validate current password with server or local storage (replace this with your actual logic)
-        if (!currentPassword.equals("userExistingPassword")) {
-            Toast.makeText(this, "Current password is incorrect", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (newPassword.equals(currentPassword)) {
-            Toast.makeText(this, "New password cannot be the same as the current password", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (newPassword.equals(confirmPassword)) {
-            passwordMatchError.setVisibility(View.GONE);
-            Toast.makeText(this, "Password reset successfully!", Toast.LENGTH_SHORT).show();
-            // Perform further actions like API call or navigation here
-        } else {
+        if (!newPassword.equals(confirmPassword)) {
             passwordMatchError.setVisibility(View.VISIBLE);
+            return;
         }
+
+        passwordMatchError.setVisibility(View.GONE);
+
+        // Create the request object
+        ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest(currentPassword, newPassword, confirmPassword);
+
+        // Create a Retrofit instance
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
+
+        // Make the API call to change the password
+        Call<ChangePasswordResponse> call = apiService.changePassword(changePasswordRequest);
+        call.enqueue(new Callback<ChangePasswordResponse>() {
+            @Override
+            public void onResponse(Call<ChangePasswordResponse> call, Response<ChangePasswordResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ChangePasswordResponse changePasswordResponse = response.body();
+                    if (changePasswordResponse.isSuccess()) {
+                        Toast.makeText(PartnerChangePasswordActivity.this, "Password changed successfully", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(PartnerChangePasswordActivity.this,LoginActivity.class);
+                        // Put the necessary data into the Intent
+
+                        startActivity(intent);
+                        finish();
+                        // Optionally navigate to another screen or perform additional actions
+                    } else {
+                        Toast.makeText(PartnerChangePasswordActivity.this, changePasswordResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(PartnerChangePasswordActivity.this, "Password change failed. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChangePasswordResponse> call, Throwable t) {
+                Toast.makeText(PartnerChangePasswordActivity.this, "Network error. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
