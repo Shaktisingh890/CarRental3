@@ -18,6 +18,8 @@ import com.example.myapplication.models.response.LoginResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
 import com.example.myapplication.utils.SharedPreferencesManager;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,11 +33,29 @@ public class LoginActivity extends AppCompatActivity {
     EditText loginEmail, loginPassword;
     Button loginButton;
     TextView signupRedirectText;
+    private String token,token1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (FirebaseApp.getApps(this).isEmpty()) {
+            Log.d("Firebase", "Firebase not initialized");
+        } else {
+            Log.d("Firebase", "Firebase initialized");
+        }
+
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                         token1 = task.getResult();
+                        Log.d("FCM Token", "Device token1: " + token1);
+                    } else {
+                        Log.e("FCM Token1", "Failed to get token");
+                    }
+                });
 
         // Initialize views
         loginEmail = findViewById(R.id.loginEmail);
@@ -65,12 +85,18 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Show progress bar and overlay
+
+
+
+                        // Show progress bar and overlay
         showProgress(true); // Modified to include overlay visibility
 
         // Make the POST request to the login API
         ApiService apiService = RetrofitClient.getRetrofitInstance(LoginActivity.this).create(ApiService.class);
         LoginRequest loginRequest = new LoginRequest(email, password);
+
+        Log.d("FCM My Token", "Device token: " + token1);
+        loginRequest.setDeviceToken(token1);
 
         Call<LoginResponse> call = apiService.login(loginRequest);
         call.enqueue(new Callback<LoginResponse>() {

@@ -1,221 +1,241 @@
-<ScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF">
-    <LinearLayout
+    android:layout_height="match_parent">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <!-- Back Button and Title -->
-        <LinearLayout
-            android:id="@+id/headerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:background="#FFFFFF"
-            android:elevation="6dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
-            <ImageView
-                android:id="@+id/backIcon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/baseline_arrow_back_24"
-                android:contentDescription="Back" />
-            <TextView
-                android:id="@+id/confirmation_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confirmation"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginStart="8dp"
-                android:textColor="#000" />
-        </LinearLayout>
-        <!-- Car Details Card -->
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:background="@drawable/rounded_card"
-            android:elevation="4dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp">
-            <!-- ImageView on the left -->
-            <!-- Text group on the right -->
-            <ImageView
-                android:id="@+id/car_image0"
-                android:layout_width="100dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                />
+            android:orientation="vertical">
+            <!-- Back Button and Title -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/headerLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="vertical"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp">
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="#FFFFFF"
+                android:elevation="6dp"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+                <ImageView
+                    android:id="@+id/backIcon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/baseline_arrow_back_24"
+                    android:contentDescription="Back" />
                 <TextView
-                    android:id="@+id/car_name"
+                    android:id="@+id/confirmation_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="16sp"
-                    android:textColor="#000000"
-                    android:fontFamily="sans-serif-medium" />
-                <TextView
-                    android:id="@+id/car_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="14sp"
-                    android:textColor="#4CAF50"
-                    android:fontFamily="sans-serif" />
+                    android:text="Confirmation"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"
+                    android:textColor="#000" />
             </LinearLayout>
+            <!-- Car Details Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="@drawable/rounded_card"
+                android:elevation="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp">
+                <ImageView
+                    android:id="@+id/car_image0"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp">
+                    <TextView
+                        android:id="@+id/car_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="16sp"
+                        android:textColor="#000000"
+                        android:fontFamily="sans-serif-medium" />
+                    <TextView
+                        android:id="@+id/car_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="14sp"
+                        android:textColor="#4CAF50"
+                        android:fontFamily="sans-serif" />
+                </LinearLayout>
+            </LinearLayout>
+            <!-- Details Section -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pick up location"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeColor="@color/green"
+                app:boxStrokeWidth="2dp"
+                app:boxBackgroundMode="outline"
+                app:hintTextColor="@color/green">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pickup_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:editable="false"
+                    android:text="2464 Royal Ln. Mesa, New Jersey 45463" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Return location"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeColor="@color/green"
+                app:boxStrokeWidth="2dp"
+                app:boxBackgroundMode="outline"
+                app:hintTextColor="@color/green">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/return_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:editable="false"
+                    android:text="" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pick up date and time"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeColor="@color/green"
+                app:boxStrokeWidth="2dp"
+                app:boxBackgroundMode="outline"
+                app:hintTextColor="@color/green">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pickup_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:editable="false"
+                    android:text="" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Return date and time"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeColor="@color/green"
+                app:boxStrokeWidth="2dp"
+                app:boxBackgroundMode="outline"
+                app:hintTextColor="@color/green">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/return_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:editable="false"
+                    android:text="" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Pricing Section -->
+            <TextView
+                android:id="@+id/perday_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Per day car rent"
+                android:textColor="#000000"
+                android:layout_marginStart="16dp"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:gravity="end"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/total_rent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Total 2 day rent"
+                android:textColor="#000000"
+                android:layout_marginStart="16dp"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_width="369dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="end"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/total_payment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text=""
+                android:layout_marginStart="16dp"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="end"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+            <!-- Confirm Button -->
+            <Button
+                android:id="@+id/confirmButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Confirm"
+                android:backgroundTint="@color/green"
+                android:textColor="#FFFFFF"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-medium" />
         </LinearLayout>
-        <!-- Details Section -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Pick up location"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeColor="@color/green"
-            app:boxStrokeWidth="2dp"
-            app:boxBackgroundMode="outline"
-            app:hintTextColor="@color/green">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pickup_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:editable="false"
-                android:text="2464 Royal Ln. Mesa, New Jersey 45463" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Return location"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeColor="@color/green"
-            app:boxStrokeWidth="2dp"
-            app:boxBackgroundMode="outline"
-            app:hintTextColor="@color/green">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/return_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:editable="false"
-                android:text="" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Pick up date and time"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeColor="@color/green"
-            app:boxStrokeWidth="2dp"
-            app:boxBackgroundMode="outline"
-            app:hintTextColor="@color/green">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pickup_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:editable="false"
-                android:text="" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Return date and time"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeColor="@color/green"
-            app:boxStrokeWidth="2dp"
-            app:boxBackgroundMode="outline"
-            app:hintTextColor="@color/green">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/return_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:editable="false"
-                android:text="" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <!-- Pricing Section -->
-        <TextView
-            android:id="@+id/perday_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="Per day car rent"
-            android:textColor="#000000"
-            android:layout_marginStart="16dp"
-            android:textSize="14sp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:gravity="end"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
-        <TextView
-            android:id="@+id/total_rent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="Total 2 day rent"
-            android:textColor="#000000"
-            android:layout_marginStart="16dp"
-            android:textSize="14sp" />
-        <TextView
-            android:layout_width="369dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="end"
-            android:textColor="#000000"
-            android:textSize="14sp" />
-        <TextView
-            android:id="@+id/total_payment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:text=""
-            android:layout_marginStart="16dp"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="end"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-        <!-- Confirm Button -->
-        <Button
-            android:id="@+id/confirmButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Confirm"
-            android:backgroundTint="@color/green"
-            android:textColor="#FFFFFF"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif-medium" />
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <!-- Progress Bar and Overlay (not inside ScrollView) -->
+    <View
+        android:id="@+id/progressOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone" />
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateTint="@color/green" />
+
+</FrameLayout>

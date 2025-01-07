@@ -54,6 +54,8 @@ public class IdentificationActivity extends AppCompatActivity {
     private String returnLocation;
     private String pickUpDateTime;
     private String returnDateTime;
+    private Boolean isDriverRequired;
+
 
 
 
@@ -90,16 +92,16 @@ public class IdentificationActivity extends AppCompatActivity {
                 passportIdInput.setVisibility(View.VISIBLE);
             } else {
                 // Show both inputs if no radio button is selected
-                nationalIdInput.setVisibility(View.GONE);
-                passportIdInput.setVisibility(View.GONE);
+                nationalIdInput.setVisibility(View.VISIBLE);
+                passportIdInput.setVisibility(View.VISIBLE);
             }
         });
 
 // Set initial visibility based on the default selection or no selection
         if (radioGroup.getCheckedRadioButtonId() == -1) {
             // No radio button selected, hide both inputs
-            nationalIdInput.setVisibility(View.GONE);
-            passportIdInput.setVisibility(View.GONE);
+            nationalIdInput.setVisibility(View.VISIBLE);
+            passportIdInput.setVisibility(View.VISIBLE);
         } else if (radioGroup.getCheckedRadioButtonId() == R.id.radio_national_id) {
             nationalIdInput.setVisibility(View.VISIBLE);
             passportIdInput.setVisibility(View.GONE);
@@ -116,6 +118,7 @@ public class IdentificationActivity extends AppCompatActivity {
         returnLocation = intent1.getStringExtra("returnLocation");
         pickUpDateTime = intent1.getStringExtra("pickupDateTime");
         returnDateTime = intent1.getStringExtra("returnDateTime");
+        isDriverRequired=intent1.getBooleanExtra("isDriverRequired",false);
 
         // Image selection for front photo
         frontPhoto.setOnClickListener(v -> {
@@ -130,10 +133,19 @@ public class IdentificationActivity extends AppCompatActivity {
         });
 
         // Back Button
-        backButton.setOnClickListener(v -> finish());
+//        backButton.setOnClickListener(v -> finish());
 
         skipButton.setOnClickListener(v -> {
-            navigateToNextActivity(); // Proceed to the next activity without changing data
+            Intent intent = new Intent(IdentificationActivity.this, ConfirmationActivity.class); // Replace 'NextActivity' with your next activity class
+            intent.putExtra("SELECTED_CAR", selectedCar); // If it's a Parcelable object
+            intent.putExtra("pickupLocation", pickUpLocation);
+            intent.putExtra("returnLocation", returnLocation);
+            intent.putExtra("pickupDateTime", pickUpDateTime);
+            intent.putExtra("returnDateTime", returnDateTime);
+            intent.putExtra("isDriverRequired", isDriverRequired);
+
+            startActivity(intent);
+            finish();
         });
 
         // Next Button
@@ -157,15 +169,7 @@ public class IdentificationActivity extends AppCompatActivity {
     }
 
 
-    private void navigateToNextActivity() {
-        Intent intent = new Intent(IdentificationActivity.this, ConfirmationActivity.class); // Replace 'NextActivity' with your next activity class
-        intent.putExtra("SELECTED_CAR", selectedCar); // If it's a Parcelable object
-        intent.putExtra("pickupLocation", pickUpLocation);
-        intent.putExtra("returnLocation", returnLocation);
-        intent.putExtra("pickupDateTime", pickUpDateTime);
-        intent.putExtra("returnDateTime", returnDateTime);
-        startActivity(intent);
-    }
+
 
     private void fetchCustomerDoc() {
         // Initialize Retrofit instance
@@ -283,6 +287,7 @@ public class IdentificationActivity extends AppCompatActivity {
                     intent.putExtra("pickupDateTime", pickUpDateTime);
                     intent.putExtra("returnDateTime", returnDateTime);
                     startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(IdentificationActivity.this, "Failed to update documents.", Toast.LENGTH_SHORT).show();
                 }
@@ -346,10 +351,18 @@ public class IdentificationActivity extends AppCompatActivity {
     }
 
     private MultipartBody.Part createImagePart(String partName, Uri imageUri) {
-        if (imageUri == null) return null;
+        if (imageUri == null) {
+            Log.e("myproblem", partName + " URI is null");
+            return null;
+        }
 
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            if (bitmap == null) {
+                Log.e("myproblem", "Failed to decode the image");
+                return null;
+            }
+
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
             byte[] byteArray = stream.toByteArray();
@@ -358,9 +371,11 @@ public class IdentificationActivity extends AppCompatActivity {
             return MultipartBody.Part.createFormData(partName, partName + ".jpg", requestBody);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e("myproblem", "Error processing image", e);
             return null;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

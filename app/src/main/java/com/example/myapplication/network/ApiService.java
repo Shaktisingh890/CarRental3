@@ -1,7 +1,9 @@
 package com.example.myapplication.network;
 
 
+import com.example.myapplication.models.request.BookingRequest;
 import com.example.myapplication.models.response.AddCarResponse;
+import com.example.myapplication.models.response.BookingResponse;
 import com.example.myapplication.models.response.Car;
 import com.example.myapplication.models.response.CarDetailsResponse;
 import com.example.myapplication.models.response.CategoryResponse;
@@ -208,14 +210,18 @@ public interface ApiService {
             @Part MultipartBody.Part backPhoto
     );
 
-    @Multipart
-    @POST("updateCustomerDoc")
-    Call<UploadIdResponse> updateCustomerDoc(
-            @Part("type") RequestBody type,
-            @Part("id_number") RequestBody idNumber,
-            @Part MultipartBody.Part frontPhoto,
-            @Part MultipartBody.Part backPhoto
-    );
+//    @Multipart
+//    @POST("updateCustomerDoc")
+//    Call<UploadIdResponse> updateCustomerDoc(
+//            @Part("type") RequestBody type,
+//            @Part("id_number") RequestBody idNumber,
+//            @Part MultipartBody.Part frontPhoto,
+//            @Part MultipartBody.Part backPhoto
+//    );
+
+
+    @POST("api/v1/booking/createBooking")
+    Call<BookingResponse> createBooking(@Body BookingRequest bookingRequest);
 }
 
 

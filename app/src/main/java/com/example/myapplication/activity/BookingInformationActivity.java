@@ -113,6 +113,7 @@ public class BookingInformationActivity extends AppCompatActivity {
         String returnLoc = returnLocation.getText().toString();
         String pickUpTime = pickUpDateTime.getText().toString();
         String returnTime = returnDateTime.getText().toString();
+        boolean isDriverRequired = switchDriver.isChecked();
 
         if (pickUp.isEmpty() || returnLoc.isEmpty() || pickUpTime.isEmpty() || returnTime.isEmpty()) {
             Toast.makeText(BookingInformationActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
@@ -125,6 +126,8 @@ public class BookingInformationActivity extends AppCompatActivity {
             intent.putExtra("returnLocation", returnLoc);
             intent.putExtra("pickupDateTime", pickUpTime);
             intent.putExtra("returnDateTime", returnTime);
+            intent.putExtra("isDriverRequired", isDriverRequired); // Pass the switch state
+
 
             // Pass the selectedCar object as well
             intent.putExtra("SELECTED_CAR", selectedCar);

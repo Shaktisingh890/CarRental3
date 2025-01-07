@@ -2,13 +2,16 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.models.response.BookingResponse;
 
 public class BookingSuccessActivity extends AppCompatActivity {
 
@@ -25,14 +28,23 @@ public class BookingSuccessActivity extends AppCompatActivity {
         TextView rentalFees = findViewById(R.id.rentalFees);
         TextView totalFees = findViewById(R.id.totalFees);
         Button backToHomeBtn = findViewById(R.id.backToHomeBtn);
+        BookingResponse bookingResponse = getIntent().getParcelableExtra("BOOKING_RESPONSE");
 
-        // Set values for each field dynamically
-        bookingStatus.setText("Booked Successfully");
-        carName.setText("Mercedes Benz w176");
-        pickupLocation.setText("Pick-up and Return: \nWashington Manchester - Same location");
-        tripDates.setText("Trip Dates:\n Thu 15 April, 11:00 am - Sat 17 April, 6:00 pm");
-        rentalFees.setText("One day rent: $200\nTotal of 3 days: $600");
-        totalFees.setText("Total Fees: $600.00");
+
+        // Set values for each field dynamically with better formatting
+        bookingStatus.setText("Booking Status: " + bookingResponse.getData().getPaymentStatus());
+        carName.setText(bookingResponse.getData().getCarData().getBrand() + " " + bookingResponse.getData().getCarData().getModel());
+        pickupLocation.setText("Pick-up and Return:\n" +
+                "Pick-up: " + bookingResponse.getData().getPickupLocation() + "\n" +
+                "Drop-off: " + bookingResponse.getData().getDropoffLocation());
+        tripDates.setText("Trip Dates:\n" +
+                "Start: " + bookingResponse.getData().getStartDate() + "\n" +
+                "End: " + bookingResponse.getData().getEndDate());
+        rentalFees.setText("Rental Fees:\n" +
+                "One Day Rent: $" + bookingResponse.getData().getCarData().getPricePerDay() + "\n" +
+                "Duration: " + bookingResponse.getData().getDurationInDays() + " day(s)");
+        totalFees.setText("Total Fees: $" + bookingResponse.getData().getTotalAmount());
+
 
         // Button to go back to home
         backToHomeBtn.setOnClickListener(new View.OnClickListener() {
