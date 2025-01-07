@@ -1,6 +1,7 @@
 package com.example.myapplication.network;
 
 
+import com.example.myapplication.models.response.Booking;
 import com.example.myapplication.models.request.BookingRequest;
 import com.example.myapplication.models.request.ChangePasswordRequest;
 import com.example.myapplication.models.response.AddCarResponse;
@@ -229,6 +230,11 @@ public interface ApiService {
     // Method to change password
     @PUT("api/v1/users/update_password")
     Call<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
+
+
+    @GET("api/v1/bookings/byId/{id}")
+    Call<Booking> getBookingDetails(@Path("id") String bookingId);
+
 }
 
 
