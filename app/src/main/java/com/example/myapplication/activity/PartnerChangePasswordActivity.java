@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class PartnerChangePasswordActivity extends AppCompatActivity {
 
-    private TextInputEditText passwordEditText, confirmPasswordEditText;
+    private TextInputEditText currentPasswordEditText, passwordEditText, confirmPasswordEditText;
     private TextView passwordStrengthText, passwordMatchError;
 
     @Override
@@ -26,7 +26,7 @@ public class PartnerChangePasswordActivity extends AppCompatActivity {
 
         // Initialize views
         ImageView backArrow = findViewById(R.id.backArrow);
-        TextView instructionText = findViewById(R.id.instructionText);
+        currentPasswordEditText = findViewById(R.id.currentPasswordEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
         passwordStrengthText = findViewById(R.id.passwordStrengthText);
@@ -50,7 +50,7 @@ public class PartnerChangePasswordActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Register button functionality
+        // Reset password button functionality
         registerButton.setOnClickListener(v -> resetPassword());
     }
 
@@ -65,15 +65,27 @@ public class PartnerChangePasswordActivity extends AppCompatActivity {
     }
 
     private void resetPassword() {
-        String password = passwordEditText.getText().toString();
+        String currentPassword = currentPasswordEditText.getText().toString();
+        String newPassword = passwordEditText.getText().toString();
         String confirmPassword = confirmPasswordEditText.getText().toString();
 
-        if (password.isEmpty() || confirmPassword.isEmpty()) {
+        if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (password.equals(confirmPassword)) {
+        // Example: Validate current password with server or local storage (replace this with your actual logic)
+        if (!currentPassword.equals("userExistingPassword")) {
+            Toast.makeText(this, "Current password is incorrect", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (newPassword.equals(currentPassword)) {
+            Toast.makeText(this, "New password cannot be the same as the current password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (newPassword.equals(confirmPassword)) {
             passwordMatchError.setVisibility(View.GONE);
             Toast.makeText(this, "Password reset successfully!", Toast.LENGTH_SHORT).show();
             // Perform further actions like API call or navigation here

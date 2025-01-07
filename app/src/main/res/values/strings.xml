@@ -2,6 +2,7 @@
     <string name="app_name">My Application</string>
     <!-- Define the categories array -->
     <string-array name="car_year_array">
+        <item>Select Year</item>
         <item>1980</item>
         <item>1981</item>
         <item>1982</item>
@@ -51,6 +52,7 @@
     </string-array>
 
     <string-array name="category_array">
+        <item>Select Category</item>
         <item>Sedan</item>
         <item>SUV</item>
         <item>Hatchback</item>
@@ -58,6 +60,7 @@
     </string-array>
 
     <string-array name="subcategory_array">
+        <item>Select Sub Category</item>
         <item>Luxury</item>
         <item>Compact </item>
         <item>Sports </item>
@@ -68,6 +71,7 @@
     </string-array>
     <!-- Define the seating capacity array -->
     <string-array name="seating_capacity_array">
+        <item>Select Seat Capacity</item>
         <item>2</item>
         <item>4</item>
         <item>5</item>
@@ -76,6 +80,7 @@
 
     <!-- Define the fuel type array -->
     <string-array name="fuel_type_array">
+        <item>Select Fuel Type</item>
         <item>Petrol</item>
         <item>Diesel</item>
         <item>Electric</item>
@@ -84,6 +89,7 @@
 
     <!-- Define the transmission type array -->
     <string-array name="transmission_type_array">
+        <item>Select Transmission Type</item>
         <item>Automatic</item>
         <item>Manual</item>
     </string-array>
