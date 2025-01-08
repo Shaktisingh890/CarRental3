@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -55,7 +56,13 @@ public class PartnerDashboardActivity extends AppCompatActivity {
 
         // Set click listener for "My Cars" tab
         tabMyCars.setOnClickListener(v -> loadFragment(new MyCarsFragment()));
-
+        // Find the notification icon
+        ImageButton notificationIcon = findViewById(R.id.notificationIcon);
+        // Set click listener to navigate to PartnerNotificationActivity
+        notificationIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(PartnerDashboardActivity.this, PartnerNotificationActivity.class);
+            startActivity(intent);
+        });
         // BottomNavigationView listener
         bottomNav.setSelectedItemId(R.id.nav_home);
         bottomNav.setOnNavigationItemSelectedListener(this::navigateTo);

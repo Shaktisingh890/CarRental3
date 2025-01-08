@@ -2,10 +2,13 @@ package com.example.myapplication.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,7 +21,8 @@ import android.widget.Toast;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
-
+import androidx.appcompat.app.AlertDialog;
+import android.view.LayoutInflater;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.AyaStoriesAdapter;
 import com.example.myapplication.adapter.ImageSliderAdapter;
@@ -158,35 +162,44 @@ public class DashboardActivity extends AppCompatActivity {
         // Set the adapter for the slider
         imageSlider.setAdapter(adapter);
     }
-
-    // Add customer comments dynamically
-    private void addCustomerComments(LinearLayout container) {
-        List<CustomerComment> comments = getCustomerComments();
-        for (CustomerComment comment : comments) {
-            TextView nameTextView = new TextView(this);
-            nameTextView.setText(comment.getName());
-            nameTextView.setTextSize(16);
-            nameTextView.setTextColor(getResources().getColor(android.R.color.black));
-            nameTextView.setPadding(0, 8, 0, 4);
-
-            TextView commentTextView = new TextView(this);
-            commentTextView.setText(comment.getComment());
-            commentTextView.setTextSize(14);
-            commentTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            commentTextView.setPadding(0, 0, 0, 8);
-
-            container.addView(nameTextView);
-            container.addView(commentTextView);
-        }
+    @Override
+    public void onBackPressed() {
+        // Show logout confirmation dialog
+        showLogoutConfirmationDialog();
     }
 
-    // Example method to get customer comments
-    private List<CustomerComment> getCustomerComments() {
-        List<CustomerComment> comments = new ArrayList<>();
-        comments.add(new CustomerComment("John Doe", "Amazing experience! Highly recommend."));
-        comments.add(new CustomerComment("Jane Smith", "Great service and friendly staff."));
-        comments.add(new CustomerComment("Michael Brown", "Affordable and reliable car rental service."));
-        return comments;
+    private void showLogoutConfirmationDialog() {
+        // Inflate the dialog layout
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_logout_confirmation, null);
+
+        // Build the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Set up button click listeners
+        Button cancelButton = dialogView.findViewById(R.id.cancelButton);
+        Button logoutButton = dialogView.findViewById(R.id.logoutButton);
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+
+        logoutButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            // Clear user session and navigate to login
+            clearSession(this);
+            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Finish DashboardActivity
+        });
+    }
+
+    public static void clearSession(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("YourSharedPrefName", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear(); // Clear all stored data
+        editor.apply();
     }
 
     // Show DatePickerDialog

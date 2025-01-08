@@ -1,6 +1,9 @@
 package com.example.myapplication.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.content.CursorLoader;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -144,6 +147,10 @@ public class DriverSignupActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Log.d("DriverSignupActivity", "Registration successful. Response: " + response.body());
                     Toast.makeText(DriverSignupActivity.this, "Driver registration successful", Toast.LENGTH_SHORT).show();
+                    // Redirect to LoginActivity after successful registration
+                    Intent intent = new Intent(DriverSignupActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
                     try {
                         Log.e("DriverSignupActivity", "Registration failed. Error: " + response.errorBody().string());
@@ -192,17 +199,51 @@ public class DriverSignupActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK && data != null) {
             Uri selectedImageUri = data.getData();
-            if (requestCode == 1) {
-                Log.d("DriverSignupActivity", "Front photo URI: " + selectedImageUri.toString());
-                frontPhotoUri = selectedImageUri;
-                frontPhoto.setImageURI(frontPhotoUri);
-            } else if (requestCode == 2) {
-                Log.d("DriverSignupActivity", "Back photo URI: " + selectedImageUri.toString());
-                backPhotoUri = selectedImageUri;
-                backPhoto.setImageURI(backPhotoUri);
+            try {
+                // Get the image file size
+                File file = new File(getRealPathFromURI(selectedImageUri));
+                long imageSize = file.length(); // Get the image size in bytes
+
+                // Check if the image size is greater than 150KB
+                if (imageSize > 150 * 1024) { // 150KB in bytes
+                    Toast.makeText(this, "Image size exceeds 150KB. Please select a smaller image.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Decode the selected image to a bitmap if the size is valid
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+
+                if (requestCode == 1) {
+                    // Set the selected image to the front photo ImageView
+                    Log.d("DriverSignupActivity", "Front photo URI: " + selectedImageUri.toString());
+                    frontPhoto.setImageBitmap(bitmap);
+                    frontPhotoUri = selectedImageUri;
+                } else if (requestCode == 2) {
+                    // Set the selected image to the back photo ImageView
+                    Log.d("DriverSignupActivity", "Back photo URI: " + selectedImageUri.toString());
+                    backPhoto.setImageBitmap(bitmap);
+                    backPhotoUri = selectedImageUri;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    // Helper method to get the real file path from URI
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String path = cursor.getString(column_index);
+        cursor.close();
+        return path;
+    }
+
 }
