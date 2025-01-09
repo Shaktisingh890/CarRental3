@@ -1,15 +1,18 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.myapplication.R;
@@ -19,7 +22,7 @@ import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
 import com.example.myapplication.utils.ProgressBarUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
+import com.example.myapplication.utils.SharedPreferencesManager;
 import java.io.IOException;
 
 import retrofit2.Call;
@@ -98,16 +101,50 @@ public class PartnerDashboardActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        // Check if the current fragment is MyCarsFragment
+        // Check if the current fragment is EarningFragment
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (currentFragment instanceof MyCarsFragment) {
-            // If on the My Cars tab, simply stay in the PartnerDashboardActivity
-            // Optionally, you can load the EarningFragment if you want to show that fragment
+
+        if (currentFragment instanceof EarningFragment) {
+            // Show the logout confirmation dialog
+            showLogoutConfirmationDialog();
+        } else if (currentFragment instanceof MyCarsFragment) {
+            // If on MyCarsFragment, load EarningFragment
             loadFragment(new EarningFragment());
         } else {
-            // Otherwise, use the default behavior for the back button (which finishes the activity)
+            // Otherwise, use the default back button behavior
             super.onBackPressed();
         }
+    }
+    public static class SharedPreferencesManager {
+        public static void clearSession(Context context) {
+            SharedPreferences preferences = context.getSharedPreferences("YourSharedPrefName", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+        }
+    }
+
+    private void showLogoutConfirmationDialog() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_logout_confirmation, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        Button cancelButton = dialogView.findViewById(R.id.cancelButton);
+        Button logoutButton = dialogView.findViewById(R.id.logoutButton);
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+
+        logoutButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            SharedPreferencesManager.clearSession(this); // Call the static method
+            Intent intent = new Intent(PartnerDashboardActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void fetchUserProfile() {

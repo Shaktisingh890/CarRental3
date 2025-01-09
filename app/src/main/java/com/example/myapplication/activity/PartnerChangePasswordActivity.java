@@ -64,27 +64,31 @@ public class PartnerChangePasswordActivity extends AppCompatActivity {
     }
 
     private void validatePasswordStrength(String password) {
-        if (password.length() >= 8) {
+        if (password.isEmpty()) {
+            passwordStrengthText.setText("Password cannot be empty");
+            passwordStrengthText.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+        } else if (password.length() >= 8 && password.matches(".*[A-Z].*") && password.matches(".*\\d.*") && password.matches(".*[@#$%^&+=].*")) {
             passwordStrengthText.setText("Password strength: Strong");
             passwordStrengthText.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
         } else {
-            passwordStrengthText.setText("Must be at least 8 characters.");
+            passwordStrengthText.setText("Password must be 8+ characters, include uppercase, digit, and special character.");
             passwordStrengthText.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
         }
     }
 
     private void resetPassword() {
-        String currentPassword = currentPasswordEditText.getText().toString();
-        String newPassword = passwordEditText.getText().toString();
-        String confirmPassword = confirmPasswordEditText.getText().toString();
+        String currentPassword = currentPasswordEditText.getText().toString().trim();
+        String newPassword = passwordEditText.getText().toString().trim();
+        String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 
         if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
             passwordMatchError.setVisibility(View.VISIBLE);
+            passwordMatchError.setText("Passwords do not match");
             return;
         }
 
@@ -105,12 +109,9 @@ public class PartnerChangePasswordActivity extends AppCompatActivity {
                     ChangePasswordResponse changePasswordResponse = response.body();
                     if (changePasswordResponse.isSuccess()) {
                         Toast.makeText(PartnerChangePasswordActivity.this, "Password changed successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(PartnerChangePasswordActivity.this,LoginActivity.class);
-                        // Put the necessary data into the Intent
-
+                        Intent intent = new Intent(PartnerChangePasswordActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
-                        // Optionally navigate to another screen or perform additional actions
                     } else {
                         Toast.makeText(PartnerChangePasswordActivity.this, changePasswordResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
