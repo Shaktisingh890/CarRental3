@@ -1,61 +1,118 @@
 package com.example.myapplication.utils;
 
 import android.Manifest;
-import android.app.PendingIntent;
-import android.content.Intent;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-
+import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import com.example.myapplication.activity.PartnerBookingRequestActivity;
-import com.example.myapplication.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.Random;
+import com.example.myapplication.R;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    public static final String PREFS_NAME = "com.example.app.PREFERENCES";
+    public static final String NOTIFICATIONS_KEY = "notifications";
+    private static final String TAG = "MyFirebaseMessagingService"; // Debug tag
+
+    private String title, body;
+    private String bookingId;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
+        Log.d("mynotificaion", "onMessageReceived called"); // Debug log
 
-        // Extract data
-        String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
-        String bookingId = remoteMessage.getData().get("bookingId");
+        // Handle notification payload
+        if (remoteMessage.getNotification() != null) {
+            title = remoteMessage.getNotification().getTitle();
+            body = remoteMessage.getNotification().getBody();
+            Log.d("mynotification", "Received notification - Title: " + title + ", Body: " + body);
+        } else {
+            Log.d("mynotification", "Received data - Title:error");
+        }
+        if (remoteMessage.getData().size() > 0) {
+            bookingId = remoteMessage.getData().get("bookingId");
+            String click_action = remoteMessage.getData().get("click_action");
+            Log.d("mynotification", "RemoteMessage: " + bookingId);
+            Log.d("mynotification", "Received notification - Title: " + click_action); // Debug log
+        }
 
-        // Show notification
-        showNotification(title, body, bookingId);
+        // Store notification in SharedPreferences
+        storeNotificationInSharedPreferences(title, body, bookingId);
+
+        // Show notification in the notification bar
+        showNotification(title, body);
     }
 
-    private void showNotification(String title, String body, String bookingId) {
-        Intent intent = new Intent(this, PartnerBookingRequestActivity.class);
-        intent.putExtra("bookingId", bookingId);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    private void storeNotificationInSharedPreferences(String title, String body, String bookingId) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        // Get the existing notifications from SharedPreferences
+        String existingNotificationsJson = sharedPreferences.getString(NOTIFICATIONS_KEY, "[]");
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default")
+        try {
+            JSONArray notificationsArray = new JSONArray(existingNotificationsJson);
+
+            // Generate a unique ID using the current timestamp
+            String notificationId = String.valueOf(System.currentTimeMillis());
+
+            // Create a new notification JSON object
+            JSONObject newNotification = new JSONObject();
+            newNotification.put("id", notificationId); // Unique ID for each notification
+            newNotification.put("title", title);
+            newNotification.put("body", body);
+            newNotification.put("bookingId", bookingId); // Include the bookingId
+            newNotification.put("isRead", false);  // Initially unread
+
+            // Add the new notification to the array
+            notificationsArray.put(newNotification);
+
+            // Save updated notifications back to SharedPreferences
+            editor.putString(NOTIFICATIONS_KEY, notificationsArray.toString());
+            editor.apply();
+
+            Log.d("n1", "Stored new notification: " + newNotification.toString());
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Error storing notification", e);
+        }
+    }
+
+    private void showNotification(String title, String body) {
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "default")
+                .setSmallIcon(R.drawable.baseline_circle_notifications_24)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.baseline_circle_notifications_24)
-                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
-        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            Log.d("mynotificaion", "Permission not granted for posting notifications"); // Debug log
             return;
         }
-        manager.notify(new Random().nextInt(), builder.build());
+
+        notificationManager.notify(0, notificationBuilder.build());
+        Log.d("mynotificaion", "Notification shown: " + title); // Debug log
     }
+
+    public static void deleteAllNotifications(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Clear all notifications
+        editor.putString(NOTIFICATIONS_KEY, "[]");
+        editor.apply();
+
+        Log.d(TAG, "All notifications deleted from SharedPreferences");
+    }
+
 }

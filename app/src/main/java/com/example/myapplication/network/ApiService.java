@@ -5,6 +5,7 @@ import com.example.myapplication.models.response.Booking;
 import com.example.myapplication.models.request.BookingRequest;
 import com.example.myapplication.models.request.ChangePasswordRequest;
 import com.example.myapplication.models.response.AddCarResponse;
+import com.example.myapplication.models.response.BookingDetailsResponse;
 import com.example.myapplication.models.response.BookingResponse;
 import com.example.myapplication.models.response.Car;
 import com.example.myapplication.models.response.CarDetailsResponse;
@@ -232,8 +233,10 @@ public interface ApiService {
     Call<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
 
 
-    @GET("api/v1/bookings/byId/{id}")
-    Call<Booking> getBookingDetails(@Path("id") String bookingId);
+
+
+    @GET("api/v1/booking/byId/{bookingId}")
+    Call<BookingDetailsResponse> getBookingDetails1(@Path("bookingId") String bookingId);
 
 }
 
