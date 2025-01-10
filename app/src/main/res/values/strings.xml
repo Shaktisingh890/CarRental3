@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">AYA Rental</string>
     <!-- Define the categories array -->
     <string-array name="car_year_array">
         <item>Select Year</item>

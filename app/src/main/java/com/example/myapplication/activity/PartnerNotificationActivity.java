@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -25,11 +26,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import com.example.myapplication.utils.MyFirebaseMessagingService;
 public class PartnerNotificationActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private NotificationAdapter adapter;
+
+    private Button clearNotification;
     private List<Notification> notifications = new ArrayList<>();
 
     @Override
@@ -50,6 +53,19 @@ public class PartnerNotificationActivity extends AppCompatActivity {
         // Close activity with back button
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
+
+        clearNotification=findViewById(R.id.clearAllButton);
+
+        clearNotification.setOnClickListener(view -> {
+            MyFirebaseMessagingService.deleteAllNotifications(getApplicationContext()); // Clear notifications
+            Toast.makeText(this, "All notifications cleared", Toast.LENGTH_SHORT).show();
+
+            // Restart the activity to reflect the changes
+            finish(); // Finish the current activity
+            startActivity(getIntent()); // Start the same activity again
+        });
+
+
     }
 
     private void fetchNotificationsFromSharedPreferences() {

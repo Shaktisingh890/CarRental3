@@ -1,10 +1,10 @@
 package com.example.myapplication.network;
 
 
-import com.example.myapplication.models.response.Booking;
 import com.example.myapplication.models.request.BookingRequest;
 import com.example.myapplication.models.request.ChangePasswordRequest;
 import com.example.myapplication.models.response.AddCarResponse;
+import com.example.myapplication.models.response.AllDriversResponse;
 import com.example.myapplication.models.response.BookingDetailsResponse;
 import com.example.myapplication.models.response.BookingResponse;
 import com.example.myapplication.models.response.Car;
@@ -237,6 +237,10 @@ public interface ApiService {
 
     @GET("api/v1/booking/byId/{bookingId}")
     Call<BookingDetailsResponse> getBookingDetails1(@Path("bookingId") String bookingId);
+
+
+    @GET("api/v1/drivers/getAllDriver")
+    Call<AllDriversResponse> getAllDrivers(); // Fetch all drivers
 
 }
 

@@ -1,7 +1,7 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +50,12 @@ public class PartnerBookingRequestActivity extends AppCompatActivity {
         btnAccept.setOnClickListener(view -> {
             // Handle accept booking logic here
             Toast.makeText(PartnerBookingRequestActivity.this, "Booking Accepted", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(PartnerBookingRequestActivity.this, Partner_DriverListActivity.class); // Replace 'NextActivity' with your next activity class
+
+
+            startActivity(intent);
+            finish();
+
         });
 
         // Handle Reject button click
@@ -94,4 +100,8 @@ public class PartnerBookingRequestActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 }
