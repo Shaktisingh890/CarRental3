@@ -2,12 +2,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/driver_card"
+        android:elevation="4dp"
+        android:layout_gravity="center">
 
         <!-- Car Details -->
         <TextView
@@ -16,16 +21,18 @@
             android:layout_height="wrap_content"
             android:text="Car Details"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textColor="#333333"
             android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvCarBrandModel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Brand  Model: Toyota Camry"
+            android:text="Brand and Model: Toyota Camry"
             android:textSize="16sp"
-            android:layout_marginBottom="4dp" />
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvCarRent"
@@ -33,6 +40,7 @@
             android:layout_height="wrap_content"
             android:text="Rent Per Day: $100"
             android:textSize="16sp"
+            android:textColor="#28A745"
             android:layout_marginBottom="16dp" />
 
         <!-- Booking Details -->
@@ -42,7 +50,8 @@
             android:layout_height="wrap_content"
             android:text="Booking Details"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textColor="#333333"
             android:layout_marginBottom="8dp" />
 
         <TextView
@@ -51,7 +60,8 @@
             android:layout_height="wrap_content"
             android:text="Pickup Location: New York"
             android:textSize="16sp"
-            android:layout_marginBottom="4dp" />
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvReturnLocation"
@@ -59,7 +69,8 @@
             android:layout_height="wrap_content"
             android:text="Return Location: Boston"
             android:textSize="16sp"
-            android:layout_marginBottom="4dp" />
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvPickupTime"
@@ -67,7 +78,8 @@
             android:layout_height="wrap_content"
             android:text="Pickup Time: 10:00 AM, Jan 10"
             android:textSize="16sp"
-            android:layout_marginBottom="4dp" />
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvReturnTime"
@@ -75,31 +87,38 @@
             android:layout_height="wrap_content"
             android:text="Return Time: 10:00 AM, Jan 11"
             android:textSize="16sp"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#666666"
+            android:layout_marginBottom="24dp" />
 
         <!-- Accept/Reject Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="16dp">
 
             <Button
                 android:id="@+id/btnAccept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accept"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#28A745"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="@color/green"
-                android:textColor="@android:color/white" />
+                android:padding="10dp"
+                android:layout_gravity="center" />
 
             <Button
                 android:id="@+id/btnReject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reject"
-                android:backgroundTint="@color/red"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:backgroundTint="#FF3B30"
+                android:padding="10dp"
+                android:layout_gravity="center" />
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

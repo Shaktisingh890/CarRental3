@@ -93,4 +93,6 @@
         <item>Automatic</item>
         <item>Manual</item>
     </string-array>
+    <string name="call_driver">Call Driver</string>
+    <string name="driver_image">Driver profile image</string>
 </resources>

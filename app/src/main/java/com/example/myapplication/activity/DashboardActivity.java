@@ -156,7 +156,7 @@ public class DashboardActivity extends AppCompatActivity {
         ViewPager2 imageSlider = findViewById(R.id.imageSlider);
 
         // List of image resource IDs
-        Integer[] images = {R.drawable.explore_ban1, R.drawable.explore_ban2, R.drawable.explore_ban3};
+        Integer[] images = {R.drawable.tio, R.drawable.tio1, R.drawable.tio3};
         ImageSliderAdapter adapter = new ImageSliderAdapter(this, Arrays.asList(images));
 
         // Set the adapter for the slider
