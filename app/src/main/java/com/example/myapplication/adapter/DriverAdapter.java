@@ -1,6 +1,7 @@
 package com.example.myapplication.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
+import com.example.myapplication.activity.DriverDetailActivity;
 import com.example.myapplication.models.response.Driver;
 
 import java.util.List;
@@ -58,6 +60,22 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
                 .placeholder(R.drawable.profile) // Placeholder image
                 .error(R.drawable.profile) // Fallback image in case of error
                 .into(holder.imgDriver);
+
+        // Set click listener
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, DriverDetailActivity.class);
+            intent.putExtra("driverId", driver.getId());
+            intent.putExtra("driverName", driver.getFullName());
+            intent.putExtra("driverPhone", driver.getPhoneNumber());
+            intent.putExtra("driverEmail", driver.getEmail());
+            intent.putExtra("driverLicenseNumber", driver.getLicenseNumber());
+            intent.putExtra("driverLicenseExpiry", driver.getLicenseExpiryDate());
+            intent.putExtra("frontPhotoImageView", driver.getLicenseFrontImgUrl());
+            intent.putExtra("backPhotoImageView", driver.getLicenseBackImgUrl());
+            intent.putExtra("driverImgUrl", driver.getImgUrl());
+            intent.putExtra("availabilityStatus", driver.isAvailabilityStatus());
+            context.startActivity(intent);
+        });
     }
 
     @Override

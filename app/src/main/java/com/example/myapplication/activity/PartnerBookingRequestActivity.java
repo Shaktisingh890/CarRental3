@@ -77,11 +77,11 @@ public class PartnerBookingRequestActivity extends AppCompatActivity {
                     BookingDetailsResponse bookingDetailsResponse = response.body();
                     if (bookingDetailsResponse != null) {
                         // Populate the UI with the booking details
-                        tvCarDetails.setText("Car Details");
+                        tvCarDetails.setText("Booking Detail");
                         tvCarBrandModel.setText("Brand Model: " + bookingDetailsResponse.getData().getCarName()+"" +bookingDetailsResponse.getData().getCarModel());
                         tvCarRent.setText("Rent Per Day: $" + bookingDetailsResponse.getData().getPricePerDay());
 
-                        tvBookingDetails.setText("Booking Details");
+                        tvBookingDetails.setText("Pickup & Drop-off Points");
                         tvPickupLocation.setText("Pickup Location: " + bookingDetailsResponse.getData().getPickupLocation());
                         tvReturnLocation.setText("Return Location: " + bookingDetailsResponse.getData().getDropoffLocation());
                         tvPickupTime.setText("Pickup Time: " + bookingDetailsResponse.getData().getStartDate());

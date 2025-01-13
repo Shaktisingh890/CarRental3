@@ -1,124 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@android:color/white">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@drawable/driver_card"
-        android:elevation="4dp"
-        android:layout_gravity="center">
-
+        android:elevation="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:elevation="6dp"
+            android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/backIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="Back" />
+            <TextView
+                android:id="@+id/tvCarDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Booking Detail"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+        </LinearLayout>
         <!-- Car Details -->
-        <TextView
-            android:id="@+id/tvCarDetails"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Car Details"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#333333"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/tvCarBrandModel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Brand and Model: Toyota Camry"
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/tvCarRent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rent Per Day: $100"
-            android:textSize="16sp"
-            android:textColor="#28A745"
-            android:layout_marginBottom="16dp" />
-
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:elevation="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:id="@+id/tvCarBrandModel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Brand and Model: Toyota Camry"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvCarRent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rent Per Day: $100"
+                android:textSize="16sp"
+                android:textColor="#28A745"
+                android:layout_marginBottom="16dp" />
+        </LinearLayout>
         <!-- Booking Details -->
-        <TextView
-            android:id="@+id/tvBookingDetails"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Booking Details"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#333333"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/tvPickupLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pickup Location: New York"
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/tvReturnLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Return Location: Boston"
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/tvPickupTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pickup Time: 10:00 AM, Jan 10"
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/tvReturnTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Return Time: 10:00 AM, Jan 11"
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="24dp" />
-
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:elevation="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/tvBookingDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pickup &amp; Drop-off Points"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvPickupLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pickup Location: New York"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvPickupTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pickup Time: 10:00 AM, Jan 10"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
+            <!-- Horizontal Line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CCCCCC"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvReturnLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Return Location: Boston"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvReturnTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Return Time: 10:00 AM, Jan 11"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="24dp" />
+        </LinearLayout>
         <!-- Accept/Reject Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="16dp">
-
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:weightSum="2">
             <Button
                 android:id="@+id/btnAccept"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Accept"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#28A745"
-                android:layout_marginEnd="16dp"
-                android:padding="10dp"
-                android:layout_gravity="center" />
-
+                android:textColor="@color/white"
+                android:backgroundTint="@color/green"
+                android:padding="12dp"
+                android:layout_marginEnd="8dp" />
             <Button
                 android:id="@+id/btnReject"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Reject"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#FF3B30"
-                android:padding="10dp"
-                android:layout_gravity="center" />
+                android:textColor="@color/white"
+                android:backgroundTint="@color/red"
+                android:padding="12dp"
+                android:layout_marginStart="8dp" />
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

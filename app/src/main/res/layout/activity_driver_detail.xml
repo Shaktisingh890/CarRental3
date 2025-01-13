@@ -1,80 +1,279 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F5F5F5">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <!-- Driver Profile Image -->
-        <ImageView
-            android:id="@+id/driver_profile_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/profile"
-            android:contentDescription="@string/driver_image"
-            android:layout_marginBottom="16dp"
-            android:scaleType="centerCrop" />
-
-        <!-- Driver Name -->
-        <TextView
-            android:id="@+id/driver_name"
-            android:layout_width="wrap_content"
+        <!-- Back Icon and Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Driver Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:elevation="6dp"
+            android:gravity="center_vertical">
 
-        <!-- Vehicle Type -->
-        <TextView
-            android:id="@+id/driver_vehicle_type"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Driver Profile"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+        </LinearLayout>
+        <!-- Profile Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vehicle Type: Sedan"
-            android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp" />
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/driver_card"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgDriver"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/profile"
+                app:shapeAppearanceOverlay="@style/CircleImage"
+                android:layout_marginBottom="8dp" />
+
+
+            <TextView
+                android:id="@+id/tvAvailabilityStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status: Available"
+                android:gravity="center"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <!-- Name -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Name"
+                android:textSize="14sp"
+                android:textColor="#777777" />
+
+            <TextView
+                android:id="@+id/tvDriverName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="John Doe"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textSize="14sp"
+                android:textColor="#777777" />
+
+            <TextView
+                android:id="@+id/tvDriverEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="john.doe@example.com"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Mobile -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile"
+                android:textSize="14sp"
+                android:textColor="#777777" />
+
+            <TextView
+                android:id="@+id/tvDriverPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="+1234567890"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
 
         <!-- License Number -->
-        <TextView
-            android:id="@+id/driver_license_no"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="License: ABC12345"
-            android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp" />
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
 
-        <!-- Phone Number -->
-        <TextView
-            android:id="@+id/driver_phone"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="License Number"
+                android:textSize="14sp"
+                android:textColor="#777777" />
+
+            <TextView
+                android:id="@+id/tvDriverLicenseNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1234-5678-9101"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- License Expiry -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Phone: +91 9876543210"
-            android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp" />
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
 
-        <!-- Call Button -->
-        <ImageView
-            android:id="@+id/btn_call_driver"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/phone"
-            android:contentDescription="@string/call_driver"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="License Expiry Date"
+                android:textSize="14sp"
+                android:textColor="#777777" />
 
+            <TextView
+                android:id="@+id/tvDriverLicenseExpiry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12/12/2030"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+        <!-- Front Photo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Front Photo"
+                android:textSize="14sp"
+                android:textColor="#777777" />
+
+            <ImageView
+                android:id="@+id/frontPhotoImageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/round_document_scanner_24"
+                android:scaleType="fitCenter"
+                android:layout_marginBottom="8dp" />
+        </LinearLayout>
+
+        <!-- Back Photo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/driver_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back Photo"
+                android:textSize="14sp"
+                android:textColor="#777777" />
+
+            <ImageView
+                android:id="@+id/backPhotoImageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/round_document_scanner_24"
+                android:scaleType="fitCenter"
+                android:layout_marginBottom="8dp" />
+        </LinearLayout>
+
+        <!-- Buttons Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <!-- Assign Driver Button -->
+            <Button
+                android:id="@+id/assignDriverButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="Assign Driver"
+                android:textColor="#FFFFFF"
+                android:padding="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/green" />
+
+            <!-- Back Button -->
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Back"
+                android:textColor="#FFFFFF"
+                android:padding="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/red" />
+        </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 </ScrollView>
