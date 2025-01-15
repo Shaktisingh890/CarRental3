@@ -35,7 +35,6 @@
         android:id="@+id/recyclerViewBookings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/backButton"
         android:padding="16dp"
         android:clipToPadding="false"
         android:layout_marginTop="60dp" />

@@ -2,6 +2,7 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ public class PartnerBookingRequestActivity extends AppCompatActivity {
     private TextView tvBookingDetails, tvPickupLocation, tvReturnLocation, tvPickupTime, tvReturnTime;
     private Button btnAccept, btnReject;
 
+    private String notificationId,partnerStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,26 +45,55 @@ public class PartnerBookingRequestActivity extends AppCompatActivity {
 
         // Get the bookingId from the intent extras
         String bookingId = getIntent().getStringExtra("bookingId");
+        notificationId=getIntent().getStringExtra("notification_id");
+     Log.d("notification_id","notificiation"+notificationId);
+        Log.d("notification_id","notificiation"+bookingId);
+
 
         // Fetch booking details
         fetchBookingDetails(bookingId);
 
+
+
+
         // Handle Accept button click
         btnAccept.setOnClickListener(view -> {
-            // Handle accept booking logic here
-            Toast.makeText(PartnerBookingRequestActivity.this, "Booking Accepted", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(PartnerBookingRequestActivity.this, Partner_DriverListActivity.class); // Replace 'NextActivity' with your next activity class
-
-
-            startActivity(intent);
-            finish();
-
+            updateBookingStatus(bookingId, "confirmed", "ongoing", Partner_DriverListActivity.class);
         });
 
-        // Handle Reject button click
         btnReject.setOnClickListener(view -> {
-            // Handle reject booking logic here
-            Toast.makeText(PartnerBookingRequestActivity.this, "Booking Rejected", Toast.LENGTH_SHORT).show();
+            updateBookingStatus(bookingId, "rejected", "cancelled", BookingCancelledReasonActivity.class);
+        });
+
+    }
+
+
+    private void updateBookingStatus(String bookingId, String partnerStatus, String status, Class<?> nextActivity) {
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
+
+        // Call the API to update the booking status
+        Call<Void> call = apiService.updateBookingStatus(bookingId, partnerStatus, status);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(PartnerBookingRequestActivity.this, "Status updated successfully", Toast.LENGTH_SHORT).show();
+
+                    // Redirect to the specified activity
+                    Intent intent = new Intent(PartnerBookingRequestActivity.this, nextActivity);
+                    intent.putExtra("bookingId",bookingId);
+                    intent.putExtra("notification_id",notificationId);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(PartnerBookingRequestActivity.this, "Failed to update status", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(PartnerBookingRequestActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -86,6 +118,17 @@ public class PartnerBookingRequestActivity extends AppCompatActivity {
                         tvReturnLocation.setText("Return Location: " + bookingDetailsResponse.getData().getDropoffLocation());
                         tvPickupTime.setText("Pickup Time: " + bookingDetailsResponse.getData().getStartDate());
                         tvReturnTime.setText("Return Time: " + bookingDetailsResponse.getData().getEndDate());
+                        partnerStatus=bookingDetailsResponse.getData().getPartnerStatus();
+                        Log.d("notification_id","fetchPartnerStatus"+bookingDetailsResponse.getData().getPartnerStatus());
+
+                        if (partnerStatus != null && (partnerStatus.equals("confirmed") || partnerStatus.equals("rejected"))) {
+                            // If the status is already confirmed or rejected, skip the status update and directly navigate to Partner_DriverListActivity
+                            Intent intent = new Intent(PartnerBookingRequestActivity.this, Partner_DriverListActivity.class);
+                            intent.putExtra("bookingId", bookingId);
+                            intent.putExtra("notification_id", notificationId);
+                            startActivity(intent);
+                            finish();
+                        }
                     } else {
                         Toast.makeText(PartnerBookingRequestActivity.this, "No booking details available", Toast.LENGTH_SHORT).show();
                     }

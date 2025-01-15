@@ -3,6 +3,7 @@ package com.example.myapplication.activity;
 import static com.example.myapplication.utils.MyFirebaseMessagingService.NOTIFICATIONS_KEY;
 import static com.example.myapplication.utils.MyFirebaseMessagingService.PREFS_NAME;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.NotificationAdapter;
+import com.example.myapplication.models.response.BookingDetailsResponse;
 import com.example.myapplication.models.response.Notification;
 
+import com.example.myapplication.models.response.NotificationResponse;
+import com.example.myapplication.network.ApiService;
+import com.example.myapplication.network.RetrofitClient;
 import com.example.myapplication.utils.MyFirebaseMessagingService;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +32,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.myapplication.utils.MyFirebaseMessagingService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PartnerNotificationActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -34,6 +44,8 @@ public class PartnerNotificationActivity extends AppCompatActivity {
 
     private Button clearNotification;
     private List<Notification> notifications = new ArrayList<>();
+
+    public String partnerStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +56,14 @@ public class PartnerNotificationActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Fetch notifications from SharedPreferences
-        fetchNotificationsFromSharedPreferences();
+        fetchNotificationsFromDatabase();
+
+
+        // Log notifications for debugging before setting the adapter
+        Log.d("onCreate", "Notifications before setting adapter:");
+        for (Notification notification : notifications) {
+            Log.d("onCreate", notification.toString());
+        }
 
         // Set up the adapter to display notifications
         adapter = new NotificationAdapter(this,notifications);
@@ -55,9 +74,9 @@ public class PartnerNotificationActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> finish());
 
         clearNotification=findViewById(R.id.clearAllButton);
-
+        MyFirebaseMessagingService myService = new MyFirebaseMessagingService();
         clearNotification.setOnClickListener(view -> {
-            MyFirebaseMessagingService.deleteAllNotifications(getApplicationContext()); // Clear notifications
+            myService.deleteAllNotificationsFromBackend(getApplicationContext()); // Clear notifications
             Toast.makeText(this, "All notifications cleared", Toast.LENGTH_SHORT).show();
 
             // Restart the activity to reflect the changes
@@ -68,43 +87,59 @@ public class PartnerNotificationActivity extends AppCompatActivity {
 
     }
 
-    private void fetchNotificationsFromSharedPreferences() {
-        Log.d("fetchNotifications", "Fetching notifications from SharedPreferences");
+    private void fetchNotificationsFromDatabase() {
+        Log.d("fetchNotifications", "Fetching notifications from database via API");
 
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String notificationsJson = sharedPreferences.getString(NOTIFICATIONS_KEY, "[]");
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
-        try {
-            JSONArray notificationsArray = new JSONArray(notificationsJson);
+        apiService.getNotifications().enqueue(new Callback<NotificationResponse>() {
+            @Override
+            public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Clear the list to avoid duplicate entries
+                    if (notifications == null) {
+                        notifications = new ArrayList<>();
+                    } else {
+                        notifications.clear();
+                    }
 
-            // Clear the list to avoid duplicate entries
-            if (notifications == null) {
-                notifications = new ArrayList<>();
-            } else {
-                notifications.clear();
+                    // Extract and add notifications from the response
+                    NotificationResponse notificationResponse = response.body();
+                    List<Notification> fetchedNotifications = notificationResponse.getData();
+
+                    if (fetchedNotifications != null) {
+                        notifications.addAll(fetchedNotifications);
+
+                        // Log notifications for debugging
+                        for (Notification notification : notifications) {
+                            Log.d("fetchNotifications", "Title: " + notification.getTitle() +
+                                    ", Body: " + notification.getBody() +
+                                    ", isRead: " + notification.getId() +
+                                    ", Booking ID: " + notification.getBookingId());
+                        }
+
+                        // Notify adapter of data change
+                        adapter.notifyDataSetChanged();
+
+                        Log.d("fetchNotifications", "Total notifications fetched: " + notifications.size());
+                    }
+                } else {
+                    Log.e("fetchNotifications", "API response error: " + response.code());
+                }
             }
 
-            for (int i = 0; i < notificationsArray.length(); i++) {
-                JSONObject notificationJson = notificationsArray.getJSONObject(i);
-
-                String id = notificationJson.optString("id", ""); // Fetch ID
-                String title = notificationJson.optString("title", "No Title");
-                String body = notificationJson.optString("body", "No Body");
-                String bookingId = notificationJson.optString("bookingId", "No bookingid");
-                boolean isRead = notificationJson.optBoolean("isRead", false);
-
-                Log.d("fetchNotifications", "Title: " + title + ", Body: " + body + ", isRead: " + isRead +",bookingid"+bookingId);
-
-                notifications.add(new Notification(id, title, body, isRead,bookingId));
+            @Override
+            public void onFailure(Call<NotificationResponse> call, Throwable t) {
+                Log.e("fetchNotifications", "API call failed: ", t);
             }
-
-        } catch (JSONException e) {
-            Log.d("fetchNotifications", "JSON parsing error: ", e);
-            e.printStackTrace();
-        }
-
-        Log.d("fetchNotifications", "Total notifications fetched: " + notifications.size());
+        });
     }
+
+
+
+
+
+
 
 
 }

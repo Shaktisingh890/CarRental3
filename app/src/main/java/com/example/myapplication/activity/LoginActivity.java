@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private View progressOverlay; // Added overlay for blur effect
     private ProgressBar progressBar;
+    private ImageView logoImage;
     EditText loginEmail, loginPassword;
     Button loginButton;
     TextView signupRedirectText;
@@ -64,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirectText = findViewById(R.id.signupRedirectText);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay); // Overlay view for blur effect
-
+        logoImage=findViewById(R.id.logoImage);
         // Set login button click listener
         loginButton.setOnClickListener(v -> handleLogin());
 
@@ -155,9 +157,12 @@ public class LoginActivity extends AppCompatActivity {
         if (show) {
             progressOverlay.setVisibility(View.VISIBLE); // Show overlay
             progressBar.setVisibility(View.VISIBLE); // Show progress bar
+            logoImage.setVisibility(View.VISIBLE);
+
         } else {
             progressOverlay.setVisibility(View.GONE); // Hide overlay
             progressBar.setVisibility(View.GONE); // Hide progress bar
+            logoImage.setVisibility(View.GONE);
         }
     }
 }

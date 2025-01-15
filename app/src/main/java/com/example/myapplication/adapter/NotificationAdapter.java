@@ -2,18 +2,28 @@ package com.example.myapplication.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.models.response.Notification;
+import com.example.myapplication.activity.BookingCancelledReasonActivity;
+import com.example.myapplication.activity.PartnerNotificationActivity;
 import com.example.myapplication.activity.PartnerBookingRequestActivity;
+import com.example.myapplication.activity.Partner_DriverListActivity;
+import com.example.myapplication.models.response.BookingDetailsResponse;
+import com.example.myapplication.models.response.Notification;
+import com.example.myapplication.network.ApiService;
+import com.example.myapplication.network.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.List;
 
@@ -27,6 +37,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public NotificationAdapter(Context context, List<Notification> notifications) {
         this.context = context;
         this.notifications = notifications;
+
+        // Log notifications for debugging during initialization
+        logNotifications("NotificationAdapter initialized");
     }
 
     @Override
@@ -53,42 +66,31 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         // Apply dim effect for read notifications
         if (notification.isRead()) {
             holder.itemView.setAlpha(0.5f); // Dim effect
-            Log.d(TAG, "onBindViewHolder: Notification at position " + position + " is read (dimmed).");
         } else {
             holder.itemView.setAlpha(1.0f); // Normal effect
-            Log.d(TAG, "onBindViewHolder: Notification at position " + position + " is unread (normal).");
         }
 
         // Handle click to mark as read/unread based on notification ID
         holder.itemView.setOnClickListener(v -> {
             if (!notification.isRead()) { // Only process if unread
-                // Mark the notification as read
                 notification.setRead(true);
                 notifyItemChanged(position); // Refresh this item in the adapter
-
-                // Debug log for click action
-                Log.d("myapp1", "onBindViewHolder: Notification clicked at position " + position +
-                        ". Marked as read and updated.");
+                Log.d(TAG, "onBindViewHolder: Marked notification as read at position " + position);
             } else {
-                // Optionally, if you want to toggle between read/unread
                 notification.setRead(false); // Mark as unread
                 notifyItemChanged(position); // Refresh this item in the adapter
-
-                Log.d("myapp1", "onBindViewHolder: Notification clicked at position " + position +
-                        ". Marked as unread and updated.");
+                Log.d(TAG, "onBindViewHolder: Marked notification as unread at position " + position);
             }
 
             String bookingId = notification.getBookingId();
+            String notification_id=notification.getId();
 
             // Log and pass the bookingId if it exists
             if (bookingId != null) {
-                Log.d("myapp1", "onBindViewHolder: Booking ID found: " + bookingId);
-                // Send the bookingId to PartnerBookingRequestActivity
-                Intent intent = new Intent(context, PartnerBookingRequestActivity.class);
-                intent.putExtra("bookingId", bookingId);
-                context.startActivity(intent);
+                Log.d(TAG, "onBindViewHolder: Booking ID found: " + bookingId);
+                fetchBookingDetails(bookingId, position,notification_id);
             } else {
-                Log.d("myapp1", "onBindViewHolder: No bookingId found in SharedPreferences.");
+                Log.d(TAG, "onBindViewHolder: No bookingId found for notification at position " + position);
             }
         });
     }
@@ -99,6 +101,75 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return notifications.size();
     }
 
+    // Helper method to log all notifications
+    private void logNotifications(String message) {
+        Log.d(TAG, message + ": Total notifications = " + notifications.size());
+        for (int i = 0; i < notifications.size(); i++) {
+            Notification notification = notifications.get(i);
+            Log.d(TAG, "Notification " + i + ": " +
+                    "Title = " + notification.getTitle() + ", " +
+                    "Body = " + notification.getBody() + ", " +
+                    "isRead = " + notification.isRead() + ", " +
+                    "Booking ID = " + notification.getBookingId());
+        }
+    }
+
+    // Call this method externally if notifications are updated
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+        logNotifications("Notifications updated");
+        notifyDataSetChanged(); // Notify adapter of data changes
+    }
+
+    private void fetchBookingDetails(String bookingId, int position,String notification_id) {
+        ApiService apiService = RetrofitClient.getRetrofitInstance(context.getApplicationContext()).create(ApiService.class);
+
+        // Call the API to get booking details by bookingId
+        Call<BookingDetailsResponse> call = apiService.getBookingDetails1(bookingId);
+        call.enqueue(new Callback<BookingDetailsResponse>() {
+            @Override
+            public void onResponse(Call<BookingDetailsResponse> call, Response<BookingDetailsResponse> response) {
+                if (response.isSuccessful()) {
+                    BookingDetailsResponse bookingDetailsResponse = response.body();
+                    if (bookingDetailsResponse != null) {
+                        String partnerStatus = bookingDetailsResponse.getData().getPartnerStatus();
+                        Log.d(TAG, "fetchBookingDetails: Partner Status = " + partnerStatus);
+
+                        // Check partner status
+                        if ("confirmed".equalsIgnoreCase(partnerStatus)) {
+                            // Redirect to PartnerDriverListActivity if partner status is confirmed
+                            Intent intent = new Intent(context, Partner_DriverListActivity.class);
+                            intent.putExtra("bookingId", bookingId); // Pass bookingId to the next activity
+                            intent.putExtra("notification_id", notification_id);
+                            context.startActivity(intent);
+                        } else if ("rejected".equalsIgnoreCase(partnerStatus)) {
+                            // If the partner status is rejected, redirect to BookingCancelledReasonActivity
+                            Intent intent = new Intent(context, BookingCancelledReasonActivity.class);
+                            intent.putExtra("bookingId", bookingId);
+                            intent.putExtra("notification_id", notification_id);
+                            context.startActivity(intent);
+                        } else {
+                            // If the partner status is not confirmed or rejected, continue to the booking request activity
+                            Intent intent = new Intent(context, PartnerBookingRequestActivity.class);
+                            intent.putExtra("bookingId", bookingId);
+                            intent.putExtra("notification_id", notification_id);
+                            context.startActivity(intent);
+                        }
+                    } else {
+                        Toast.makeText(context, "No booking details available", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Failed to fetch booking details", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookingDetailsResponse> call, Throwable t) {
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     // ViewHolder Class
     public static class NotificationViewHolder extends RecyclerView.ViewHolder {
         TextView title, body;
@@ -107,7 +178,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             super(itemView);
             title = itemView.findViewById(R.id.notification_title);
             body = itemView.findViewById(R.id.notification_body);
-            Log.d(TAG, "NotificationViewHolder: ViewHolder created."); // Debug log
         }
     }
 }

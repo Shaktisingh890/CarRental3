@@ -1,7 +1,7 @@
 package com.example.myapplication.models.response;
 
 public class Notification {
-    private String id; // Unique ID for the notification
+    private String _id; // Unique ID for the notification
     private String title;
     private String body;  // Body of the notification
     private boolean isRead;  // Status to check if the notification has been read
@@ -9,8 +9,8 @@ public class Notification {
     private String bookingId;
 
     // Constructor
-    public Notification(String id, String title, String body, boolean isRead,String bookingId) {
-        this.id = id;
+    public Notification(String _id, String title, String body, boolean isRead,String bookingId) {
+        this._id = _id;
         this.title = title;
         this.body = body;
         this.isRead = isRead;
@@ -20,7 +20,7 @@ public class Notification {
 
     // Getters
     public String getId() {
-        return id;
+        return _id;
     }
 
     public String getTitle() {
@@ -39,7 +39,7 @@ public class Notification {
 
     // Setters
     public void setId(String id) {
-        this.id = id;
+        this._id = _id;
     }
 
     public void setTitle(String title) {

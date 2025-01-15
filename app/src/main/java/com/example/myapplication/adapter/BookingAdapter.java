@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.models.response.Car;
 import com.example.myapplication.models.response.CustomerBookingResponse;
 
 import java.util.ArrayList;
@@ -18,12 +17,13 @@ import java.util.List;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
 
-    private List<CustomerBookingResponse> bookingList = new ArrayList<>();
+    private List<CustomerBookingResponse.BookingData> bookingList = new ArrayList<>();
 
-    public void setBookingList(List<CustomerBookingResponse> bookingList) {
+    public void setBookingList(List<CustomerBookingResponse.BookingData> bookingList) {
         this.bookingList = bookingList;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public BookingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,42 +33,33 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
     @Override
     public void onBindViewHolder(@NonNull BookingViewHolder holder, int position) {
-        // Access the Booking object from the CustomerBookingResponse
-        CustomerBookingResponse bookingResponse = bookingList.get(position);
+        CustomerBookingResponse.BookingData bookingData = bookingList.get(position);
 
         // Log all the details in one statement
-        Car car = bookingResponse.getCarId();
-        if (car != null) {
-            String carModel = car.getModel() != null ? car.getModel() : "Model not available";
-            String carBrand = car.getBrand() != null ? car.getBrand() : "Brand not available";
-            String carColor = car.getColor() != null ? car.getColor() : "Color not available";
+        String carModel = bookingData.getCarId() != null && bookingData.getCarId().getModel() != null ? bookingData.getCarId().getModel() : "Model not available";
+        String carBrand = bookingData.getCarId() != null && bookingData.getCarId().getBrand() != null ? bookingData.getCarId().getBrand() : "Brand not available";
+        String carColor = bookingData.getCarId() != null && bookingData.getCarId().getColor() != null ? bookingData.getCarId().getColor() : "Color not available";
 
-            String logMessage = "Booking Data: " +
-                    "Booking ID: " + bookingResponse.get_id() + ", " +
-                    "Customer ID: " + bookingResponse.getCustomerId() + ", " +
-                    "Car Model: " + carModel + ", " +
-                    "Car Brand: " + carBrand + ", " +
-                    "Car Year: " + car.getYear() + ", " +
-                    "Car Color: " + carColor + ", " +
-                    "Total Amount: " + bookingResponse.getTotalAmount() + ", " +
-                    "Payment Status: " + bookingResponse.getPaymentStatus() + ", " +
-                    "Booking Status: " + bookingResponse.getStatus();
+        String logMessage = "Booking Data: " +
+                "Booking ID: " + bookingData.getId() + ", " +
+                "Customer ID: " + bookingData.getCustomerId() + ", " +
+                "Car Model: " + carModel + ", " +
+                "Car Brand: " + carBrand + ", " +
+                "Car Color: " + carColor + ", " +
+                "Total Amount: " + bookingData.getTotalAmount() + ", " +
+                "Payment Status: " + bookingData.getPaymentStatus() + ", " +
+                "Booking Status: " + bookingData.getStatus();
 
-            Log.d("BookingAdapter", logMessage);
-        } else {
-            Log.d("BookingAdapter", "Car data is null");
-        }
+        Log.d("BookingAdapter", logMessage);
 
         // Bind the data from the Booking object to the ViewHolder
-        holder.textCarModel.setText(car.getModel());
-        holder.textBookingId.setText("Booking ID: " + bookingResponse.get_id());
-        holder.textLocation.setText("Location: " + car.getColor()); // Replace with actual location if available
-        holder.textTripStart.setText("Start Date: " + bookingResponse.getStartDate());
-        holder.textTripEnd.setText("End Date: " + bookingResponse.getEndDate());
-        holder.textPaidAmount.setText("Paid Amount: " + bookingResponse.getTotalAmount());
-        // You may need to convert the car image data (if available) to an image resource.
+        holder.textCarModel.setText(carModel);
+        holder.textBookingId.setText("Booking ID: " + bookingData.getId());
+        holder.textLocation.setText("Pickup Location: " + (bookingData.getPickupLocation() != null ? bookingData.getPickupLocation() : "Not available"));
+        holder.textTripStart.setText("Start Date: " + bookingData.getStartDate());
+        holder.textTripEnd.setText("End Date: " + bookingData.getEndDate());
+        holder.textPaidAmount.setText("Paid Amount: " + bookingData.getTotalAmount());
     }
-
 
     @Override
     public int getItemCount() {

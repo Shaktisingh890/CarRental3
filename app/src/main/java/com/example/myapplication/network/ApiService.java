@@ -21,6 +21,8 @@ import com.example.myapplication.models.request.LoginRequest;
 import com.example.myapplication.models.response.LoginResponse;
 import com.example.myapplication.models.response.LogoutResponse;
 import com.example.myapplication.models.request.PartnerRegisterRequest;
+import com.example.myapplication.models.response.Notification;
+import com.example.myapplication.models.response.NotificationResponse;
 import com.example.myapplication.models.response.PartnerResponse;
 import com.example.myapplication.models.request.RegisterRequest;
 import com.example.myapplication.models.response.RegisterResponse;
@@ -31,10 +33,13 @@ import com.example.myapplication.models.response.UserProfileResponse;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -187,7 +192,9 @@ public interface ApiService {
 
     @GET("api/v1/cars/getFetchSubCategory/{category}")
     Call<SubCategoryResponse> getSubCategories(@Path("category") String category);
-    Call<List<CustomerBookingResponse>> getBookingsByUserId();
+
+    @GET("api/v1/booking/getBookingByuserId")
+    Call<ResponseBody> getBookingsByUserId();
 
 
 
@@ -242,6 +249,41 @@ public interface ApiService {
     @GET("api/v1/drivers/getAllDriver")
     Call<AllDriversResponse> getAllDrivers(); // Fetch all drivers
 
+    @POST("api/v1/notifications/new_notification")
+    Call<Void> storeNotification(@Body Notification notification);
+
+    @GET("api/v1/notifications/get_partner_booking_notification") // Replace with the actual endpoint for fetching notifications
+
+    Call<NotificationResponse> getNotifications();
+
+
+
+
+
+    @DELETE("api/v1/notifications/partner_all_notification")
+    Call<Void> deleteAllNotifications();
+
+    @DELETE("api/v1/notifications/delete/{id}")
+    Call<Void> deleteNotificationById(@Path("id") String notificationId);
+
+
+
+
+    @FormUrlEncoded
+    @POST("api/v1/booking/updatePartnerStatus")
+    Call<Void> updateBookingStatus(
+            @Field("bookingId") String bookingId,
+            @Field("partnerStatus") String partnerStatus,
+            @Field("status") String status
+    );
+
+    @FormUrlEncoded
+    @POST("api/v1/booking/updateDriverStatus")
+    Call<Void> updateDriverStatus(
+            @Field("bookingId") String bookingId,
+            @Field("driverStatus") String driverStatus,
+            @Field("status") String status
+    );
 }
 
 

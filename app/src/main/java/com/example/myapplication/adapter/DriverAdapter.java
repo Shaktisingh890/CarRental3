@@ -23,9 +23,13 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
     private final Context context;
     private final List<Driver> driverList;
 
-    public DriverAdapter(Context context, List<Driver> driverList) {
+    public String bookingId,notification_id;
+
+    public DriverAdapter(Context context, List<Driver> driverList,String bookingId,String notification_id) {
         this.context = context;
         this.driverList = driverList;
+        this.bookingId=bookingId;
+        this.notification_id=notification_id;
     }
 
     @NonNull
@@ -74,6 +78,9 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
             intent.putExtra("backPhotoImageView", driver.getLicenseBackImgUrl());
             intent.putExtra("driverImgUrl", driver.getImgUrl());
             intent.putExtra("availabilityStatus", driver.isAvailabilityStatus());
+           intent.putExtra("bookingId",bookingId);
+           intent.putExtra("notification_id",notification_id);
+
             context.startActivity(intent);
         });
     }

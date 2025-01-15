@@ -26,16 +26,20 @@ public class Partner_DriverListActivity extends AppCompatActivity {
     private DriverAdapter driverAdapter;
     private List<Driver> driverList;
 
+    public String bookingId,notification_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.partner_driverlist);
+        bookingId=getIntent().getStringExtra("bookingId");
+        notification_id=getIntent().getStringExtra("notification_id");
 
         recyclerViewDrivers = findViewById(R.id.recyclerViewDrivers);
         recyclerViewDrivers.setLayoutManager(new LinearLayoutManager(this));
 
         driverList = new ArrayList<>();
-        driverAdapter = new DriverAdapter(this, driverList);
+        driverAdapter = new DriverAdapter(this, driverList,bookingId,notification_id);
         recyclerViewDrivers.setAdapter(driverAdapter);
 
         // Fetch all drivers

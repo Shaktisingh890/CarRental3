@@ -1,15 +1,25 @@
 package com.example.myapplication.activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
+import com.example.myapplication.network.ApiService;
+import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.MyFirebaseMessagingService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DriverDetailActivity extends AppCompatActivity {
     private TextView tvDriverName, tvDriverPhone, tvAvailabilityStatus, tvDriverEmail, tvDriverLicenseNumber, tvDriverLicenseExpiry;
@@ -76,7 +86,17 @@ public class DriverDetailActivity extends AppCompatActivity {
         assignDriverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle Assign Driver logic
+                MyFirebaseMessagingService myService = new MyFirebaseMessagingService();
+
+                String bookingId = getIntent().getStringExtra("bookingId");
+                String notification_id= getIntent().getStringExtra("notification_id");
+                Log.d("my","kjjk"+notification_id);
+                if (bookingId != null && !bookingId.isEmpty()) {
+                    updateDriverStatus(bookingId, "accepted", "booked");
+                    myService.deleteNotificationByIdFromBackend(getApplicationContext(),notification_id);
+                } else {
+                    Toast.makeText(DriverDetailActivity.this, "Booking ID is missing!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -103,6 +123,37 @@ public class DriverDetailActivity extends AppCompatActivity {
                 openFullScreenImageDialog(backPhotoImageUrl);
             }
         });
+    }
+
+
+    // Method to update driver status
+    private void updateDriverStatus(String bookingId, String driverStatus, String status) {
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
+
+        Call<Void> call = apiService.updateDriverStatus(bookingId, driverStatus, status);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(DriverDetailActivity.this, "Driver status updated successfully!", Toast.LENGTH_SHORT).show();
+                    redirectToPartnerBookingActivity();
+                } else {
+                    Toast.makeText(DriverDetailActivity.this, "Failed to update driver status. Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(DriverDetailActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Method to redirect to PartnerBookingActivity
+    private void redirectToPartnerBookingActivity() {
+        Intent intent = new Intent(DriverDetailActivity.this, PartnerBookingActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // Method to open full-screen image in a dialog
