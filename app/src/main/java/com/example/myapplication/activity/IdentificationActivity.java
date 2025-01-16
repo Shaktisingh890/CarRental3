@@ -52,6 +52,7 @@ public class IdentificationActivity extends AppCompatActivity {
     private View progressOverlay;
     private ProgressBar progressBar;
 
+    private ImageView imageView;
     private String pickUpLocation;
     private String returnLocation;
     private String pickUpDateTime;
@@ -83,6 +84,7 @@ public class IdentificationActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.update_button);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
+        imageView = findViewById(R.id.logoImage);
 
 // Handle Radio Button Selection
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -176,7 +178,7 @@ public class IdentificationActivity extends AppCompatActivity {
 
     private void fetchCustomerDoc() {
         // Initialize Retrofit instance
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true, imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
@@ -186,7 +188,7 @@ public class IdentificationActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UploadIdResponse> call, Response<UploadIdResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView); // Using utility class
 
                     UploadIdResponse uploadIdResponse = response.body();
 
@@ -237,7 +239,7 @@ public class IdentificationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UploadIdResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, true, imageView); // Using utility class
 
                 Toast.makeText(IdentificationActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 showNextButtonOnly();
@@ -270,14 +272,14 @@ public class IdentificationActivity extends AppCompatActivity {
         MultipartBody.Part frontPart = createImagePart("front_photo", frontPhotoUri);
         MultipartBody.Part backPart = createImagePart("back_photo", backPhotoUri);
 
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
         // Call API to update customer documents
         Call<UploadIdResponse> call = apiService.saveNewDocCustomer(typeBody,idBody,frontPart, backPart);
         call.enqueue(new Callback<UploadIdResponse>() {
             @Override
             public void onResponse(Call<UploadIdResponse> call, Response<UploadIdResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 if (response.isSuccessful() && response.body() != null) {
 
@@ -298,7 +300,7 @@ public class IdentificationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UploadIdResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 Toast.makeText(IdentificationActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -308,7 +310,7 @@ public class IdentificationActivity extends AppCompatActivity {
     private void saveNewDocCustomer() {
         // Create Retrofit instance
         RetrofitClient retrofitClient = new RetrofitClient();
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
@@ -327,7 +329,7 @@ public class IdentificationActivity extends AppCompatActivity {
         call.enqueue(new Callback<UploadIdResponse>() {
             @Override
             public void onResponse(Call<UploadIdResponse> call, Response<UploadIdResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(IdentificationActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -346,7 +348,7 @@ public class IdentificationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UploadIdResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 Toast.makeText(IdentificationActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

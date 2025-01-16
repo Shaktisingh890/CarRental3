@@ -282,7 +282,8 @@ public interface ApiService {
     Call<Void> updateDriverStatus(
             @Field("bookingId") String bookingId,
             @Field("driverStatus") String driverStatus,
-            @Field("status") String status
+            @Field("status") String status,
+            @Field("driverId") String driverId
     );
 }
 

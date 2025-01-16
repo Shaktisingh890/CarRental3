@@ -108,4 +108,15 @@
         android:layout_gravity="center"
         android:visibility="gone"
         android:indeterminateTint="@color/green" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/logoImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        app:shapeAppearanceOverlay="@style/CircleImage"
+        android:src="@drawable/progressbar_icon"
+        android:visibility="gone"
+        />
+
 </FrameLayout>

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
@@ -36,6 +37,8 @@ public class PartnerDashboardActivity extends AppCompatActivity {
     private View progressOverlay;
     private ProgressBar progressBar;
 
+    private ImageView imageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class PartnerDashboardActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
+        imageView = findViewById(R.id.logoImage);
 
         tabEarning = findViewById(R.id.tab_earning);
         tabMyCars = findViewById(R.id.tab_my_cars);
@@ -149,13 +153,13 @@ public class PartnerDashboardActivity extends AppCompatActivity {
 
     private void fetchUserProfile() {
         Log.d("fetchUserProfile", "Making API call to fetch user profile");
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(PartnerDashboardActivity.this).create(ApiService.class);
         apiService.getUserProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 // Log the HTTP status code
                 Log.d("fetchUserProfile", "Response Code: " + response.code());
@@ -221,7 +225,7 @@ public class PartnerDashboardActivity extends AppCompatActivity {
                 } else {
                     // Log the error body
                     try {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
                         Log.d("fetchUserProfile", "Error Body: " + errorBody);
@@ -235,7 +239,7 @@ public class PartnerDashboardActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 Log.e("fetchUserProfile", "Error: " + t.getMessage(), t);
                 Toast.makeText(PartnerDashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();

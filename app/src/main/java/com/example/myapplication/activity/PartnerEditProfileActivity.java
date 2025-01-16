@@ -47,6 +47,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
 
     private View progressOverlay;
     private ProgressBar progressBar;
+    private ImageView imageView;
     private String fullName,email,phoneNumber,address,imgUrl,upi_id,company_name,company_address,area,account_number;
 
 
@@ -70,6 +71,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
+        imageView = findViewById(R.id.logoImage);
 
         // Handle Back Button click
         backButton.setOnClickListener(v -> finish());
@@ -207,7 +209,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
         // Prepare request bodies for all fields
         RequestBody nameRequestBody = RequestBody.create(MultipartBody.FORM, name);
@@ -236,7 +238,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Hide progress ba
+                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Hide progress ba
                     Toast.makeText(PartnerEditProfileActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(PartnerEditProfileActivity.this, PartnerDashboardActivity.class);
@@ -249,7 +251,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Hide progress bar
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Hide progress bar
                 Toast.makeText(PartnerEditProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -290,7 +292,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
 
         File file = getImageFile();
         if (file == null) return;
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(PartnerEditProfileActivity.this).create(ApiService.class);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
@@ -299,7 +301,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
         apiService.uploadImage(part).enqueue(new Callback<ImageResponse>() {
             @Override
             public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false);
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView);
                 if (response.isSuccessful()) {
                     Toast.makeText(PartnerEditProfileActivity.this, "Image Changed successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(PartnerEditProfileActivity.this, PartnerDashboardActivity.class);
@@ -311,7 +313,7 @@ public class PartnerEditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ImageResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false);
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView);
 
                 Toast.makeText(PartnerEditProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Driver implements Parcelable {
-    private String id;
+    private String _id;
     private String fullName;
     private String email;
     private String phoneNumber;
@@ -17,10 +17,10 @@ public class Driver implements Parcelable {
     private String imgUrl;
 
     // Constructor
-    public Driver(String id, String fullName, String email, String phoneNumber, String licenseNumber,
+    public Driver(String _id, String fullName, String email, String phoneNumber, String licenseNumber,
                   String address, String licenseExpiryDate, String licenseFrontImgUrl, String licenseBackImgUrl,
                   boolean availabilityStatus, String imgUrl) {
-        this.id = id;
+        this._id = _id;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -35,7 +35,7 @@ public class Driver implements Parcelable {
 
     // Parcelable implementation
     protected Driver(Parcel in) {
-        id = in.readString();
+        _id = in.readString();
         fullName = in.readString();
         email = in.readString();
         phoneNumber = in.readString();
@@ -67,7 +67,7 @@ public class Driver implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(_id);
         dest.writeString(fullName);
         dest.writeString(email);
         dest.writeString(phoneNumber);
@@ -82,11 +82,11 @@ public class Driver implements Parcelable {
 
     // Getters and Setters
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = _id;
     }
 
     public String getFullName() {

@@ -30,6 +30,7 @@ import com.example.myapplication.network.RetrofitClient;
 import com.example.myapplication.models.response.AddCarResponse;
 import com.example.myapplication.utils.FileUtils;
 import com.google.gson.Gson;
+import com.example.myapplication.utils.ProgressBarUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class AddCarActivity extends AppCompatActivity {
     private MultipartBody.Part[] selectedImageParts3;
     private MultipartBody.Part[] selectedImageParts4;
 
+    private ImageView logoImage;
     // Step 1 Fields
     private EditText etCarName, etCarModel, etCarColor, etCarMileagePerHour, etCarDescription, etRegistrationNumber;
     private Spinner spinnerCategory, etSubcategory,spinnerSeatingCapacity,etCarYear, spinnerFuelType, spinnerTransmissionType;
@@ -214,6 +216,7 @@ public class AddCarActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.nextButton);
         backArrow = findViewById(R.id.backArrow);
         progressBar = findViewById(R.id.progressBar);
+        logoImage=findViewById(R.id.logoImage);
         // Step 1 Fields
         etCarName = findViewById(R.id.etCarName);
         etCarModel = findViewById(R.id.etCarModel);
@@ -452,6 +455,8 @@ public class AddCarActivity extends AppCompatActivity {
 
     // Submit form logic (final step)
     private void submitForm() {
+
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,logoImage);
         // Validate that all required images are uploaded
         if (!validateImageUploads()) {
             return;  // Stop the form submission if validation fails
@@ -537,12 +542,12 @@ public class AddCarActivity extends AppCompatActivity {
                 imageParts4.add(imagePart);
             }
         }
-        showProgress(true);
+
 
         apiService.addCarWithImages(carDetailsBody, imageParts,imageParts1,imageParts2,imageParts3,imageParts4).enqueue(new Callback<AddCarResponse>() {
             @Override
             public void onResponse(Call<AddCarResponse> call, Response<AddCarResponse> response) {
-                showProgress(false);
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,logoImage);
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(AddCarActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     if (response.body().isSuccess()) {
@@ -560,7 +565,7 @@ public class AddCarActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddCarResponse> call, Throwable t) {
-                showProgress(false);
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,logoImage);
                 Log.d("mytag","myerror"+t.getMessage());
                 Toast.makeText(AddCarActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

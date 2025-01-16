@@ -45,6 +45,7 @@ public class ConfirmationActivity extends AppCompatActivity {
     private EditText pickupDateEditText;
     private EditText returnDateEditText;
     private Calendar calendar;
+    private ImageView image_logo;
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat timeFormat;
     private String pickUpDateTime, returnDateTime,pickUpLocation,returnLocation,partnerId,carId;
@@ -73,6 +74,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         TextView perDayPriceTextView = findViewById(R.id.perday_price);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
+        image_logo = findViewById(R.id.logoImage);
 
         // Initialize calendar and date/time format
         calendar = Calendar.getInstance();
@@ -195,7 +197,7 @@ public class ConfirmationActivity extends AppCompatActivity {
                 calculateDurationInHours(pickUpDateTime, returnDateTime),
                 totalRent
         );
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,image_logo ); // Using utility class
 
         // Get Retrofit instance and API interface
         ApiService apiService = RetrofitClient.getRetrofitInstance(ConfirmationActivity.this).create(ApiService.class);
@@ -207,7 +209,7 @@ public class ConfirmationActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     BookingResponse bookingResponse = response.body();
                     if (bookingResponse.isSuccess()) {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false,image_logo); // Using utility class
 
                         Toast.makeText(ConfirmationActivity.this, "Booking successful! ID: " + bookingResponse.getData().get_id(), Toast.LENGTH_SHORT).show();
                         // Redirect to success activity
@@ -226,7 +228,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<BookingResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,image_logo); // Using utility class
 
                 Toast.makeText(ConfirmationActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

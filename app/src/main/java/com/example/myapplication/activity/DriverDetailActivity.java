@@ -25,6 +25,8 @@ public class DriverDetailActivity extends AppCompatActivity {
     private TextView tvDriverName, tvDriverPhone, tvAvailabilityStatus, tvDriverEmail, tvDriverLicenseNumber, tvDriverLicenseExpiry;
     private ImageView imgDriver, frontPhotoImageView, backPhotoImageView;
 
+    private String driverId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,9 @@ public class DriverDetailActivity extends AppCompatActivity {
         tvDriverLicenseNumber.setText(driverLicenseNumber);
         tvDriverLicenseExpiry.setText(driverLicenseExpiry);
 
+        driverId = getIntent().getStringExtra("driverId");
+               Log.d("driverid","driver "+driverId);
+
         // Load Front and Back Photos using Glide or any image loading library
         Glide.with(this)
                 .load(frontPhotoImageUrl) // URL or File path
@@ -89,10 +94,12 @@ public class DriverDetailActivity extends AppCompatActivity {
                 MyFirebaseMessagingService myService = new MyFirebaseMessagingService();
 
                 String bookingId = getIntent().getStringExtra("bookingId");
+
+
                 String notification_id= getIntent().getStringExtra("notification_id");
                 Log.d("my","kjjk"+notification_id);
                 if (bookingId != null && !bookingId.isEmpty()) {
-                    updateDriverStatus(bookingId, "accepted", "booked");
+                    updateDriverStatus(bookingId, "accepted", "booked",driverId);
                     myService.deleteNotificationByIdFromBackend(getApplicationContext(),notification_id);
                 } else {
                     Toast.makeText(DriverDetailActivity.this, "Booking ID is missing!", Toast.LENGTH_SHORT).show();
@@ -127,10 +134,10 @@ public class DriverDetailActivity extends AppCompatActivity {
 
 
     // Method to update driver status
-    private void updateDriverStatus(String bookingId, String driverStatus, String status) {
+    private void updateDriverStatus(String bookingId, String driverStatus, String status,String driverId) {
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
-        Call<Void> call = apiService.updateDriverStatus(bookingId, driverStatus, status);
+        Call<Void> call = apiService.updateDriverStatus(bookingId, driverStatus, status,driverId);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

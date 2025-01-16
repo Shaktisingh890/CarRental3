@@ -63,7 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Store notification in SharedPreferences
         // Store notification in the backend
-        storeNotificationInBackend(title, body, bookingId);
+//        storeNotificationInBackend(title, body, bookingId,click_action);
 
         // Show notification with permission check
         if (checkNotificationPermission()) {
@@ -71,40 +71,61 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void storeNotificationInBackend(String title, String body, String bookingId) {
-        // Create a Notification object
-        String uniqueId = UUID.randomUUID().toString();
-        Notification notification = new Notification(uniqueId,title,body, false,bookingId);
-        Log.d("my notification","title"+title);
-        Log.d("my notification","body"+body);
-
-        Log.d("my notification","bookingId");
-
-
-
-
-        // Get an instance of Retrofit and the ApiService
-        Retrofit retrofit = RetrofitClient.getRetrofitInstance(getApplicationContext());
-        ApiService apiService = retrofit.create(ApiService.class);
-
-        // Make the API call
-        Call<Void> call = apiService.storeNotification(notification);
-        call.enqueue(new retrofit2.Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "Notification stored successfully in the backend.");
-                } else {
-                    Log.e(TAG, "Failed to store notification. Response code: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Error storing notification in backend: " + t.getMessage(), t);
-            }
-        });
-    }
+//    private void storeNotificationInBackend(String title, String body, String bookingId ,String clickAction) {
+//        String type;
+//        if (clickAction != null) {
+//            switch (clickAction) {
+//                case "OPEN_PARTNER_BOOKING_REQUEST":
+//                    type = "partner";
+//                    break;
+//                case "OPEN_DRIVER_BOOKING_REQUEST":
+//                    type = "driver";
+//                    break;
+//                case "CUSTOMER_CONFIRMED_NOTIFICATION":
+//                    type = "customer";
+//                    break;
+//                default:
+//                    type = "partner";
+//                    break;
+//            }
+//        } else {
+//            type = "partner";
+//        }
+//
+//        // Create a Notification object
+//        String uniqueId = UUID.randomUUID().toString();
+//        Notification notification = new Notification(uniqueId,title,body, false,bookingId);
+//        notification.setType(type);
+//        Log.d("my notification","title"+title);
+//        Log.d("my notification","body"+body);
+//
+//        Log.d("my notification","bookingId");
+//
+//
+//
+//
+//        // Get an instance of Retrofit and the ApiService
+//        Retrofit retrofit = RetrofitClient.getRetrofitInstance(getApplicationContext());
+//        ApiService apiService = retrofit.create(ApiService.class);
+//
+//        // Make the API call
+//        Call<Void> call = apiService.storeNotification(notification);
+//        call.enqueue(new retrofit2.Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
+//                if (response.isSuccessful()) {
+//                    Log.d(TAG, "Notification stored successfully in the backend.");
+//                } else {
+//                    Log.e(TAG, "Failed to store notification. Response code: " + response.code());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                Log.e(TAG, "Error storing notification in backend: " + t.getMessage(), t);
+//            }
+//        });
+//    }
 
 
     private boolean checkNotificationPermission() {
@@ -126,7 +147,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 case "OPEN_PARTNER_BOOKING_REQUEST":
                     intent = new Intent(this, PartnerBookingRequestActivity.class);
                     break;
-                case "open_partner_notification":
+                case "OPEN_DRIVER_BOOKING_REQUEST":
+                    intent = new Intent(this, PartnerNotificationActivity.class);
+                    break;
+
+                case "CUSTOMER_CONFIRMED_NOTIFICATION":
                     intent = new Intent(this, PartnerNotificationActivity.class);
                     break;
                 default:

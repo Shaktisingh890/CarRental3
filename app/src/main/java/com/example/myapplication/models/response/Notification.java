@@ -8,6 +8,8 @@ public class Notification {
 
     private String bookingId;
 
+    private String type;
+
     // Constructor
     public Notification(String _id, String title, String body, boolean isRead,String bookingId) {
         this._id = _id;
@@ -16,6 +18,14 @@ public class Notification {
         this.isRead = isRead;
         this.bookingId=bookingId;
 
+    }
+
+
+    public void setType(String type){
+        this.type=type;
+    }
+    public String getType(){
+        return  type;
     }
 
     // Getters

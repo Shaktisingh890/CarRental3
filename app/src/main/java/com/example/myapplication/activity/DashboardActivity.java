@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,6 +58,8 @@ public class DashboardActivity extends AppCompatActivity {
     private TextView tripStartDateTextView, tripStartTimeTextView, dropOffDateTextView, dropOffTimeTextView;
     private int year, month, day, hour, minute;
     private ProgressBar progressBar;
+
+    private ImageView imageView;
     // Flags to identify which TextView to update
     private boolean isPickupDate = true;
     private boolean isPickupTime = true;
@@ -90,6 +93,7 @@ public class DashboardActivity extends AppCompatActivity {
 //        LinearLayout commentsContainer = findViewById(R.id.customerCommentsContainer);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
+        imageView = findViewById(R.id.logoImage);
 
         // Initialize Spinners with data
         String[] locations = {"CT – Cape Town Airport", "Cape Town - City", "Johannesburg - City"};
@@ -338,13 +342,13 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void fetchUserProfile() {
         Log.d("fetchUserProfile", "Making API call to fetch user profile");
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true, imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(DashboardActivity.this).create(ApiService.class);
         apiService.getUserProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView); // Using utility class
 
                 // Log the HTTP status code
                 Log.d("fetchUserProfile", "Response Code: " + response.code());
