@@ -86,8 +86,10 @@ public class MyBookingDetailActivity extends AppCompatActivity {
             tvDriverContact.setText(drivercontact);
         } else {
             // Hide the driver details layout if driver information is null
-            layoutDriverDetails.setVisibility(View.GONE);
-            findViewById(R.id.tvDriverDetails).setVisibility(View.GONE);
+//           layoutDriverDetails.setVisibility(View.GONE);
+//            findViewById(R.id.tvDriverDetails).setVisibility(View.GONE);
+            TextView driverName=findViewById(R.id.tvDriverName);
+            driverName.setText("No Driver Assign By Partner ");
         }
 //        tvDriverName.setText();
 
