@@ -43,6 +43,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private View progressOverlay;
     private ProgressBar progressBar;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
+        imageView = findViewById(R.id.logoImage);
         etName = findViewById(R.id.et_name);
         etEmail = findViewById(R.id.et_email);
         etPhone = findViewById(R.id.et_phone);
@@ -116,7 +118,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         File file = getImageFile();
         if (file == null) return;
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true, imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(EditProfileActivity.this).create(ApiService.class);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
@@ -125,7 +127,7 @@ public class EditProfileActivity extends AppCompatActivity {
         apiService.uploadImage(part).enqueue(new Callback<ImageResponse>() {
             @Override
             public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false);
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView);
                 if (response.isSuccessful()) {
                     Toast.makeText(EditProfileActivity.this, "Image Changed successfully", Toast.LENGTH_SHORT).show();
                 } else {
@@ -135,7 +137,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ImageResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false);
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView);
 
                 Toast.makeText(EditProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -164,7 +166,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true, imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(EditProfileActivity.this).create(ApiService.class);
         RequestBody nameRequestBody = RequestBody.create(MultipartBody.FORM, name);
@@ -176,7 +178,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 .enqueue(new Callback<UserProfileResponse>() {
                     @Override
                     public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView); // Using utility class
 
                         if (response.isSuccessful()) {
 
@@ -190,7 +192,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<UserProfileResponse> call, Throwable t) {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView); // Using utility class
 
                         Toast.makeText(EditProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -199,13 +201,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void fetchUserProfile() {
         Log.d("fetchUserProfile", "Making API call to fetch user profile");
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true, imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(EditProfileActivity.this).create(ApiService.class);
         apiService.getUserProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView); // Using utility class
 
                 // Log the HTTP status code
                 Log.d("fetchUserProfile", "Response Code: " + response.code());
@@ -231,16 +233,16 @@ public class EditProfileActivity extends AppCompatActivity {
                 } else {
                     // Log the error body
                     try {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false, imageView); // Using utility class
 
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
                         Log.d("fetchUserProfile", "Error Body: " + errorBody);
                     } catch (IOException e) {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                         Log.e("fetchUserProfile", "Error parsing error body: " + e.getMessage(), e);
                     }
-                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                    ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                     Log.d("fetchUserProfile", "Failed to fetch profile. Error Code: " + response.code());
                     Toast.makeText(EditProfileActivity.this, "Failed to fetch profile", Toast.LENGTH_SHORT).show();

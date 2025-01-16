@@ -31,6 +31,7 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
     private ListView subCategoryListView;
     private View progressOverlay;
     private ProgressBar progressBar;
+    private ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
         subCategoryListView = findViewById(R.id.subCategoryListView);
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
+        imageView = findViewById(R.id.logoImage);
         // Get the category from the intent
         String category = getIntent().getStringExtra("CATEGORY");
 
@@ -57,7 +59,7 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
 
     private void fetchSubCategories(String category) {
 
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
@@ -65,7 +67,7 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
         apiService.getSubCategories(category).enqueue(new Callback<SubCategoryResponse>() {
             @Override
             public void onResponse(Call<SubCategoryResponse> call, Response<SubCategoryResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 if (response.isSuccessful() && response.body() != null) {
                     SubCategoryResponse subCategoryResponse = response.body();
@@ -87,7 +89,7 @@ public class SubCategorySelectionActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SubCategoryResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                 Toast.makeText(SubCategorySelectionActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

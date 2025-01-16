@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class MyCarsFragment extends Fragment {
     private CarAdapter carAdapter;
     private View progressOverlay;
     private ProgressBar progressBar;
+    private ImageView imageView;
 
     private String userId = "123";  // Replace with actual user ID logic
 
@@ -45,20 +47,21 @@ public class MyCarsFragment extends Fragment {
         carsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         progressBar = view.findViewById(R.id.progressBar);  // Use 'view.findViewById'
         progressOverlay = view.findViewById(R.id.progressOverlay);  // Use 'view.findViewById'
+        imageView = view.findViewById(R.id.logoImage);
         fetchCarDetails();
 
         return view;
     }
 
     private void fetchCarDetails() {
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true); // Using utility class
+        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
         RetrofitClient.getRetrofitInstance(getContext()).create(ApiService.class)
                 .getCarDetailsByUserId(userId)
                 .enqueue(new Callback<CarDetailsResponse>() {
                     @Override
                     public void onResponse(Call<CarDetailsResponse> call, Response<CarDetailsResponse> response) {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false); // Using utility class
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
 
                         if (response.isSuccessful() && response.body() != null) {
                             CarDetailsResponse carDetailsResponse = response.body();
@@ -76,7 +79,7 @@ public class MyCarsFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<CarDetailsResponse> call, Throwable t) {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false);
+                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView);
                         Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

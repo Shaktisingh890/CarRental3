@@ -1,5 +1,7 @@
 package com.example.myapplication.utils;
 import android.view.View;
+import android.widget.ImageView;
+
 public class ProgressBarUtils {
 
     /**
@@ -9,13 +11,16 @@ public class ProgressBarUtils {
      * @param progressBar     The progress bar to be shown/hidden.
      * @param show            True to show, false to hide.
      */
-    public static void showProgress(View progressOverlay, View progressBar, boolean show) {
+    public static void showProgress(View progressOverlay, View progressBar, boolean show, ImageView image_logo) {
         if (show) {
             progressOverlay.setVisibility(View.VISIBLE); // Show overlay
             progressBar.setVisibility(View.VISIBLE);     // Show progress bar
+            image_logo.setVisibility(View.VISIBLE);
+
         } else {
             progressOverlay.setVisibility(View.GONE);    // Hide overlay
-            progressBar.setVisibility(View.GONE);        // Hide progress bar
+            progressBar.setVisibility(View.GONE);
+            image_logo.setVisibility(View.GONE);
         }
     }
 }
