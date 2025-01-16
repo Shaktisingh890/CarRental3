@@ -11,6 +11,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
+        android:background="#FFFFFF"
+        android:elevation="6dp"
         android:gravity="center_vertical">
 
         <ImageView

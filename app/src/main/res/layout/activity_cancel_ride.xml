@@ -1,0 +1,68 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/cancelRideLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Why are you canceling the ride?"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp"/>
+
+    <RadioGroup
+        android:id="@+id/reasonRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/reasonNoShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driver did not show up"/>
+
+        <RadioButton
+            android:id="@+id/reasonChangedMind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I changed my mind"/>
+
+        <RadioButton
+            android:id="@+id/reasonPriceIssue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price too high"/>
+
+        <RadioButton
+            android:id="@+id/reasonOther"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other"/>
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/otherReasonEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Please explain..."
+        android:visibility="gone"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:minHeight="100dp"
+        android:padding="8dp"
+        android:background="@drawable/driver_card" />
+
+    <Button
+        android:id="@+id/submitReasonButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

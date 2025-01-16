@@ -72,11 +72,11 @@ public class CategorySelectionActivity extends AppCompatActivity {
     private int getImageResourceForCategory(String categoryName) {
         switch (categoryName) {
             case "SUV":
-                return R.drawable.suv; // Replace with actual drawable names
+                return R.drawable.suv1; // Replace with actual drawable names
             case "Sedan":
                 return R.drawable.sedan;
             case "Hatchback":
-                return R.drawable.hatchback;
+                return R.drawable.hatchback1;
             case "Convertible":
                 return R.drawable.convertible;
             default:

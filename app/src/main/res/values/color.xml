@@ -10,4 +10,7 @@
     <color name="yellow">#FFEB3B</color>
     <color name="blue">#4CAF50</color>
     <color name="light_gray">#f5f5f5</color>
+    <color name="cancelButtonColor">#FF5252</color> <!-- Red for Cancel Booking -->
+    <color name="downloadButtonColor">#4CAF50</color> <!-- Green for Download Invoice -->
+
 </resources>

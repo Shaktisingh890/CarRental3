@@ -98,7 +98,7 @@ public class DashboardActivity extends AppCompatActivity {
         dropoffSpinner.setAdapter(adapter2);
 
         // Setup Slider
-        List<Integer> storyImages = Arrays.asList(R.drawable.sedan, R.drawable.suv, R.drawable.hatchback);
+        List<Integer> storyImages = Arrays.asList(R.drawable.sedan, R.drawable.suv, R.drawable.hatchback1);
         AyaStoriesAdapter sliderAdapter = new AyaStoriesAdapter(this, storyImages);
 //        viewPager2.setAdapter(sliderAdapter);
 //        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {}).attach();

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/rounded_background"
+    android:background="@drawable/driver_card"
     android:padding="16dp"
     android:elevation="4dp"
     android:layout_marginBottom="16dp">
@@ -21,18 +21,6 @@
             android:text="Mercedes-Benz"
             android:textColor="#000000"
             android:textSize="16sp" />
-
-        <!-- Booking ID Text -->
-        <TextView
-            android:id="@+id/textBookingId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textCarModel"
-            android:layout_marginTop="0dp"
-            android:text="Booking id CZ2215"
-            android:textColor="#808080"
-            android:textSize="14sp" />
-
         <!-- Delete Icon -->
         <ImageView
             android:id="@+id/iconDelete"
@@ -58,39 +46,38 @@
             android:contentDescription="Car image" />
     </RelativeLayout>
 
-
+    <!-- Booking ID Text -->
+    <TextView
+        android:id="@+id/textBookingId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textCarModel"
+        android:layout_marginTop="0dp"
+        android:text="Booking id CZ2215"
+        android:textColor="#000000"
+        android:textSize="14sp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="8dp">
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/location"
-            android:contentDescription="Location icon" />
 
         <TextView
             android:id="@+id/textLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:text="2464 Royal Ln. Mesa, New Jersey 45463"
             android:textSize="14sp"
-            android:textColor="#808080" />
+            android:textColor="#000000"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
             <TextView
                 android:id="@+id/textTripStart"
@@ -98,21 +85,21 @@
                 android:layout_height="wrap_content"
                 android:text="Trip start"
                 android:textSize="14sp"
-                android:textColor="#808080" />
+                android:textColor="#000000"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sat, 7 June, 5:30pm"
+                android:text=""
                 android:textSize="14sp"
                 android:textColor="#000000" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
             <TextView
                 android:id="@+id/textTripEnd"
@@ -120,18 +107,15 @@
                 android:layout_height="wrap_content"
                 android:text="Trip end"
                 android:textSize="14sp"
-                android:textColor="#808080" />
+                android:textColor="#000000"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mon, 9 June, 6:30pm"
+                android:text=""
                 android:textSize="14sp"
                 android:textColor="#000000" />
         </LinearLayout>
-
-
-    </LinearLayout>
     <TextView
         android:id="@+id/textPaidAmount"
         android:layout_width="wrap_content"
@@ -139,5 +123,6 @@
         android:text="Paid $660"
         android:textSize="14sp"
         android:textColor="#000000"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-medium" />
 </LinearLayout>

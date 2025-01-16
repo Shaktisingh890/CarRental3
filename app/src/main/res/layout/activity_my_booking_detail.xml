@@ -1,0 +1,283 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- Header Section -->
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#FFFFFF"
+            android:padding="16dp"
+            android:elevation="4dp">
+            <ImageView
+                android:id="@+id/backArrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:contentDescription="Back"
+                android:layout_gravity="center_vertical" />
+            <TextView
+                android:id="@+id/tvBookingDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Booking Details"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/tvBookingID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Booking ID: 12345"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tvBookingDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date: 2025-01-15"
+                android:textSize="16sp" />
+        </LinearLayout>
+        <!-- Booking Status Progress Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Booking Status"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                android:textColor="#000" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+                <!-- Pending Status -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <View
+                        android:id="@+id/viewPending"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/status_circle_pending" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pending"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#000" />
+                </LinearLayout>
+                <!-- Connector -->
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/status_connector" />
+                <!-- Ongoing Status -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <View
+                        android:id="@+id/viewOngoing"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/status_circle_ongoing" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ongoing"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#000" />
+                </LinearLayout>
+                <!-- Connector -->
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/status_connector" />
+                <!-- Booked Status -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <View
+                        android:id="@+id/viewBooked"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/status_circle_booked" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Booked"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#000" />
+                </LinearLayout>
+                <!-- Connector -->
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/status_connector" />
+                <!-- Completed Status -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <View
+                        android:id="@+id/viewCompleted"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/status_circle_completed" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Completed"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#000" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <!-- Car Details Accordion -->
+            <TextView
+                android:id="@+id/tvCarDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Car Details"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/driver_card"
+                android:layout_marginBottom="16dp"
+                android:padding="8dp" />
+            <LinearLayout
+                android:id="@+id/layoutCarDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/tvCarName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Car: Toyota Innova"
+                    android:padding="8dp" />
+                <TextView
+                    android:id="@+id/tvCarModel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Model: 2023"
+                    android:padding="8dp" />
+            </LinearLayout>
+            <!-- Driver Details Accordion -->
+            <TextView
+                android:id="@+id/tvDriverDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Driver Details"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/driver_card"
+                android:padding="8dp" />
+            <LinearLayout
+                android:id="@+id/layoutDriverDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/tvDriverName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: John Doe"
+                    android:padding="8dp" />
+                <TextView
+                    android:id="@+id/tvDriverContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contact: 1234567890"
+                    android:padding="8dp" />
+            </LinearLayout>
+            <!-- Payment Info Accordion -->
+            <TextView
+                android:id="@+id/tvPaymentInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Payment Info"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/driver_card"
+                android:padding="8dp" />
+            <LinearLayout
+                android:id="@+id/layoutPaymentInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/tvPaymentStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status: Paid"
+                    android:padding="8dp" />
+                <TextView
+                    android:id="@+id/tvPaymentAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount: ₹5000"
+                    android:padding="8dp" />
+            </LinearLayout>
+            <!-- Buttons Section -->
+            <Button
+                android:id="@+id/btnCancelBooking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel Booking"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/cancelButtonColor"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/btnDownloadInvoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Download Invoice"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/downloadButtonColor"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
