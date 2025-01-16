@@ -399,12 +399,14 @@ public class CustomerBookingResponse implements Parcelable {
         private int year;
         private int seats;
         private String fuelType;
+
+        private String registrationNumber;
         private double pricePerDay;
         private String color;
         private List<String> features;
         private String availabilityStatus;
 
-        public Car(Location location, List<String> images, String brand, String model, int year, int seats, String fuelType, double pricePerDay, String color, List<String> features, String availabilityStatus) {
+        public Car(Location location, List<String> images, String brand, String model, int year, int seats, String fuelType, String registrationNumber, double pricePerDay, String color, List<String> features, String availabilityStatus) {
             this.location = location;
             this.images = images;
             this.brand = brand;
@@ -412,6 +414,7 @@ public class CustomerBookingResponse implements Parcelable {
             this.year = year;
             this.seats = seats;
             this.fuelType = fuelType;
+            this.registrationNumber=registrationNumber;
             this.pricePerDay = pricePerDay;
             this.color = color;
             this.features = features;
@@ -426,6 +429,7 @@ public class CustomerBookingResponse implements Parcelable {
             year = in.readInt();
             seats = in.readInt();
             fuelType = in.readString();
+            registrationNumber=in.readString();
             pricePerDay = in.readDouble();
             color = in.readString();
             features = in.createStringArrayList();
@@ -458,6 +462,7 @@ public class CustomerBookingResponse implements Parcelable {
             parcel.writeInt(year);
             parcel.writeInt(seats);
             parcel.writeString(fuelType);
+            parcel.writeString(registrationNumber);
             parcel.writeDouble(pricePerDay);
             parcel.writeString(color);
             parcel.writeStringList(features);
@@ -470,6 +475,13 @@ public class CustomerBookingResponse implements Parcelable {
             return location;
         }
 
+        public void setRegistrationNumber(String registrationNumber){
+            this.registrationNumber=registrationNumber;
+        }
+
+        public String getRegistrationNumber(){
+            return registrationNumber;
+        }
         public void setLocation(Location location) {
             this.location = location;
         }

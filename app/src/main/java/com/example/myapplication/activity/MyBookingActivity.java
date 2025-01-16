@@ -50,7 +50,7 @@ public class MyBookingActivity extends AppCompatActivity {
 
         // Set up RecyclerView
         recyclerViewBookings.setLayoutManager(new LinearLayoutManager(this));
-        bookingAdapter = new BookingAdapter();
+        bookingAdapter = new BookingAdapter(getApplicationContext());
         bookingAdapter.setBookingList(bookings);
         recyclerViewBookings.setAdapter(bookingAdapter);
 

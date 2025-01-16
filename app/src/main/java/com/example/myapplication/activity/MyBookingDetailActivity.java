@@ -1,6 +1,7 @@
 package com.example.myapplication.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,16 +10,42 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.models.response.CustomerBookingResponse;
 
 public class MyBookingDetailActivity extends AppCompatActivity {
 
     private LinearLayout layoutCarDetails, layoutDriverDetails, layoutPaymentInfo;
     private TextView tvCarDetails, tvDriverDetails, tvPaymentInfo;
 
+    private String pickupLocation,dropoffLocation,bookingAmount,driverName,drivercontact,bookingStartDate,bookingEndDate,carName,carRegistrationNumber;
+
+    private String Tag="MyBooking";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_booking_detail);
+
+
+
+
+        CustomerBookingResponse.BookingData bookingData = getIntent().getParcelableExtra("booking_data");
+        Log.d(Tag,"my details :"+ bookingData.getPickupLocation());
+        Log.d(Tag,"my details"+bookingData.getCarId());
+        Log.d(Tag,"my details"+bookingData.getCarId().getModel());
+//        Log.d(Tag,"my details"+bookingData.getDriverId().getFullName());
+        Log.d(Tag,"my details"+bookingData.getDriverId());
+
+        pickupLocation=bookingData.getPickupLocation();
+       dropoffLocation=bookingData.getDropoffLocation();
+//         driverName=bookingData.getDriverId().getFullName();
+//       drivercontact=bookingData.getDriverId().getPhoneNumber();
+       bookingStartDate=bookingData.getStartDate();
+      bookingEndDate=bookingData.getEndDate();
+        carName=bookingData.getCarId().getBrand();
+       carRegistrationNumber=bookingData.getCarId().getRegistrationNumber();
+       bookingAmount= String.valueOf(bookingData.getTotalAmount());
+
 
         // Initialize layouts and text views
         layoutCarDetails = findViewById(R.id.layoutCarDetails);
@@ -26,6 +53,51 @@ public class MyBookingDetailActivity extends AppCompatActivity {
         layoutPaymentInfo = findViewById(R.id.layoutPaymentInfo);
 
         tvCarDetails = findViewById(R.id.tvCarDetails);
+
+       TextView tvCarName=findViewById(R.id.tvCarName);
+       TextView tvCarModel=findViewById(R.id.tvCarModel);
+       TextView tvCarRegistrationNumber=findViewById(R.id.tvCarRegistrationNumber);
+       TextView tvDriverName=findViewById(R.id.tvDriverName);
+       TextView tvDriverContact=findViewById(R.id.tvDriverContact);
+        TextView tvpickupLocation=findViewById(R.id.pickupLocation);
+        TextView tvdropoffLocation=findViewById(R.id.dropoffLocation);
+        TextView tvbooking_start_date=findViewById(R.id.booking_start_date);
+        TextView tvbooking_end_date=findViewById(R.id.booking_end_date);
+        TextView tvbookingAmount=findViewById(R.id.bookingAmount);
+
+        tvCarName.setText("CarName:"+carName);
+        tvCarModel.setText("Modal:"+bookingData.getCarId().getModel());
+        tvCarRegistrationNumber.setText("Registration Number: "+carRegistrationNumber);
+        tvpickupLocation.setText("Pickup Location: "+pickupLocation);
+        tvdropoffLocation.setText("Dropoff Location: "+dropoffLocation);
+        tvbooking_start_date.setText("Booking Date: "+bookingStartDate);
+        tvbooking_end_date.setText("Bookind End Date: "+bookingEndDate);
+        tvbookingAmount.setText("Booking Amount: "+bookingAmount);
+
+
+
+
+
+        // Conditionally handle driver details
+        if (bookingData.getDriverId() != null) {
+            driverName = bookingData.getDriverId().getFullName();
+            drivercontact = bookingData.getDriverId().getPhoneNumber();
+            tvDriverName.setText(driverName);
+            tvDriverContact.setText(drivercontact);
+        } else {
+            // Hide the driver details layout if driver information is null
+            layoutDriverDetails.setVisibility(View.GONE);
+            findViewById(R.id.tvDriverDetails).setVisibility(View.GONE);
+        }
+//        tvDriverName.setText();
+
+//
+//
+        TextView pickupLocation=findViewById(R.id.pickupLocation);
+       TextView dropoffLocation=findViewById(R.id.dropoffLocation);
+      TextView booking_start_date=findViewById(R.id.booking_start_date);
+      TextView booking_end_date=findViewById(R.id.booking_end_date);
+
         tvDriverDetails = findViewById(R.id.tvDriverDetails);
         tvPaymentInfo = findViewById(R.id.tvPaymentInfo);
 

@@ -38,17 +38,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+
             <TextView
-                android:id="@+id/tvBookingID"
+                android:id="@+id/pickupLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Booking ID: 12345"
+                android:text=""
                 android:textSize="16sp" />
+
             <TextView
-                android:id="@+id/tvBookingDate"
+                android:id="@+id/dropoffLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date: 2025-01-15"
+                android:text=""
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/bookingAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/booking_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/booking_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
                 android:textSize="16sp" />
         </LinearLayout>
         <!-- Booking Status Progress Bar -->
@@ -193,13 +217,20 @@
                     android:id="@+id/tvCarName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Car: Toyota Innova"
+                    android:text=""
                     android:padding="8dp" />
                 <TextView
                     android:id="@+id/tvCarModel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Model: 2023"
+                    android:text=""
+                    android:padding="8dp" />
+
+                <TextView
+                    android:id="@+id/tvCarRegistrationNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
                     android:padding="8dp" />
             </LinearLayout>
             <!-- Driver Details Accordion -->
@@ -223,13 +254,13 @@
                     android:id="@+id/tvDriverName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name: John Doe"
+                    android:text=""
                     android:padding="8dp" />
                 <TextView
                     android:id="@+id/tvDriverContact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Contact: 1234567890"
+                    android:text=""
                     android:padding="8dp" />
             </LinearLayout>
             <!-- Payment Info Accordion -->

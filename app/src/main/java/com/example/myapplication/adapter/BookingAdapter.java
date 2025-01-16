@@ -1,15 +1,20 @@
 package com.example.myapplication.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide; // Import Glide
 import com.example.myapplication.R;
+import com.example.myapplication.activity.MyBookingDetailActivity;
 import com.example.myapplication.models.response.CustomerBookingResponse;
 
 import java.util.ArrayList;
@@ -17,11 +22,21 @@ import java.util.List;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
 
+    private final Context context;
     private List<CustomerBookingResponse.BookingData> bookingList = new ArrayList<>();
 
+    public BookingAdapter(Context context) {
+        this.context = context;
+    }
+
     public void setBookingList(List<CustomerBookingResponse.BookingData> bookingList) {
-        this.bookingList = bookingList;
-        notifyDataSetChanged();
+        if (bookingList != null) {
+            this.bookingList = bookingList;
+            notifyDataSetChanged();
+        } else {
+            Log.w("BookingAdapter", "Booking list is null, setting an empty list.");
+            this.bookingList = new ArrayList<>();
+        }
     }
 
     @NonNull
@@ -35,48 +50,77 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     public void onBindViewHolder(@NonNull BookingViewHolder holder, int position) {
         CustomerBookingResponse.BookingData bookingData = bookingList.get(position);
 
-        // Log all the details in one statement
-        String carModel = bookingData.getCarId() != null && bookingData.getCarId().getModel() != null ? bookingData.getCarId().getModel() : "Model not available";
-        String carBrand = bookingData.getCarId() != null && bookingData.getCarId().getBrand() != null ? bookingData.getCarId().getBrand() : "Brand not available";
-        String carColor = bookingData.getCarId() != null && bookingData.getCarId().getColor() != null ? bookingData.getCarId().getColor() : "Color not available";
+        if (bookingData == null) {
+            Log.e("BookingAdapter", "Booking data at position " + position + " is null.");
+            return;
+        }
 
-        String logMessage = "Booking Data: " +
-                "Booking ID: " + bookingData.getId() + ", " +
-                "Customer ID: " + bookingData.getCustomerId() + ", " +
-                "Car Model: " + carModel + ", " +
-                "Car Brand: " + carBrand + ", " +
-                "Car Color: " + carColor + ", " +
-                "Total Amount: " + bookingData.getTotalAmount() + ", " +
-                "Payment Status: " + bookingData.getPaymentStatus() + ", " +
-                "Booking Status: " + bookingData.getStatus();
+        // Safely extract data for car name, model, paid amount, and image URL
+        String carName = bookingData.getCarId() != null && bookingData.getCarId().getBrand() != null
+                ? bookingData.getCarId().getBrand() : "Car name not available";
 
-        Log.d("BookingAdapter", logMessage);
+        String carModel = bookingData.getCarId() != null && bookingData.getCarId().getModel() != null
+                ? bookingData.getCarId().getModel() : "Model not available";
 
-        // Bind the data from the Booking object to the ViewHolder
+        String paidAmount = String.valueOf(bookingData.getTotalAmount()) != null
+                ? "Paid Amount: " + String.valueOf(bookingData.getTotalAmount()) : "Paid Amount not available";
+
+        // Assuming car images are available in bookingData.getCarId().getImages()
+        List<String> carImages = bookingData.getCarId().getImages();
+        String carImageUrl = "";
+
+        if (carImages != null && !carImages.isEmpty()) {
+            carImageUrl = carImages.get(0); // Get the first image in the list
+        }
+
+        Log.d("BookingAdapter", "Binding data for booking ID: " + bookingData.getId());
+
+        // Bind data to UI components
+        holder.textCarName.setText(carName);
         holder.textCarModel.setText(carModel);
-        holder.textBookingId.setText("Booking ID: " + bookingData.getId());
-        holder.textLocation.setText("Pickup Location: " + (bookingData.getPickupLocation() != null ? bookingData.getPickupLocation() : "Not available"));
-        holder.textTripStart.setText("Start Date: " + bookingData.getStartDate());
-        holder.textTripEnd.setText("End Date: " + bookingData.getEndDate());
-        holder.textPaidAmount.setText("Paid Amount: " + bookingData.getTotalAmount());
+        holder.textPaidAmount.setText(paidAmount);
+
+        // Load image using Glide
+        if (!carImageUrl.isEmpty()) {
+            Glide.with(context)
+                    .load(carImageUrl)
+                    .into(holder.imageCar);
+        } else {
+            // Optionally set a placeholder or empty image if no image URL is available
+            Glide.with(context)
+                    .load(R.drawable.profile) // Use a placeholder image
+                    .into(holder.imageCar);
+        }
+
+        // Handle card click event
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, MyBookingDetailActivity.class);
+            intent.putExtra("booking_data", bookingData); // Assuming BookingData is Parcelable or Serializable
+
+            // Check if the context is not an Activity, add FLAG_ACTIVITY_NEW_TASK
+            if (!(context instanceof android.app.Activity)) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return bookingList.size();
+        return bookingList != null ? bookingList.size() : 0;
     }
 
-    public class BookingViewHolder extends RecyclerView.ViewHolder {
-        TextView textCarModel, textBookingId, textLocation, textTripStart, textTripEnd, textPaidAmount;
+    public static class BookingViewHolder extends RecyclerView.ViewHolder {
+        TextView textCarName, textCarModel, textPaidAmount;
+        ImageView imageCar;
 
         public BookingViewHolder(@NonNull View itemView) {
             super(itemView);
-            textCarModel = itemView.findViewById(R.id.textCarModel); // Ensure this ID exists
-            textBookingId = itemView.findViewById(R.id.textBookingId);
-            textLocation = itemView.findViewById(R.id.textLocation);
-            textTripStart = itemView.findViewById(R.id.textTripStart);
-            textTripEnd = itemView.findViewById(R.id.textTripEnd);
+            textCarName = itemView.findViewById(R.id.textCarName); // Added for car name
+            textCarModel = itemView.findViewById(R.id.textCarModel);
             textPaidAmount = itemView.findViewById(R.id.textPaidAmount);
+            imageCar = itemView.findViewById(R.id.imageCar); // ImageView for car image
         }
     }
 }
