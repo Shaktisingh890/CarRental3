@@ -13,6 +13,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.models.response.BookingDetailsResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.MyFirebaseMessagingService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,6 +64,9 @@ public class PartnerBookingRequestActivity extends AppCompatActivity {
 
         btnReject.setOnClickListener(view -> {
             updateBookingStatus(bookingId, "rejected", "cancelled", BookingCancelledReasonActivity.class);
+            MyFirebaseMessagingService myservice= new MyFirebaseMessagingService();
+            myservice.deleteNotificationByIdFromBackend(this,notificationId);
+
         });
 
     }

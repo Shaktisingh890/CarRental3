@@ -1,5 +1,7 @@
 package com.example.myapplication.models.response;
 
+import com.google.gson.annotations.SerializedName;
+
 public class BookingDetailsResponse {
 
     private int statusCode;
@@ -40,36 +42,79 @@ public class BookingDetailsResponse {
         this.success = success;
     }
 
-    // BookingDetails class
+    // Inner class for BookingDetails
     public static class BookingDetails {
-        private String _id;
+
+        @SerializedName("_id")
+        private String id;
+
+        @SerializedName("customerId")
         private String customerId;
+
+        @SerializedName("carId")
         private String carId;
+
+        @SerializedName("partnerId")
         private String partnerId;
+
+        @SerializedName("pickupLocation")
         private String pickupLocation;
+
+        @SerializedName("dropoffLocation")
         private String dropoffLocation;
+
+        @SerializedName("startDate")
         private String startDate;
+
+        @SerializedName("endDate")
         private String endDate;
+
+        @SerializedName("durationInDays")
         private int durationInDays;
+
+        @SerializedName("totalAmount")
         private double totalAmount;
+
+        @SerializedName("paymentStatus")
         private String paymentStatus;
+
+        @SerializedName("status")
         private String status;
+
+        @SerializedName("penalties")
         private int penalties;
+
+        @SerializedName("partnerStatus")
         private String partnerStatus;
+
+        @SerializedName("driverStatus")
         private String driverStatus;
-        private String createdAt;
-        private String updatedAt;
+
+        @SerializedName("carModel")
         private String carModel;
+
+        @SerializedName("carName")
         private String carName;
+
+        @SerializedName("pricePerDay")
         private double pricePerDay;
 
+        @SerializedName("cName")
+        private String cname;
+
+        @SerializedName("cPhone")
+        private String cphone;
+
+        @SerializedName("cImage")
+        private String cimage;
+
         // Getters and Setters
-        public String get_id() {
-            return _id;
+        public String getId() {
+            return id;
         }
 
-        public void set_id(String _id) {
-            this._id = _id;
+        public void setId(String id) {
+            this.id = id;
         }
 
         public String getCustomerId() {
@@ -184,22 +229,6 @@ public class BookingDetailsResponse {
             this.driverStatus = driverStatus;
         }
 
-        public String getCreatedAt() {
-            return createdAt;
-        }
-
-        public void setCreatedAt(String createdAt) {
-            this.createdAt = createdAt;
-        }
-
-        public String getUpdatedAt() {
-            return updatedAt;
-        }
-
-        public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
-        }
-
         public String getCarModel() {
             return carModel;
         }
@@ -222,6 +251,30 @@ public class BookingDetailsResponse {
 
         public void setPricePerDay(double pricePerDay) {
             this.pricePerDay = pricePerDay;
+        }
+
+        public String getCname() {
+            return cname;
+        }
+
+        public void setCname(String cname) {
+            this.cname = cname;
+        }
+
+        public String getCphone() {
+            return cphone;
+        }
+
+        public void setCphone(String cphone) {
+            this.cphone = cphone;
+        }
+
+        public String getCimage() {
+            return cimage;
+        }
+
+        public void setCimage(String cimage) {
+            this.cimage = cimage;
         }
     }
 }

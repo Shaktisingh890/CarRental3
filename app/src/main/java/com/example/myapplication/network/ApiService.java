@@ -32,6 +32,7 @@ import com.example.myapplication.models.response.UserProfileResponse;
 
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -253,7 +254,6 @@ public interface ApiService {
     Call<Void> storeNotification(@Body Notification notification);
 
     @GET("api/v1/notifications/get_partner_booking_notification") // Replace with the actual endpoint for fetching notifications
-
     Call<NotificationResponse> getNotifications();
 
 
@@ -285,6 +285,14 @@ public interface ApiService {
             @Field("status") String status,
             @Field("driverId") String driverId
     );
+
+    @PUT("api/v1/drivers/updateStatus")
+    Call<Void> updateAvailabilityStatus(@Body Map<String, Boolean> availabilityStatus);
+
+
+    @GET("api/v1/drivers/getAvailability") // Replace with your API endpoint
+    Call<Map<String, Boolean>> getAvailabilityStatus();
+
 }
 
 

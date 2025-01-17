@@ -1,11 +1,13 @@
 package com.example.myapplication.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -13,23 +15,36 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import com.example.myapplication.R;
-import androidx.appcompat.app.AlertDialog;
-public class DriverDashboardActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
-    private ImageView menuIcon;
+import com.example.myapplication.R;
+import com.example.myapplication.network.ApiService;
+import com.example.myapplication.network.RetrofitClient;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class DriverDashboardActivity extends AppCompatActivity {
     private Switch availabilitySwitch;
     private TextView subtitleMessage;
+
+    private ImageView menuIcon;
+
+    private DrawerLayout drawerLayout;
+    private boolean isInitialLoad = true; // Flag to differentiate between initial load and user interaction
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_dashboard);
 
-        // Initialize Views
-        drawerLayout = findViewById(R.id.drawerLayout);
-        menuIcon = findViewById(R.id.menuIcon);
+        drawerLayout=findViewById(R.id.drawerLayout);
+        availabilitySwitch = findViewById(R.id.onlineOfflineSwitch);
+        subtitleMessage = findViewById(R.id.subtitleMessage);
+        menuIcon=findViewById(R.id.menuIcon);
         availabilitySwitch = findViewById(R.id.onlineOfflineSwitch);
         subtitleMessage = findViewById(R.id.subtitleMessage);
         RelativeLayout optionEditProfile = findViewById(R.id.option_edit_profile);
@@ -40,6 +55,9 @@ public class DriverDashboardActivity extends AppCompatActivity {
         RelativeLayout earnings = findViewById(R.id.earnings);
         ImageView closeIcon = findViewById(R.id.close);
 
+        // Fetch the availability status on activity start
+        fetchAvailabilityStatus();
+
         // Set up hamburger menu click listener
         menuIcon.setOnClickListener(v -> {
             if (drawerLayout.isDrawerOpen(findViewById(R.id.driverProfileLayout))) {
@@ -48,6 +66,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(findViewById(R.id.driverProfileLayout));
             }
         });
+
 
         // Set up click listener for Edit Profile
         optionEditProfile.setOnClickListener(v -> {
@@ -80,20 +99,23 @@ public class DriverDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Set Switch Listener
+
+
+        // Set up switch change listener
         availabilitySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                availabilitySwitch.setText("Online");
-                subtitleMessage.setText("You are now available to take rides.");
-                showCustomToast("You are Online", R.drawable.toast_background, R.drawable.ic_toast_icon);
-                // Redirect to RideRequestActivity
-                Intent intent = new Intent(DriverDashboardActivity.this, RideRequestActivity.class);
-                startActivity(intent);
-            } else {
-                availabilitySwitch.setText("Offline");
-                subtitleMessage.setText("Go Offline for taking rest");
-                showCustomToast("You are Offline", R.drawable.toast_background_red, R.drawable.cross);
+            if (!isInitialLoad) { // Only trigger update when it's a user interaction
+                Map<String, Boolean> availabilityStatus = new HashMap<>();
+                availabilityStatus.put("availability", isChecked);
+                updateAvailabilityStatus(availabilityStatus, isChecked);
             }
+        });
+
+        // Find the notification icon
+        ImageButton notificationIcon = findViewById(R.id.notificationIcon);
+        // Set click listener to navigate to PartnerNotificationActivity
+        notificationIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(DriverDashboardActivity.this, DriverNotificationActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -102,6 +124,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
         // Show the logout confirmation dialog when back button is pressed
         showLogoutConfirmationDialog();
     }
+
 
     private void showLogoutConfirmationDialog() {
         // Inflate the dialog layout
@@ -133,33 +156,75 @@ public class DriverDashboardActivity extends AppCompatActivity {
         });
     }
 
-    // Clear session method
+    private void fetchAvailabilityStatus() {
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
+
+        Call<Map<String, Boolean>> call = apiService.getAvailabilityStatus();
+        call.enqueue(new Callback<Map<String, Boolean>>() {
+            @Override
+            public void onResponse(Call<Map<String, Boolean>> call, Response<Map<String, Boolean>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    boolean isOnline = response.body().get("availability");
+                    isInitialLoad = true; // Set flag to true for initial load
+                    availabilitySwitch.setChecked(isOnline);
+                    updateUIBasedOnStatus(isOnline);
+                    isInitialLoad = false; // Reset flag after the initial state is set
+                } else {
+                    Toast.makeText(DriverDashboardActivity.this, "Failed to fetch status", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Boolean>> call, Throwable t) {
+                Toast.makeText(DriverDashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateAvailabilityStatus(Map<String, Boolean> availabilityStatus, boolean isChecked) {
+        ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
+
+        Call<Void> call = apiService.updateAvailabilityStatus(availabilityStatus);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    updateUIBasedOnStatus(isChecked);
+                } else {
+                    Toast.makeText(DriverDashboardActivity.this, "Failed to update status", Toast.LENGTH_SHORT).show();
+                    availabilitySwitch.setChecked(!isChecked); // Revert switch to previous state
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(DriverDashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                availabilitySwitch.setChecked(!isChecked); // Revert switch to previous state
+            }
+        });
+    }
+
+    private void updateUIBasedOnStatus(boolean isOnline) {
+        if (isOnline) {
+            availabilitySwitch.setText("Online");
+            subtitleMessage.setText("You are now available to take rides.");
+            showCustomToast("You are Online", R.drawable.toast_background, R.drawable.ic_toast_icon);
+        } else {
+            availabilitySwitch.setText("Offline");
+            subtitleMessage.setText("Go Offline for taking rest");
+            showCustomToast("You are Offline", R.drawable.toast_background_red, R.drawable.cross);
+        }
+    }
+
     private void clearSession() {
         SharedPreferences preferences = getSharedPreferences("YourSharedPrefName", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.apply();
     }
+
     private void showCustomToast(String message, int backgroundResource, int iconResource) {
-        // Inflate the custom layout
-        LayoutInflater inflater = getLayoutInflater();
-        View customToastView = inflater.inflate(R.layout.custom_toast, findViewById(R.id.toastContainer));
-
-        // Set the message text
-        TextView toastMessage = customToastView.findViewById(R.id.toastMessage);
-        toastMessage.setText(message);
-
-        // Set the background resource (green for online, red for offline)
-        customToastView.setBackgroundResource(backgroundResource);
-
-        // Set the icon resource
-        ImageView toastIcon = customToastView.findViewById(R.id.toastIcon);
-        toastIcon.setImageResource(iconResource);
-
-        // Create the Toast and show it
-        Toast customToast = new Toast(getApplicationContext());
-        customToast.setDuration(Toast.LENGTH_SHORT);
-        customToast.setView(customToastView);
-        customToast.show();
+        // Custom Toast Implementation
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
