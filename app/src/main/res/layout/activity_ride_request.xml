@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:background="@color/white"
     tools:context=".activity.RideRequestActivity">
-    <!--Back Button Header Section -->
+
+    <!-- Back Button Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +32,7 @@
             android:textStyle="bold"
             android:textColor="#000000" />
     </LinearLayout>
+
     <!-- Earnings and Rides Section -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -101,179 +103,257 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Map Section -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:background="#DEDEDE">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Car Info Box -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/driver_card"
+                android:layout_marginTop="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Car Detail"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/carName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Car: Toyota Corolla"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/CarModal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Car Modal:Corolla"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/RegistrationNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registration: ABC-1234"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/carPickupLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pickup Location: Panniyankara, Kozhikode"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/carDropoffLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Return Location: Kozhikode, Kerala, India"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <!-- Fleet Partner Info Box -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/driver_card"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fleet Partner Information"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/partnerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: John Doe"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/partnerPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone: +91 9876543210"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Ride Request Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/mapPlaceholder"
+        <!-- User Info -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/bottomSection"
-            android:layout_weight="1"
-            android:scaleType="centerCrop"
-            android:background="@drawable/map_placeholder" />
-        <!-- Ride Request Section -->
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/profile"
+                android:contentDescription="Profile Picture"
+                android:background="@drawable/circle_background"
+                android:scaleType="centerCrop"
+                android:clipToOutline="true" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp">
+                <TextView
+                    android:id="@+id/customerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Customer Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/total_rent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₹1500"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
+                <TextView
+                    android:id="@+id/phoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone: +91 9876543210"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Address and Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#FFFFFF"
-            android:padding="16dp">
-            <!-- User Info -->
+            android:padding="16dp"
+            android:background="@drawable/driver_card"
+            android:layout_marginTop="16dp">
+
+            <!-- Pickup Location with Start Date -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <ImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/profile"
-                    android:contentDescription="Profile Picture"
-                    android:background="@drawable/circle_background" />
-                <LinearLayout
+                android:layout_marginBottom="8dp">
+                <TextView
+                    android:id="@+id/pickupLocation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="8dp">
-                    <TextView
-                        android:id="@+id/customerName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Abhay"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="5.0 ★"
-                        android:textSize="14sp"
-                        android:textColor="@color/green" />
-                </LinearLayout>
-                <LinearLayout
+                    android:text="Pickup Location: Panniyankara, Kozhikode"
+                    android:textSize="14sp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/startDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="8dp"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/total_rent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:gravity="center" />
-                    <TextView
-                        android:id="@+id/phoneNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text=""
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center" />
-                </LinearLayout>
+                    android:text="Start Date: 15-Jan-2025"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray" />
             </LinearLayout>
-            <!-- Address and Buttons -->
+
+            <!-- Return Location with End Date -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/driver_card"
-                android:layout_marginTop="8dp"
-                android:padding="16dp">
-                <!-- Vertical Dotted Line -->
-                <LinearLayout
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/dropoffLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Return Location: Kozhikode, Kerala, India"
+                    android:textSize="14sp"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/endDate"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center">
-                    <!-- Top Image -->
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="Start Location Icon"
-                        android:src="@drawable/baseline_circle_24" />
-                    <!-- Centered Divider -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="5dp"
-                        android:layout_weight="1"
-                        android:text="|"
-                        android:textSize="12sp"
-                        android:textColor="#DDDDDD"
-                        android:gravity="center" />
-                    <!-- Bottom Image -->
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/location"
-                        android:contentDescription="End Location Icon" />
-                </LinearLayout>
-                <!-- Text and Divider -->
-                <LinearLayout
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <!-- First Row -->
-                    <TextView
-                        android:id="@+id/pickupLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Panniyankara, Kozhikode"
-                        android:textSize="14sp"
-                        android:textColor="@color/black" />
-                    <!-- Horizontal Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#DDDDDD"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginVertical="4dp" />
-                    <!-- Second Row -->
-                    <TextView
-                        android:id="@+id/dropoffLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Kozhikode, Kerala, India"
-                        android:textSize="14sp"
-                        android:textColor="@color/gray" />
-                </LinearLayout>
-            </LinearLayout>
-            <!-- Action Buttons -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
-                <Button
-                    android:id="@+id/declineButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/red"
-                    android:text="Decline"
-                    android:textColor="@color/white" />
-                <Button
-                    android:id="@+id/acceptButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/green"
-                    android:text="Accept"
-                    android:layout_marginStart="8dp"
-                    android:textColor="@color/white" />
+                    android:text="End Date: 16-Jan-2025"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray" />
             </LinearLayout>
         </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+            <Button
+                android:id="@+id/declineButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/red"
+                android:text="Decline"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/acceptButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/green"
+                android:text="Accept"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

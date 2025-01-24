@@ -99,7 +99,7 @@ public class DriverDetailActivity extends AppCompatActivity {
                 String notification_id= getIntent().getStringExtra("notification_id");
                 Log.d("my","kjjk"+notification_id);
                 if (bookingId != null && !bookingId.isEmpty()) {
-                    updateDriverStatus(bookingId, "accepted", "booked",driverId);
+                    assignDriver(bookingId,driverId);
                     myService.deleteNotificationByIdFromBackend(getApplicationContext(),notification_id);
                 } else {
                     Toast.makeText(DriverDetailActivity.this, "Booking ID is missing!", Toast.LENGTH_SHORT).show();
@@ -134,10 +134,10 @@ public class DriverDetailActivity extends AppCompatActivity {
 
 
     // Method to update driver status
-    private void updateDriverStatus(String bookingId, String driverStatus, String status,String driverId) {
+    private void assignDriver(String bookingId,String driverId) {
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
-        Call<Void> call = apiService.updateDriverStatus(bookingId, driverStatus, status,driverId);
+        Call<Void> call = apiService.assignDriver(bookingId,driverId);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

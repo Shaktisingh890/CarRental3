@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class RideRequestActivity extends AppCompatActivity {
     private String notificationId,driverStatus,bookingId;
-    TextView tvpickupLocation,tvdropoffLocation,tvCarRent,tvCustomerName,tvphoneNumber;
+    TextView tvpickupLocation,tvdropoffLocation,tvCarRent,tvCustomerName,tvphoneNumber,tvCarName,tvCarModal,tvRegistrationNumber,tvpartnerName,tvpartnerPhone,tvcarPickupLocation,tvcarDropoffLocation, tvPickupTime,tvReturnTime;
     ImageView tvprofileimage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,15 @@ public class RideRequestActivity extends AppCompatActivity {
         tvCustomerName=findViewById(R.id.customerName);
         tvprofileimage=findViewById(R.id.profile_image);
         tvphoneNumber=findViewById(R.id.phoneNumber);
-
-
-
-
+        tvCarName=findViewById(R.id.carName);
+        tvCarModal=findViewById(R.id.CarModal);
+        tvRegistrationNumber=findViewById(R.id.RegistrationNumber);
+        tvpartnerName=findViewById(R.id.partnerName);
+        tvpartnerPhone=findViewById(R.id.partnerPhone);
+        tvcarPickupLocation=findViewById(R.id.carPickupLocation);
+        tvcarDropoffLocation=findViewById(R.id.carDropoffLocation);
+        tvPickupTime=findViewById(R.id.startDate);
+        tvReturnTime=findViewById(R.id.endDate);
         // Find the backArrow ImageView
         ImageView backArrow = findViewById(R.id.backArrow);
 
@@ -62,22 +67,18 @@ public class RideRequestActivity extends AppCompatActivity {
 
         // Find the Accept Button
         Button acceptButton = findViewById(R.id.acceptButton);
-        MyFirebaseMessagingService myservice= new MyFirebaseMessagingService();
+
         // Set a click listener for the Accept button
         acceptButton.setOnClickListener(view -> {
-            updateBookingStatus(bookingId, "accepted", "booked", DriverDashboardActivity.class);
-            myservice.deleteNotificationByIdFromBackend(this,notificationId);
-
+            updateDriverStatus(bookingId, "accepted", "booked", RideDetailsActivity.class);
         });
 
         declineButton.setOnClickListener(view -> {
-            updateBookingStatus(bookingId, "rejected", "cancelled", BookingCancelledReasonActivity.class);
-
-            myservice.deleteNotificationByIdFromBackend(this,notificationId);
+            updateDriverStatus(bookingId, "rejected", "cancelled", DeclineRideActivity.class);
+//            MyFirebaseMessagingService myservice= new MyFirebaseMessagingService();
+//            myservice.deleteNotificationByIdFromBackend(this,notificationId);
 
         });
-
-
 
     }
 
@@ -100,6 +101,7 @@ public class RideRequestActivity extends AppCompatActivity {
                                 .load(imageUrl)  // Load the image URL
                                 .placeholder(R.drawable.profile)  // Set a placeholder image while loading
                                 .error(R.drawable.profile)  // Set an error image if the image URL fails to load
+                                .circleCrop()
                                 .into(tvprofileimage);  // Set the image into ImageView
                         Log.d("Driver","driver"+bookingDetailsResponse.getData().getCname());
                         tvCustomerName.setText(bookingDetailsResponse.getData().getCname());
@@ -108,10 +110,18 @@ public class RideRequestActivity extends AppCompatActivity {
 //                        tvBookingDetails.setText("Pickup & Drop-off Points");
                         tvpickupLocation.setText("Pickup Location: " + bookingDetailsResponse.getData().getPickupLocation());
                         tvdropoffLocation.setText("Return Location: " + bookingDetailsResponse.getData().getDropoffLocation());
-//                        tvPickupTime.setText("Pickup Time: " + bookingDetailsResponse.getData().getStartDate());
-//                        tvReturnTime.setText("Return Time: " + bookingDetailsResponse.getData().getEndDate());
+                        tvPickupTime.setText("Pickup Time: " + bookingDetailsResponse.getData().getStartDate());
+                        tvReturnTime.setText("Return Time: " + bookingDetailsResponse.getData().getEndDate());
                         driverStatus=bookingDetailsResponse.getData().getDriverStatus();
                         Log.d("notification_id","fetchDriverStatus"+bookingDetailsResponse.getData().getDriverStatus());
+
+                        tvCarName.setText("Car Name: " + bookingDetailsResponse.getData().getCarName());
+                        tvCarModal.setText("Car Modal: " + bookingDetailsResponse.getData().getCarModel());
+                        tvRegistrationNumber.setText("Registration No: " + bookingDetailsResponse.getData().getRegistrationNumber());
+                        tvpartnerName.setText("Name: " + bookingDetailsResponse.getData().getpartnerName());
+                        tvpartnerPhone.setText("Contact No: " + bookingDetailsResponse.getData().getpartnerPhone());
+                        tvcarPickupLocation.setText("Pickup Location: " + bookingDetailsResponse.getData().getcarPickupLocation());
+                        tvcarDropoffLocation.setText("Return Location: " + bookingDetailsResponse.getData().getcarDropoffLocation());
 
                         if (driverStatus != null && (driverStatus.equals("confirmed") || driverStatus.equals("rejected"))) {
                             // If the status is already confirmed or rejected, skip the status update and directly navigate to Partner_DriverListActivity
@@ -135,11 +145,11 @@ public class RideRequestActivity extends AppCompatActivity {
             }
         });
     }
-    private void updateBookingStatus(String bookingId, String driverStatus, String status, Class<?> nextActivity) {
+    private void updateDriverStatus(String bookingId, String driverStatus, String status, Class<?> nextActivity) {
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
         // Call the API to update the booking status
-        Call<Void> call = apiService.updateBookingStatus(bookingId,driverStatus, status);
+        Call<Void> call = apiService.updateDriverStatus(bookingId,driverStatus, status);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
