@@ -229,7 +229,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     etEmail.setText(user.getData().getEmail());
                     etPhone.setText(user.getData().getPhoneNumber());
                     etAddress.setText(user.getData().getAddress());
-                    Glide.with(EditProfileActivity.this).load(user.getData().getImgUrl()).into(profileImage);
+                    Glide.with(EditProfileActivity.this).load(user.getData().getImgUrl()).circleCrop().into(profileImage);
                 } else {
                     // Log the error body
                     try {
@@ -257,8 +257,4 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 }

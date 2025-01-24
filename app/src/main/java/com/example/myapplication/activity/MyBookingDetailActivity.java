@@ -3,6 +3,7 @@ package com.example.myapplication.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +26,10 @@ public class MyBookingDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_booking_detail);
+        ImageView backButton = findViewById(R.id.backButton);
 
-
-
+        // Back button click listener
+        backButton.setOnClickListener(view -> finish());
 
         CustomerBookingResponse.BookingData bookingData = getIntent().getParcelableExtra("booking_data");
         Log.d(Tag,"my details :"+ bookingData.getPickupLocation());
@@ -46,8 +48,6 @@ public class MyBookingDetailActivity extends AppCompatActivity {
        carRegistrationNumber=bookingData.getCarId().getRegistrationNumber();
        bookingAmount= String.valueOf(bookingData.getTotalAmount());
        status=bookingData.getStatus();
-       Log.d("mystatus1","status"+status);
-
 
         // Initialize layouts and text views
         layoutCarDetails = findViewById(R.id.layoutCarDetails);
@@ -72,9 +72,9 @@ public class MyBookingDetailActivity extends AppCompatActivity {
         tvCarRegistrationNumber.setText("Registration Number: "+carRegistrationNumber);
         tvpickupLocation.setText("Pickup Location: "+pickupLocation);
         tvdropoffLocation.setText("Dropoff Location: "+dropoffLocation);
-        tvbooking_start_date.setText("Booking Date: "+bookingStartDate);
-        tvbooking_end_date.setText("Bookind End Date: "+bookingEndDate);
-        tvbookingAmount.setText("Booking Amount: "+bookingAmount);
+        tvbooking_start_date.setText("Start Date: "+bookingStartDate);
+        tvbooking_end_date.setText("End Date: "+bookingEndDate);
+        tvbookingAmount.setText("Amount: "+bookingAmount);
 
 
 

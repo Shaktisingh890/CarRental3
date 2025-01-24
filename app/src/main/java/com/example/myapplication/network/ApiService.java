@@ -282,7 +282,14 @@ public interface ApiService {
     Call<Void> updateDriverStatus(
             @Field("bookingId") String bookingId,
             @Field("driverStatus") String driverStatus,
-            @Field("status") String status,
+            @Field("status") String status
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/v1/booking/assignDriver")
+    Call<Void> assignDriver(
+            @Field("bookingId") String bookingId,
             @Field("driverId") String driverId
     );
 

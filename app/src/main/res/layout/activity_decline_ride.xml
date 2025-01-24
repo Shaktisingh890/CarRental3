@@ -1,0 +1,125 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f9f9f9">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#FFFFFF"
+        android:elevation="6dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/backArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:id="@+id/tvDeclineHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Why Decline the Ride?"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <!-- Instructions -->
+    <TextView
+        android:id="@+id/tvInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerLayout"
+        android:layout_margin="16dp"
+        android:text="Please provide a reason for declining the ride:"
+        android:textSize="16sp"
+        android:textColor="@android:color/black" />
+
+    <!-- Radio Group -->
+    <RadioGroup
+        android:id="@+id/rgReasons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvInstructions"
+        android:orientation="vertical"
+        android:layout_margin="16dp">
+
+        <RadioButton
+            android:id="@+id/rbReason1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not Interested"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/rbReason2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Car Issue"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/rbReason3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unavailable at the Moment"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/rbReason4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other Reason"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <!-- Custom Reason Input -->
+    <EditText
+        android:id="@+id/etCustomReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rgReasons"
+        android:layout_margin="16dp"
+        android:hint="Enter custom reason (if any)"
+        android:visibility="gone" />
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:backgroundTint="@android:color/darker_gray"
+            android:textColor="#ffffff"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/btnSubmitReason"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Submit"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:textColor="#ffffff"
+            android:padding="12dp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -86,7 +86,11 @@ public class BookingDetailsResponse {
 
         @SerializedName("partnerStatus")
         private String partnerStatus;
+        @SerializedName("partnerName")
+        private String partnerName;
 
+        @SerializedName("partnerPhone")
+        private String partnerPhone;
         @SerializedName("driverStatus")
         private String driverStatus;
 
@@ -96,6 +100,14 @@ public class BookingDetailsResponse {
         @SerializedName("carName")
         private String carName;
 
+        @SerializedName("carPickupLocation")
+        private String carPickupLocation;
+        @SerializedName("carDropoffLocation")
+        private String carDropoffLocation;
+        @SerializedName("pickupDate")
+        private String pickupDate;
+        @SerializedName("RegistrationNumber")
+        private String RegistrationNumber;
         @SerializedName("pricePerDay")
         private double pricePerDay;
 
@@ -145,8 +157,7 @@ public class BookingDetailsResponse {
             return pickupLocation;
         }
 
-        public void setPickupLocation(String pickupLocation) {
-            this.pickupLocation = pickupLocation;
+        public void setPickupLocation(String pickupLocation) {this.pickupLocation = pickupLocation;
         }
 
         public String getDropoffLocation() {
@@ -243,6 +254,40 @@ public class BookingDetailsResponse {
 
         public void setCarName(String carName) {
             this.carName = carName;
+        }
+
+        public String getcarPickupLocation() {
+            return carPickupLocation;
+        }
+
+        public void setcarPickupLocation(String carPickupLocation) {this.carPickupLocation = carPickupLocation;}
+
+
+        public String getcarDropoffLocation() {
+            return carDropoffLocation;
+        }
+
+        public void setcarDropoffLocation(String carDropoffLocation) {this.carDropoffLocation = carDropoffLocation;}
+
+        public String getRegistrationNumber() {
+            return RegistrationNumber;
+        }
+
+        public void setRegistrationNumber(String RegistrationNumber) { this.RegistrationNumber = RegistrationNumber;}
+        public String getpartnerName() {
+            return partnerName;
+        }
+
+        public void setpartnerName(String partnerName) {
+            this.partnerName = partnerName;
+        }
+
+        public String getpartnerPhone() {
+            return partnerPhone;
+        }
+
+        public void setpartnerPhone(String partnerPhone) {
+            this.partnerPhone = partnerPhone;
         }
 
         public double getPricePerDay() {

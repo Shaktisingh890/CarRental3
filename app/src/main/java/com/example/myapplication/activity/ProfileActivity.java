@@ -88,7 +88,8 @@ public class ProfileActivity extends AppCompatActivity {
             Glide.with(this)
                     .load(imgUrl)
                     .placeholder(R.drawable.profile) // Placeholder while loading
-                    .error(R.drawable.profile)       // Fallback in case of an error
+                    .error(R.drawable.profile)
+                    .circleCrop()// Fallback in case of an error
                     .into(profileImage);
         } else {
             profileImage.setImageResource(R.drawable.profile); // Set default profile picture
@@ -224,7 +225,5 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(ProfileActivity.this, "No active session found. Please log in.", Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }
