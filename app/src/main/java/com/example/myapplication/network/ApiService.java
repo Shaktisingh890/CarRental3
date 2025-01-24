@@ -260,7 +260,7 @@ public interface ApiService {
 
 
 
-    @DELETE("api/v1/notifications/partner_all_notification")
+    @DELETE("api/v1/notifications/all_notification")
     Call<Void> deleteAllNotifications();
 
     @DELETE("api/v1/notifications/delete/{id}")

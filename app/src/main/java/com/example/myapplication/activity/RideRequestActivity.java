@@ -62,15 +62,17 @@ public class RideRequestActivity extends AppCompatActivity {
 
         // Find the Accept Button
         Button acceptButton = findViewById(R.id.acceptButton);
-
+        MyFirebaseMessagingService myservice= new MyFirebaseMessagingService();
         // Set a click listener for the Accept button
         acceptButton.setOnClickListener(view -> {
-            updateBookingStatus(bookingId, "accepted", "booked", RideDetailsActivity.class);
+            updateBookingStatus(bookingId, "accepted", "booked", DriverDashboardActivity.class);
+            myservice.deleteNotificationByIdFromBackend(this,notificationId);
+
         });
 
         declineButton.setOnClickListener(view -> {
             updateBookingStatus(bookingId, "rejected", "cancelled", BookingCancelledReasonActivity.class);
-            MyFirebaseMessagingService myservice= new MyFirebaseMessagingService();
+
             myservice.deleteNotificationByIdFromBackend(this,notificationId);
 
         });

@@ -17,7 +17,7 @@ public class MyBookingDetailActivity extends AppCompatActivity {
     private LinearLayout layoutCarDetails, layoutDriverDetails, layoutPaymentInfo;
     private TextView tvCarDetails, tvDriverDetails, tvPaymentInfo;
 
-    private String pickupLocation,dropoffLocation,bookingAmount,driverName,drivercontact,bookingStartDate,bookingEndDate,carName,carRegistrationNumber;
+    private String pickupLocation,dropoffLocation,bookingAmount,driverName,drivercontact,bookingStartDate,bookingEndDate,carName,carRegistrationNumber,status;
 
     private String Tag="MyBooking";
 
@@ -45,6 +45,8 @@ public class MyBookingDetailActivity extends AppCompatActivity {
         carName=bookingData.getCarId().getBrand();
        carRegistrationNumber=bookingData.getCarId().getRegistrationNumber();
        bookingAmount= String.valueOf(bookingData.getTotalAmount());
+       status=bookingData.getStatus();
+       Log.d("mystatus1","status"+status);
 
 
         // Initialize layouts and text views
@@ -123,7 +125,7 @@ public class MyBookingDetailActivity extends AppCompatActivity {
         );
 
         // Example logic to update status
-        updateBookingStatus("Ongoing");
+        updateBookingStatus(status);
     }
 
     private void toggleVisibility(LinearLayout layout) {
@@ -139,26 +141,31 @@ public class MyBookingDetailActivity extends AppCompatActivity {
         View viewOngoing = findViewById(R.id.viewOngoing);
         View viewBooked = findViewById(R.id.viewBooked);
         View viewCompleted = findViewById(R.id.viewCompleted);
+        View viewCancelled = findViewById(R.id.cancelled);
 
         // Reset all
         resetStatus(viewPending);
         resetStatus(viewOngoing);
         resetStatus(viewBooked);
         resetStatus(viewCompleted);
+        resetStatus(viewCancelled);
 
         // Highlight based on status
         switch (status) {
-            case "Pending":
-                highlightStatus(viewPending);
+            case "pending":
+                highlightStatus(viewPending, "pending");
                 break;
-            case "Ongoing":
-                highlightStatus(viewOngoing);
+            case "ongoing":
+                highlightStatus(viewOngoing, "ongoing");
                 break;
-            case "Booked":
-                highlightStatus(viewBooked);
+            case "booked":
+                highlightStatus(viewBooked, "booked");
                 break;
-            case "Completed":
-                highlightStatus(viewCompleted);
+            case "cancelled":
+                highlightStatus(viewCancelled, "cancelled");
+                break;
+            case "completed":
+                highlightStatus(viewCompleted, "completed");
                 break;
         }
     }
@@ -167,7 +174,28 @@ public class MyBookingDetailActivity extends AppCompatActivity {
         view.setBackgroundResource(R.drawable.status_circle_pending); // Default style
     }
 
-    private void highlightStatus(View view) {
-        view.setBackgroundResource(R.drawable.status_circle_ongoing); // Active style
+    private void highlightStatus(View view, String status) {
+        int drawableResource;
+        switch (status) {
+            case "pending":
+                drawableResource = R.drawable.status_circle_pending;
+                break;
+            case "ongoing":
+                drawableResource = R.drawable.status_circle_ongoing;
+                break;
+            case "booked":
+                drawableResource = R.drawable.status_circle_booked;
+                break;
+            case "cancelled":
+                drawableResource = R.drawable.status_circle_booked;
+                break;
+            case "completed":
+                drawableResource = R.drawable.status_circle_completed;
+                break;
+            default:
+                drawableResource = R.drawable.status_circle_completed; // Default style
+                break;
+        }
+        view.setBackgroundResource(drawableResource);
     }
 }

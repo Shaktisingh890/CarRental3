@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.activity.BookingCancelledReasonActivity;
 import com.example.myapplication.activity.DriverBookingRequestActivity;
+import com.example.myapplication.activity.DriverDashboardActivity;
 import com.example.myapplication.activity.PartnerBookingRequestActivity;
 import com.example.myapplication.activity.Partner_DriverListActivity;
 import com.example.myapplication.activity.RideDetailsActivity;
@@ -138,17 +139,21 @@ public class DriverNotificationAdapter extends RecyclerView.Adapter<DriverNotifi
                         Log.d(TAG, "fetchBookingDetails: Partner Status = " + driverStatus);
 
                         // Check partner status
-                        if ("confirmed".equalsIgnoreCase(driverStatus)) {
+                        if ("accepted".equalsIgnoreCase(driverStatus)) {
                             // Redirect to PartnerDriverListActivity if partner status is confirmed
-                            Intent intent = new Intent(context, Partner_DriverListActivity.class);
+                            Intent intent = new Intent(context, DriverDashboardActivity.class);
                             intent.putExtra("bookingId", bookingId); // Pass bookingId to the next activity
                             intent.putExtra("notification_id", notification_id);
+                            Toast.makeText(context, "Already Accepted This Booking , Check Your Bookings", Toast.LENGTH_SHORT).show();
+
                             context.startActivity(intent);
                         } else if ("rejected".equalsIgnoreCase(driverStatus)) {
                             // If the partner status is rejected, redirect to BookingCancelledReasonActivity
                             Intent intent = new Intent(context, BookingCancelledReasonActivity.class);
                             intent.putExtra("bookingId", bookingId);
                             intent.putExtra("notification_id", notification_id);
+                            Toast.makeText(context, "Rejected This Booking , Check Your Bookings", Toast.LENGTH_SHORT).show();
+
                             context.startActivity(intent);
                         } else {
                             // If the partner status is not confirmed or rejected, continue to the booking request activity

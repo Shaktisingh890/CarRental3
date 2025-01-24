@@ -65,13 +65,15 @@ public class DriverNotificationActivity extends AppCompatActivity {
         clearNotification=findViewById(R.id.clearAllButton);
         MyFirebaseMessagingService myService = new MyFirebaseMessagingService();
         clearNotification.setOnClickListener(view -> {
-            myService.deleteAllNotificationsFromBackend(getApplicationContext()); // Clear notifications
+            myService.deleteAllNotificationsFromBackend(this); // Clear notifications
             Toast.makeText(this, "All notifications cleared", Toast.LENGTH_SHORT).show();
 
             // Restart the activity to reflect the changes
             finish(); // Finish the current activity
             startActivity(getIntent()); // Start the same activity again
         });
+
+
 
 
     }

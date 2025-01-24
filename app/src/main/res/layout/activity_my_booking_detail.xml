@@ -189,6 +189,30 @@
                         android:layout_marginTop="4dp"
                         android:textColor="#000" />
                 </LinearLayout>
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/status_connector" />
+                <!-- Completed Status -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <View
+                        android:id="@+id/cancelled"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/status_circle_ongoing" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cancelled"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#000" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
