@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map with OpenStreetMap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body, html { margin: 0; height: 100%; }
+        #map { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Initialize map and set to a default location (Delhi in this case)
+    var map = L.map('map').setView([28.6139, 77.2090], 13);  // Default map location (Delhi)
+
+    // OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add a marker on the map at default location
+    var marker = L.marker([28.6139, 77.2090]).addTo(map);
+    marker.bindPopup("<b>Hello Delhi!</b><br>I am a popup.").openPopup();
+
+    // Debug statement: Logging initial map setup
+    console.log("Map initialized at Delhi (28.6139, 77.2090)");
+
+    // Function to update the map based on new location
+    function updateMap(lat, lon) {
+        // Debug statement: Logging update attempt
+        console.log("Updating map with new location: Latitude = " + lat + ", Longitude = " + lon);
+
+        // Update map center
+        map.setView([lat, lon], 13);  // Update map to new location
+
+        // Update marker position
+        marker.setLatLng([lat, lon]);
+
+        // Update the popup to show new location
+        marker.setPopupContent("<b>New Location</b><br>Latitude: " + lat + "<br>Longitude: " + lon).openPopup();
+
+        // Debug statement: Confirming update
+        console.log("Map center and marker position updated to: Latitude = " + lat + ", Longitude = " + lon);
+    }
+
+  
+
+</script>
+</body>
+</html>

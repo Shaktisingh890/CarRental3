@@ -197,6 +197,9 @@ public interface ApiService {
     @GET("api/v1/booking/getBookingByuserId")
     Call<ResponseBody> getBookingsByUserId();
 
+    @GET("api/v1/booking/getBookingBypartner")
+    Call<ResponseBody> getBookingsByPartnerId();
+
 
 
 //    @Multipart
@@ -299,6 +302,13 @@ public interface ApiService {
 
     @GET("api/v1/drivers/getAvailability") // Replace with your API endpoint
     Call<Map<String, Boolean>> getAvailabilityStatus();
+
+
+
+    @POST("update_driver_location")
+    Call<Void> updateDriverLocation(@Body Map<String, Object> locationData);
+
+
 
 }
 

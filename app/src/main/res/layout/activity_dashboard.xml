@@ -412,30 +412,49 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="70dp"
                 android:gravity="center_horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="EXPLORE OUR TRIBE"
+                    android:layout_marginBottom="12dp"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp" />
+
+                <!-- Image Slider -->
                 <androidx.cardview.widget.CardView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="4dp">
-                    <!-- Optional elevation for shadow -->
+                    android:layout_width="300dp"
+                    android:layout_height="160dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    android:clipChildren="true"
+                    android:clipToPadding="true"
+                    android:paddingBottom="4dp">
+
                     <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/imageSlider"
+                        android:id="@+id/viewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent" />
+
                 </androidx.cardview.widget.CardView>
+
+                <!-- TabLayout Dots -->
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabDots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="-30dp"
+                app:tabIndicatorColor="@android:color/black"
+                app:tabIndicatorHeight="4dp"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@android:color/black" />
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
     <!-- Bottom Navigation View -->

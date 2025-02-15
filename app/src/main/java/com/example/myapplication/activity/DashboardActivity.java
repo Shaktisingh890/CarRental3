@@ -1,6 +1,9 @@
 package com.example.myapplication.activity;
 
 import android.app.DatePickerDialog;
+
+
+
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 import androidx.appcompat.app.AlertDialog;
@@ -47,8 +52,15 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.os.Bundle;
+import android.os.Handler;
 
 public class DashboardActivity extends AppCompatActivity {
+
+    private ViewPager2 viewPager2;
+    private TabLayout dotsIndicator;
+    private Handler handler = new Handler();
+    private Runnable autoScrollRunnable;
 
     private Button lowCostButton, normalCostButton, searchCarButton;
     private Spinner pickupSpinner, dropoffSpinner;
@@ -63,6 +75,9 @@ public class DashboardActivity extends AppCompatActivity {
     // Flags to identify which TextView to update
     private boolean isPickupDate = true;
     private boolean isPickupTime = true;
+
+    private int currentItem = 0;  // Track current item position in ViewPager
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +103,12 @@ public class DashboardActivity extends AppCompatActivity {
         dropOffDateTextView = findViewById(R.id.trip_end_date);
         dropOffTimeTextView = findViewById(R.id.trip_end_time);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
-//        ViewPager2 viewPager2 = findViewById(R.id.ayaStoriesSlider);
-//        TabLayout tabLayout = findViewById(R.id.sliderDots);
-//        LinearLayout commentsContainer = findViewById(R.id.customerCommentsContainer);
+
         progressBar = findViewById(R.id.progressBar);
         progressOverlay = findViewById(R.id.progressOverlay);
         imageView = findViewById(R.id.logoImage);
+
+
 
         // Initialize Spinners with data
         String[] locations = {"CT – Cape Town Airport", "Cape Town - City", "Johannesburg - City"};
@@ -101,14 +116,7 @@ public class DashboardActivity extends AppCompatActivity {
         pickupSpinner.setAdapter(adapter2);
         dropoffSpinner.setAdapter(adapter2);
 
-        // Setup Slider
-        List<Integer> storyImages = Arrays.asList(R.drawable.sedan, R.drawable.suv, R.drawable.hatchback1);
-        AyaStoriesAdapter sliderAdapter = new AyaStoriesAdapter(this, storyImages);
-//        viewPager2.setAdapter(sliderAdapter);
-//        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {}).attach();
 
-        // Add Customer Comments
-//        addCustomerComments(commentsContainer);
 
         // Set current date and time
         Calendar calendar = Calendar.getInstance();
@@ -156,15 +164,34 @@ public class DashboardActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::navigateTo);
 
-        // Initialize ViewPager2 for Image Slider
-        ViewPager2 imageSlider = findViewById(R.id.imageSlider);
 
-        // List of image resource IDs
-        Integer[] images = {R.drawable.tio, R.drawable.tio1, R.drawable.tio3};
-        ImageSliderAdapter adapter = new ImageSliderAdapter(this, Arrays.asList(images));
 
-        // Set the adapter for the slider
-        imageSlider.setAdapter(adapter);
+
+        viewPager2 = findViewById(R.id.viewPager);
+        dotsIndicator=findViewById(R.id.tabDots);
+        List<Integer> storyImages = Arrays.asList(R.drawable.exp, R.drawable.exp2, R.drawable.tio3);
+        ImageSliderAdapter sliderAdapter = new ImageSliderAdapter(this, storyImages);
+        viewPager2.setAdapter(sliderAdapter);
+
+        // Set up TabLayout with ViewPager2 for dot indicators
+        new TabLayoutMediator(dotsIndicator, viewPager2, (tab, position) -> {}).attach();
+
+        // Auto-scroll functionality
+        autoScrollRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (viewPager2.getCurrentItem() == storyImages.size() - 1) {
+                    viewPager2.setCurrentItem(0);
+                } else {
+                    viewPager2.setCurrentItem(viewPager2.getCurrentItem() + 1);
+                }
+                handler.postDelayed(this, 6000); // Change image every 3 seconds
+            }
+        };
+        handler.postDelayed(autoScrollRunnable, 6000); // Start auto-scrolling
+
+
+
     }
     @Override
     public void onBackPressed() {

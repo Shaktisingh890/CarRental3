@@ -79,6 +79,7 @@ public class MyBookingActivity extends AppCompatActivity {
 
                         // Parse the JSON manually
                         JSONObject jsonObject = new JSONObject(jsonString);
+                        Log.d(TAG, "Parsed JSON Object: " + jsonObject);
 
                         if (jsonObject.getBoolean("success")) {
                             JSONArray dataArray = jsonObject.getJSONArray("data");

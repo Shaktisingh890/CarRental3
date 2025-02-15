@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -21,6 +23,7 @@ import com.example.myapplication.dialog.*;
 import com.example.myapplication.models.response.UserProfileResponse;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.NavigationUtil;
 import com.example.myapplication.utils.ProgressBarUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.myapplication.utils.SharedPreferencesManager;
@@ -72,7 +75,14 @@ public class PartnerDashboardActivity extends AppCompatActivity {
         });
         // BottomNavigationView listener
         bottomNav.setSelectedItemId(R.id.nav_home);
-        bottomNav.setOnNavigationItemSelectedListener(this::navigateTo);
+        // Set the listener for item selection
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Handle the selection using NavigationUtil
+                return NavigationUtil.handleBottomNavigationSelection(PartnerDashboardActivity.this, item.getItemId());
+            }
+        });;
 
         // Handle intent that switches to My Cars tab
         Intent intent = getIntent();
@@ -81,20 +91,8 @@ public class PartnerDashboardActivity extends AppCompatActivity {
         }
     }
 
-    // Method to navigate based on BottomNavigationView item selection
-    private boolean navigateTo(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_home) {
-            loadFragment(new EarningFragment());  // Load the appropriate fragment
-            return true;
-        } else if (id == R.id.nav_profile) {
-            fetchUserProfile();
-        } else if (id == R.id.nav_booking) {
-            startActivity(new Intent(PartnerDashboardActivity.this, PartnerBookingActivity.class));
-            return true;
-        }
-        return false;
-    }
+
+
 
     // Method to load the given fragment into the container
     private void loadFragment(Fragment fragment) {
@@ -151,100 +149,6 @@ public class PartnerDashboardActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchUserProfile() {
-        Log.d("fetchUserProfile", "Making API call to fetch user profile");
-        ProgressBarUtils.showProgress(progressOverlay, progressBar, true,imageView); // Using utility class
 
-        ApiService apiService = RetrofitClient.getRetrofitInstance(PartnerDashboardActivity.this).create(ApiService.class);
-        apiService.getUserProfile().enqueue(new Callback<UserProfileResponse>() {
-            @Override
-            public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
-
-                // Log the HTTP status code
-                Log.d("fetchUserProfile", "Response Code: " + response.code());
-
-                if (response.isSuccessful() && response.body() != null) {
-                    UserProfileResponse user = response.body();
-
-                    // Log individual fields from the response
-                    Log.d("fetchUserProfile", "Full Name: " + user.getData().getFullName());
-                    Log.d("fetchUserProfile", "Email: " + user.getData().getEmail());
-                    Log.d("fetchUserProfile", "Phone Number: " + user.getData().getPhoneNumber());
-                    Log.d("fetchUserProfile", "Address: " + user.getData().getAddress());
-                    Log.d("fetchUserProfile", "Image URL: " + user.getData().getImgUrl());
-
-                    // Pass data to ProfileActivity using Intent
-                    Intent intent = new Intent(PartnerDashboardActivity.this, PartnerProfileActivity.class);
-
-
-// Check and send user details
-                    if (user.getData() != null) {
-                        intent.putExtra("fullName", user.getData().getFullName() != null ? user.getData().getFullName() : "");
-                        intent.putExtra("email", user.getData().getEmail() != null ? user.getData().getEmail() : "");
-                        intent.putExtra("phoneNumber", user.getData().getPhoneNumber() != null ? user.getData().getPhoneNumber() : "");
-                        intent.putExtra("address", user.getData().getAddress() != null ? user.getData().getAddress() : "");
-                        intent.putExtra("imgUrl", user.getData().getImgUrl() != null ? user.getData().getImgUrl() : "");
-
-                        // Check and send payment details
-                        if (user.getData().getPaymentDetails() != null) {
-                            intent.putExtra("upi_id", user.getData().getPaymentDetails().getUpiId() != null ?
-                                    user.getData().getPaymentDetails().getUpiId() : "");
-                            intent.putExtra("account_number", user.getData().getPaymentDetails().getAccountNumber() != null ?
-                                    user.getData().getPaymentDetails().getAccountNumber() : "");
-                        } else {
-                            intent.putExtra("upi_id", "");
-                            intent.putExtra("account_number", "");
-                        }
-
-                        // Check and send business info
-                        if (user.getData().getBusinessInfo() != null) {
-                            intent.putExtra("company_address", user.getData().getBusinessInfo().getCompanyAddress() != null ?
-                                    user.getData().getBusinessInfo().getCompanyAddress() : "");
-                            intent.putExtra("company_name", user.getData().getBusinessInfo().getCompanyName() != null ?
-                                    user.getData().getBusinessInfo().getCompanyName() : "");
-                            intent.putExtra("area", user.getData().getBusinessInfo().getServiceArea() != null ?
-                                    user.getData().getBusinessInfo().getServiceArea() : "");
-                        } else {
-                            intent.putExtra("company_address", "");
-                            intent.putExtra("company_name", "");
-                            intent.putExtra("area", "");
-                        }
-                    }
-
-// Start the activity
-                    startActivity(intent);
-                    finish();
-
-
-
-
-
-
-                    startActivity(intent);
-                } else {
-                    // Log the error body
-                    try {
-                        ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
-
-                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
-                        Log.d("fetchUserProfile", "Error Body: " + errorBody);
-                    } catch (IOException e) {
-                        Log.e("fetchUserProfile", "Error parsing error body: " + e.getMessage(), e);
-                    }
-                    Log.d("fetchUserProfile", "Failed to fetch profile. Error Code: " + response.code());
-                    Toast.makeText(PartnerDashboardActivity.this, "Failed to fetch profile", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
-                ProgressBarUtils.showProgress(progressOverlay, progressBar, false,imageView); // Using utility class
-
-                Log.e("fetchUserProfile", "Error: " + t.getMessage(), t);
-                Toast.makeText(PartnerDashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
 }

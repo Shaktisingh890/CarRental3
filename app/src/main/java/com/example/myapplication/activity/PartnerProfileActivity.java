@@ -62,6 +62,9 @@ public class PartnerProfileActivity extends AppCompatActivity {
         area=getIntent().getStringExtra("area");
 
 
+
+
+
         Log.d("myfullname","my name is "+fullName);
         Log.d("myfullname","my name is "+phoneNumber);
         Log.d("myfullname","my name is "+imgUrl);
@@ -97,7 +100,7 @@ public class PartnerProfileActivity extends AppCompatActivity {
         optionLogout = findViewById(R.id.option_logout);
         bottomNav = findViewById(R.id.bottomNavView);
         // BottomNavigationView listener
-        bottomNav.setSelectedItemId(R.id.nav_settings);
+        bottomNav.setSelectedItemId(R.id.nav_profile);
         bottomNav.setOnNavigationItemSelectedListener(this::navigateTo);
 
 
@@ -248,7 +251,7 @@ public class PartnerProfileActivity extends AppCompatActivity {
         if (id == R.id.nav_home) {
             startActivity(new Intent(PartnerProfileActivity.this, PartnerDashboardActivity.class));
             return true;
-        } else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_profile) {
             startActivity(new Intent(PartnerProfileActivity.this, PartnerProfileActivity.class));
             return true;
         } else if (id == R.id.nav_booking) {

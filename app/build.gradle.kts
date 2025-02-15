@@ -41,11 +41,15 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
+
+
+
     implementation(libs.firebase.messaging);
     implementation(libs.retrofit)
     implementation(libs.gsonConverter)
     implementation(libs.glide)
     annotationProcessor(libs.glideCompiler)
+    implementation(libs.play.services.location)
     implementation (libs.phonepe)
     implementation (libs.okhttp)
     implementation(libs.loggingInterceptor) // OkHttp Logging Interceptor dependency
@@ -56,5 +60,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("io.socket:socket.io-client:2.0.1")
+
+
+
 
 }

@@ -1,11 +1,24 @@
 package com.example.myapplication.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,12 +26,26 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.core.app.ActivityCompat;
+import android.Manifest;
+
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.myapplication.R;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.utils.LocationUtils;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,19 +54,57 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DriverDashboardActivity extends AppCompatActivity {
+public class DriverDashboardActivity extends AppCompatActivity implements LocationUtils.LocationUpdateListener {
     private Switch availabilitySwitch;
     private TextView subtitleMessage;
 
-    private ImageView menuIcon;
+    // Declare a Handler and Runnable to repeat the location request
+    private Handler locationHandler;
+    private Runnable locationRunnable;
 
+    private Socket mSocket;
+
+    private double latitude;
+    private double longitude;
+
+    private static final String TAG="DriverDashboardLocation";
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
+
+    private ImageView menuIcon;
+    private FusedLocationProviderClient fusedLocationClient;
     private DrawerLayout drawerLayout;
+    private LocationUtils locationUtils;
+
     private boolean isInitialLoad = true; // Flag to differentiate between initial load and user interaction
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_dashboard);
+
+        // Initialize LocationUtil
+        locationUtils = new LocationUtils(this, this);
+
+        // Check if location permissions are granted, if not request them
+
+
+
+
+        if (!locationUtils.isLocationPermissionGranted()) {
+            Log.d("location2", "if part of dashboard");
+            // If permissions are granted, enable location services (GPS check)
+            locationUtils.requestLocationPermissions(this);
+            locationUtils.fetchLocationWithUpdates();
+
+        } else {
+            // If permissions are not granted, request location permissions
+            Log.d("location2", "else part of dashboard");
+            locationUtils.fetchLocationWithUpdates();
+        }
+
+
+
+
 
         drawerLayout=findViewById(R.id.drawerLayout);
         availabilitySwitch = findViewById(R.id.onlineOfflineSwitch);
@@ -54,8 +119,55 @@ public class DriverDashboardActivity extends AppCompatActivity {
         RelativeLayout contact_us = findViewById(R.id.contact_us);
         RelativeLayout earnings = findViewById(R.id.earnings);
         ImageView closeIcon = findViewById(R.id.close);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Fetch the availability status on activity start
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true); // Enables debugging for WebView
+        }
+
+        // Set up the WebView
+        WebView mapWebView = findViewById(R.id.mapWebView);
+
+        // Enable JavaScript
+        WebSettings webSettings = mapWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        // Expose JavaScript function to Android
+        mapWebView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void updateMap(double lat, double lon) {
+                Log.d("WebView", "Received location update: " + lat + ", " + lon);
+            }
+        }, "Android");
+
+        // Load the map HTML
+        mapWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                Log.d("DriverDashboard", "Map page loaded successfully");
+
+                // Call the JavaScript function to update the map
+                if (latitude != 0 && longitude != 0) {
+                    loadLeafletMap(latitude, longitude);
+                }
+            }
+        });
+
+        mapWebView.loadUrl("file:///android_asset/leaflet_map.html");
+
+
+
+
+
+
+
+
+
+
+
+    // Fetch the availability status on activity start
         fetchAvailabilityStatus();
 
         // Set up hamburger menu click listener
@@ -100,6 +212,34 @@ public class DriverDashboardActivity extends AppCompatActivity {
         });
 
 
+        try {
+            mSocket = IO.socket("http://192.168.1.42:3000"); // Replace with your server URL
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                // Connection successful
+                Log.d("Socket", "Connected to server.");
+                // You can update UI or call any other method after the connection
+            }
+        });
+
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                // Connection failed
+                Log.e("Socket", "Connection failed: " + args[0]);
+                // Handle error, maybe show a message to the user
+            }
+        });
+
+//        mSocket.on("locationUpdate", onLocationUpdate);
+
+        mSocket.connect();
+
 
         // Set up switch change listener
         availabilitySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -117,7 +257,41 @@ public class DriverDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(DriverDashboardActivity.this, DriverNotificationActivity.class);
             startActivity(intent);
         });
+
+
+
+
+
     }
+
+
+
+    @Override
+    public void onLocationFetched(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+        Log.d("LocationUtil","i am onLocationFetched");
+
+        // Send the fetched location to your backend, e.g., Socket.IO
+//        sendLocationToBackend(latitude, longitude);
+
+        // Update the map or UI with the location
+        loadLeafletMap(latitude, longitude);
+
+        // Log the latitude and longitude
+        Log.d("LocationUtil", "Location: Lat=" + latitude + ", Lon=" + longitude);
+    }
+
+
+    @Override
+    public void onLocationError(String errorMessage) {
+        // Handle any errors related to location (e.g., permission issues, GPS disabled)
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -156,6 +330,17 @@ public class DriverDashboardActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        locationUtils.handlePermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
+
+
+
+
     private void fetchAvailabilityStatus() {
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
@@ -181,6 +366,20 @@ public class DriverDashboardActivity extends AppCompatActivity {
         });
     }
 
+
+    private void updateUIBasedOnStatus(boolean isOnline) {
+        if (isOnline) {
+            availabilitySwitch.setText("Online");
+            subtitleMessage.setText("You are now available to take rides.");
+            showCustomToast("You are Online", R.drawable.toast_background, R.drawable.ic_toast_icon);
+        } else {
+            availabilitySwitch.setText("Offline");
+            subtitleMessage.setText("Go Offline for taking rest");
+            showCustomToast("You are Offline", R.drawable.toast_background_red, R.drawable.cross);
+        }
+    }
+
+
     private void updateAvailabilityStatus(Map<String, Boolean> availabilityStatus, boolean isChecked) {
         ApiService apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService.class);
 
@@ -204,17 +403,37 @@ public class DriverDashboardActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUIBasedOnStatus(boolean isOnline) {
-        if (isOnline) {
-            availabilitySwitch.setText("Online");
-            subtitleMessage.setText("You are now available to take rides.");
-            showCustomToast("You are Online", R.drawable.toast_background, R.drawable.ic_toast_icon);
-        } else {
-            availabilitySwitch.setText("Offline");
-            subtitleMessage.setText("Go Offline for taking rest");
-            showCustomToast("You are Offline", R.drawable.toast_background_red, R.drawable.cross);
+
+
+    private void loadLeafletMap(double latitude, double longitude) {
+        WebView mapWebView = findViewById(R.id.mapWebView);
+        Log.d("LocationUtil","call the loadleafletmap function");
+        // Call the JavaScript function in the HTML with the latitude and longitude
+        String script = "javascript:updateMap(" + latitude + ", " + longitude + ")";
+        mapWebView.evaluateJavascript(script, null);
+    }
+
+
+    private void sendLocationToBackend(double latitude, double longitude) {
+        try {
+            // Create a JSONObject to send latitude and longitude
+            JSONObject locationData = new JSONObject();
+            locationData.put("latitude", latitude);
+            locationData.put("longitude", longitude);
+
+            // Send the location data to the backend using Socket.IO
+            mSocket.emit("locationUpdate", locationData);
+
+            Log.d(TAG, "Location sent to backend: Latitude = " + latitude + ", Longitude = " + longitude);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+
+
+
 
     private void clearSession() {
         SharedPreferences preferences = getSharedPreferences("YourSharedPrefName", MODE_PRIVATE);

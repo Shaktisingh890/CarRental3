@@ -3,6 +3,7 @@ package com.example.myapplication.network;
 
 import android.content.Context;
 
+
 import com.example.myapplication.utils.SharedPreferencesManager;
 
 import okhttp3.OkHttpClient;
@@ -38,7 +39,7 @@ public class RetrofitClient {
 
         // Create and return the Retrofit instance
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.1.47:3000/") // Base URL for the API
+                .baseUrl("http://192.168.1.20:3000/") // Base URL for the API
                 .client(okHttpClient)               // Use the OkHttpClient with logging and auth interceptor
                 .addConverterFactory(GsonConverterFactory.create()) // Convert JSON to Java objects using Gson
                 .build();
